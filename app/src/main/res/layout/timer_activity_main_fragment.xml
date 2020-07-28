@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackGround"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layoutTop_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginBottom="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/watchComments"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/common_margin"
+            android:layout_weight="1"
+            android:background="@drawable/orange_buttons"
+            android:text="@string/timer_watch_comments"
+            android:textColor="@color/appBackGround" />
+
+        <Button
+            android:id="@+id/timerExit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/appBackGround"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="@drawable/bg_blue_btn"
+            android:text="@string/timer_exit_activity" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_1"
+            android:layout_marginTop="@dimen/layoutTop_margin"
+            android:text="@string/timer_time_of_start"
+            android:textSize="@dimen/timer_options_size" />
+
+        <TextView
+            android:id="@+id/timerStartView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_1"
+            android:layout_marginStart="@dimen/five_dp_margin"
+            android:layout_marginTop="@dimen/layoutTop_margin"
+            android:layout_weight="1"
+            android:textSize="@dimen/timer_options_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/white_1"
+            android:text="@string/timer_start_pause"
+            android:textSize="@dimen/timer_options_size" />
+
+        <TextView
+            android:id="@+id/timerPauseStartView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/five_dp_margin"
+            android:textColor="@color/white_1"
+            android:layout_weight="1"
+            android:textSize="@dimen/timer_options_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_1"
+            android:text="@string/timer_finish_pause"
+            android:textSize="@dimen/timer_options_size" />
+
+        <TextView
+            android:id="@+id/timerEndPauseView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/five_dp_margin"
+            android:textColor="@color/white_1"
+            android:layout_weight="1"
+            android:textSize="@dimen/timer_options_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_1"
+            android:text="@string/timer_time_of_finish"
+            android:textSize="@dimen/timer_options_size" />
+
+        <TextView
+            android:id="@+id/timerFinishView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/five_dp_margin"
+            android:textColor="@color/white_1"
+            android:layout_weight="1"
+            android:textSize="@dimen/timer_options_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_margin"
+        android:layout_marginBottom="@dimen/common_margin">
+
+        <TextView
+            android:id="@+id/current_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:textColor="@color/white_1"
+            android:textSize="@dimen/timer_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginBottom="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/addComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_rounded_ripple"
+            android:text="@string/timer_add_comment"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginBottom="@dimen/common_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/startTimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/start_button"
+            android:text="@string/timer_start" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/common_margin"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/stopTimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/stop_button"
+            android:textColor="@color/appBackGround"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_marginEnd="@dimen/five_dp_margin"
+            android:text="@string/timer_stop_timer" />
+
+        <Button
+            android:id="@+id/resumeTimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_rounded_ripple"
+            android:textColor="@color/appBackGround"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_marginEnd="@dimen/five_dp_margin"
+            android:text="@string/timer_resume_timer" />
+
+        <Button
+            android:id="@+id/pauseTimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/appBackGround"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="@drawable/bg_rounded_ripple"
+            android:text="@string/timer_pause_timer" />
+    </LinearLayout>
+
+</LinearLayout>

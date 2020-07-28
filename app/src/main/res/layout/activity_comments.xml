@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackGround"
+    android:orientation="vertical">
+
+    <fragment
+        android:id="@+id/topButtons"
+        android:name="com.example.workapp.presentation.screen.timer.comments.AddTimerCommentFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/comment_buttons_fragment"/>
+
+    <fragment
+        android:id="@+id/showComments"
+        android:name="com.example.workapp.presentation.screen.timer.comments.ShowTimerCommentsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/comments_show_fragment" />
+
+</LinearLayout>

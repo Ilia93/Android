@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackGround"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_1"
+            android:layout_marginTop="@dimen/layoutTop_margin"
+            android:text="@string/timer_time_of_start"
+            android:textSize="@dimen/timer_options_size" />
+
+        <TextView
+            android:id="@+id/timerStartResultView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_1"
+            android:layout_marginTop="@dimen/layoutTop_margin"
+            android:layout_marginStart="@dimen/five_dp_margin"
+            android:layout_weight="1"
+            android:textSize="@dimen/timer_options_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/white_1"
+            android:text="@string/timer_elapsed_time"
+            android:textSize="@dimen/timer_options_size" />
+
+        <TextView
+            android:id="@+id/elapsedTimeView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/five_dp_margin"
+            android:textColor="@color/white_1"
+            android:layout_weight="1"
+            android:textSize="@dimen/timer_options_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/white_1"
+            android:text="@string/timer_time_in_pause"
+            android:textSize="@dimen/timer_options_size" />
+
+        <TextView
+            android:id="@+id/timeInPauseView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/five_dp_margin"
+            android:textColor="@color/white_1"
+            android:layout_weight="1"
+            android:textSize="@dimen/timer_options_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_1"
+            android:text="@string/timer_time_of_finish"
+            android:textSize="@dimen/timer_options_size" />
+
+        <TextView
+            android:id="@+id/timerFinishResultView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/five_dp_margin"
+            android:textColor="@color/white_1"
+            android:layout_weight="1"
+            android:textSize="@dimen/timer_options_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin"
+        android:layout_marginTop="@dimen/layoutTop_margin"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/timerExitFinishFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_rounded_ripple"
+            android:text="@string/timer_close_common_info"
+            android:textSize="@dimen/major_size" />
+    </LinearLayout>
+
+</LinearLayout>

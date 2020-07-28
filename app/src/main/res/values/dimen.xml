@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name ="major_size">17sp</dimen>
+    <dimen name="layoutTop_margin">15dp</dimen>
+    <dimen name="common_margin">10dp</dimen>
+    <dimen name="five_dp_margin">5dp</dimen>
+    <dimen name="timer_options_size">10sp</dimen>
+    <dimen name="textView_height">20sp</dimen>
+    <dimen name="finalView_text">11sp</dimen>
+    <dimen name="timer_size">40sp</dimen>
+    <dimen name="main_btn_create_dimen">200dp</dimen>
+</resources>
