@@ -29,8 +29,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.screen.timer.timer.TimerActivity" />
-        <activity android:name=".presentation.screen.archive.CompletedWorks" />
+        <activity android:name=".presentation.screen.archive.ArchiveActivity" />
         <activity android:name=".presentation.screen.archive.CompletedWorksInformation" />
+        <activity android:name=".presentation.screen.comment.CommentActivity" />
     </application>
 
 </manifest>

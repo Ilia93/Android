@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/common_margin"
+    android:layout_marginTop="@dimen/common_margin"
+    android:layout_marginEnd="@dimen/common_margin"
+    android:layout_marginBottom="@dimen/common_margin"
+    android:background="@drawable/archive_elements_background_indigo"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin"
+        android:layout_marginBottom="@dimen/common_margin"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/workInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue_1"
+            android:textStyle="bold"
+            android:textSize="@dimen/archive_text_major_size" />
+
+        <TextView
+            android:id="@+id/work_short_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/blue_1"
+            android:textSize="@dimen/archive_additional_text_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/common_margin"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/work_completed_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue_1"
+            android:textSize="@dimen/archive_additional_text_size" />
+
+        <CheckBox
+            android:id="@+id/is_completed_flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>

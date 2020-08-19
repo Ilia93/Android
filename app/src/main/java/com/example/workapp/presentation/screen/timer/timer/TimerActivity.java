@@ -2,12 +2,16 @@ package com.example.workapp.presentation.screen.timer.timer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,9 +21,10 @@ import com.example.workapp.data.network.NetworkClient;
 import com.example.workapp.data.network.model.comments.CommentsModel;
 import com.example.workapp.data.network.model.timer.TimerModel;
 import com.example.workapp.data.network.model.work.WorkModel;
+import com.example.workapp.presentation.screen.archive.ArchiveActivity;
+import com.example.workapp.presentation.screen.comment.CommentActivity;
+import com.example.workapp.presentation.screen.comment.CommentDialog;
 import com.example.workapp.presentation.screen.main.MainActivity;
-import com.example.workapp.presentation.screen.timer.comments.AddTimerCommentFragment;
-import com.example.workapp.presentation.screen.timer.comments.ShowTimerCommentsFragment;
 import com.example.workapp.presentation.screen.timer.operations.TimerOperations;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TimerActivity extends AppCompatActivity implements StartTimerFragment.TimerClickListener,
-        StopTimerFragment.TimerCloseable, AddTimerCommentFragment.CreateCommentsListener {
+        StopTimerFragment.TimerCloseable, CommentDialog.EditNameDialogListener {
 
     public static Date timeOfTimerStart, timeOfTimerPauseStart, timeOfTimerPauseFinish;
     public static boolean isStarted, isPaused, isResumed = false;
@@ -48,33 +53,54 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
     FragmentTransaction transaction;
     Fragment startTimerFragment = new StartTimerFragment();
     Fragment stopTimerFragment = new StopTimerFragment();
-    Fragment watchTimerComments = new ShowTimerCommentsFragment();
-    Fragment addCommentFragment = new AddTimerCommentFragment();
     Timer timer;
     TimerTask timerTask;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
+        setToolbar();
         if (savedInstanceState == null) {
             myFragmentManager = getSupportFragmentManager();
             replaceFragment(startTimerFragment);
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (isStarted) {
-            startTimerFragment.getView().findViewById(R.id.startTimer).setEnabled(false);
-        }
+    private void createTimer(@NotNull Call<TimerModel> call) {
+        call.enqueue(new Callback<TimerModel>() {
+            @Override
+            public void onResponse(@NonNull Call<TimerModel> call, @NonNull Response<TimerModel> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        timer.cancel();
+                    } catch (NullPointerException exception) {
+                        showToastMessage("Timer isn't created");
+                    }
+                    showToastMessage("Timer stopped");
+                    replaceFragment(stopTimerFragment);
+                } else {
+                    try {
+                        if (response.errorBody() != null) {
+                            showToastMessage(response.errorBody().string());
+                        }
+                    } catch (IOException e) {
+                        showToastMessage("Error happened");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TimerModel> call, @NonNull Throwable t) {
+                showToastMessage(t.getMessage());
+            }
+        });
     }
 
     @Override
     public void onTimerStarted() {
         isStarted = true;
-        setButtonsVisibility();
         timeOfTimerStart = timerOperations.getCalendarInstance();
         timerModel.setStartTime(timerOperations.setTime());
         timerModel.setWorkId(getIntent().getStringExtra("workId"));
@@ -131,7 +157,6 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
                     }
                 }
             }
-//TODO Race condition, разобраться с логикой, перенести код в successes
 
             @Override
             public void onFailure(@NonNull Call<WorkModel> call, @NonNull Throwable t) {
@@ -174,54 +199,22 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
     }
 
     @Override
-    public void onTimerAddComment() {
-        replaceFragment(addCommentFragment);
-    }
-
-    @Override
-    public void onTimerWatchComments() {
-        replaceFragment(watchTimerComments);
-    }
-
-    @Override
-    public void onTimerExit() {
-        Intent intent = new Intent(TimerActivity.this, MainActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
     public void onTimerClosed() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-    @Override
-    public void createComment() {
-        addCommentFragment.getFragmentManager().findFragmentById(R.id.FragmentFrame);
-        try {
-            if (((EditText) addCommentFragment.getView().findViewById
-                    (R.id.inputComment)).getText().toString().equals("")) {
-                throw new NullPointerException();
-            } else {
-                commentsModel.setText(((EditText) addCommentFragment.getView().findViewById
-                        (R.id.inputComment)).getText().toString());
-                ((EditText) addCommentFragment.getView().findViewById(R.id.inputComment)).setText(null);
-                commentsModel.setTime(timerOperations.setTime());
-                commentsModel.setWorkId(getIntent().getStringExtra("workId"));
-                createCommentOnServer();
-            }
-        } catch (NullPointerException exception) {
-            showToastMessage("Comment can't be empty");
-        }
-    }
-
-    private void createCommentOnServer() {
+    private void createCommentOnServer(DialogFragment dialog) {
         Call<CommentsModel> call = NetworkClient.getCommentAPI().createComment(commentsModel);
         call.enqueue(new Callback<CommentsModel>() {
             @Override
             public void onResponse(@NonNull Call<CommentsModel> call,
                                    @NonNull Response<CommentsModel> response) {
                 if (response.isSuccessful()) {
+                    commentsModel.setTime(timerOperations.setTime());
+                    commentsModel.setWorkId(getIntent().getStringExtra("workId"));
+                    commentsModel.setText(((EditText) dialog.getDialog().findViewById
+                            (R.id.inputDialogComment)).getText().toString());
                     showToastMessage("Comment created");
                 } else {
                     try {
@@ -241,6 +234,47 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
         });
     }
 
+    public void replaceFragment(Fragment name) {
+        transaction = myFragmentManager.beginTransaction();
+        transaction.replace(R.id.FragmentFrame, name);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private void showToastMessage(String text) {
+        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void setToolbar() {
+        toolbar = findViewById(R.id.main_screen_toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.archive_activity_toolbar) {
+            Intent intent = new Intent(this, ArchiveActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.timer_activity_toolbar) {
+            Intent intent = new Intent(this, TimerActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.home_activity_toolbar) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.comments_activity_toolbar) {
+            Intent intent = new Intent(this, CommentActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void stopService() {
         try {
             getApplicationContext().unbindService(MainActivity.serviceConnection);
@@ -249,57 +283,38 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
         }
     }
 
+   /* @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Fragment dialog1 = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (dialog1 instanceof CommentDialog){
+            CommentDialog commentDialog = (CommentDialog) dialog1;
+            commentDialog.getText()
+
+        }
+        //try {
+            if (((EditText) dialog.getDialog().findViewById(R.id.inputDialogComment))
+                    .getText().equals("")) {
+          //      throw new NullPointerException();
+          //  } else {
+                createCommentOnServer(dialog);
+            }
+       // } catch (NullPointerException exception) {
+       //     showToastMessage("Comment can't be empty");
+       // }
+    }
+
     @Override
-    public void exitComments() {
-        replaceFragment(startTimerFragment);
-    }
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Fragment dialog1 = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (dialog1 instanceof CommentDialog){
+            CommentDialog commentDialog = (CommentDialog) dialog1;
+            commentDialog.dismiss();
+        }
+    }*/
 
-    public void replaceFragment(Fragment name) {
-        transaction = myFragmentManager.beginTransaction();
-        transaction.replace(R.id.FragmentFrame, name);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
+    @Override
+    public void onFinishEditDialog(String inputText) {
+        createCommentOnServer();
 
-    public void setButtonsVisibility() {
-        startTimerFragment.getView().findViewById(R.id.stopTimer).setEnabled(true);
-        startTimerFragment.getView().findViewById(R.id.pauseTimer).setEnabled(true);
-        startTimerFragment.getView().findViewById(R.id.resumeTimer).setEnabled(true);
-        startTimerFragment.getView().findViewById(R.id.startTimer).setEnabled(false);
-    }
-
-    private void createTimer(@NotNull Call<TimerModel> call) {
-        call.enqueue(new Callback<TimerModel>() {
-            @Override
-            public void onResponse(@NonNull Call<TimerModel> call, @NonNull Response<TimerModel> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        timer.cancel();
-                    } catch (NullPointerException exception) {
-                        showToastMessage("Timer isn't created");
-                    }
-                    showToastMessage("Timer stopped");
-                    replaceFragment(stopTimerFragment);
-                } else {
-                    try {
-                        if (response.errorBody() != null) {
-                            showToastMessage(response.errorBody().string());
-                        }
-                    } catch (IOException e) {
-                        showToastMessage("Error happened");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<TimerModel> call, @NonNull Throwable t) {
-                showToastMessage(t.getMessage());
-            }
-        });
-    }
-
-    private void showToastMessage(String text) {
-        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-        toast.show();
     }
 }

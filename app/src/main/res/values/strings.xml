@@ -11,7 +11,7 @@
     <string name="main_archive_activity">Archive</string>
     <string name="main_enter_work">Enter work name:</string>
     <string name="main_create_work">CREATE</string>
-    <string name="main_work_templates">Predefined work names</string>
+    <string name="main_work_templates">Activity templates</string>
     <string name="main_walk_template">Walk</string>
     <string name="main_sleep_template">Sleep</string>
     <string name="main_physical_work_template">Ph.work</string>
@@ -55,4 +55,15 @@
     <string name="service_leave">Leave current activity</string>
     <string name="service_stop">Service stopped</string>
     <string name="service_comment_received">Comment received</string>
+    <string name="archive_work_short_information">Tap for full information</string>
+    <string name="archive_completed_work">Completed</string>
+    <string name="archive_failed_work">Failed</string>
+    <string name="archive_work_completed_text">Completed: </string>
+    <string name="timer_activity_toolbar">Timer activity</string>
+    <string name="comment_activity_toolbar">Comments Activity</string>
+    <string name="main_screen_home">Home</string>
+    <string name="main_screen_archive_activity_toolbar">Archive activity</string>
+    <string name="timer_dialog_header">Add comment</string>
+    <string name="timer_dialog_create">Create</string>
+    <string name="timer_dialog_cancel">Cancel</string>
 </resources>

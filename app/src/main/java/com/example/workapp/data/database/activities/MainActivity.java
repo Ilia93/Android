@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.archive:
-                    Intent archiveIntent = new Intent(MainActivity.this, CompletedWorks.class);
+                    Intent archiveIntent = new Intent(MainActivity.this, ArchiveActivity.class);
                     startActivity(archiveIntent);
                     break;
                 case R.id.next:

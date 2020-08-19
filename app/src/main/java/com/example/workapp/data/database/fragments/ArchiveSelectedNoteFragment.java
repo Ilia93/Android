@@ -15,11 +15,11 @@ import com.example.workapp.R;
 
 import java.util.List;
 
-import static com.example.workapp.presentation.screen.archive.CompletedWorks.isClickedFifthNote;
-import static com.example.workapp.presentation.screen.archive.CompletedWorks.isClickedFourthNote;
-import static com.example.workapp.presentation.screen.archive.CompletedWorks.isClickedSecondNote;
-import static com.example.workapp.presentation.screen.archive.CompletedWorks.isClickedThirdNote;
-import static com.example.workapp.presentation.screen.archive.CompletedWorks.isIsClickedFirstNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isClickedFifthNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isClickedFourthNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isClickedSecondNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isClickedThirdNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isIsClickedFirstNote;
 
 import com.example.workapp.database.entity.AppTimer;
 import com.example.workapp.database.querries.WorkWithComments;

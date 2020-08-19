@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workapp.R;
 import com.example.workapp.data.network.NetworkClient;
@@ -19,13 +23,15 @@ import com.example.workapp.data.network.model.work.WorkActionResult;
 import com.example.workapp.data.network.model.work.WorkCloudDataSource;
 import com.example.workapp.data.network.model.work.WorkModel;
 import com.example.workapp.databinding.ActivityMainBinding;
-import com.example.workapp.presentation.screen.archive.CompletedWorks;
+import com.example.workapp.presentation.screen.archive.ArchiveActivity;
+import com.example.workapp.presentation.screen.comment.CommentActivity;
 import com.example.workapp.presentation.screen.timer.timer.TimerActivity;
 import com.example.workapp.presentation.service.notifications.NotificationService;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,31 +62,14 @@ public class MainActivity extends AppCompatActivity {
     public final String WORK_NAME = "workName";
     public final String WORK_OBJECT_ID = "workObjectId";
     public WorkModel workModel = new WorkModel();
+    List<ActivityTemplatesModel> activityTemplates = new ArrayList<>();
+    Toolbar toolbar;
     ActivityMainBinding activityMainBinding;
+    RecyclerView mainRecyclerView, worksTemplatesRecyclerView;
 
     OnClickListener mainScreen = v -> {
-        switch (v.getId()) {
-            case R.id.archive:
-                moveToArchiveScreen();
-                break;
-            case R.id.next:
-                onNextButtonClicked();
-                break;
-            case R.id.createWork:
-                createWork();
-                break;
-            case R.id.run:
-                insertPredefinedWorkName(R.string.main_run_activity);
-                break;
-            case R.id.sleep:
-                insertPredefinedWorkName(R.string.main_sleep_activity);
-                break;
-            case R.id.walk:
-                insertPredefinedWorkName(R.string.main_walk_activity);
-                break;
-            case R.id.physical_work:
-                insertPredefinedWorkName(R.string.main_physical_activity);
-                break;
+        if (v.getId() == R.id.createWork) {
+            createWork();
         }
     };
 
@@ -90,17 +79,13 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
         setClickListeners();
+        setToolbar();
+        createActivityTemplates();
         showWorks();
     }
 
     public void setClickListeners() {
-        activityMainBinding.archive.setOnClickListener(mainScreen);
-        activityMainBinding.next.setOnClickListener(mainScreen);
         activityMainBinding.createWork.setOnClickListener(mainScreen);
-        activityMainBinding.run.setOnClickListener(mainScreen);
-        activityMainBinding.walk.setOnClickListener(mainScreen);
-        activityMainBinding.sleep.setOnClickListener(mainScreen);
-        activityMainBinding.physicalWork.setOnClickListener(mainScreen);
     }
 
     public void showWorks() {
@@ -108,25 +93,8 @@ public class MainActivity extends AppCompatActivity {
         workCloudDataSource.getWork(workModel.getName(), new WorkActionResult() {
             @Override
             public void onSuccess(List<WorkModel> works) {
-                switch (works.size()) {
-                    case 0:
-                        handleEmptyWorks();
-                        break;
-                    case 1:
-                        handleOneWork(works);
-                        break;
-                    case 2:
-                        handleTwoWorks(works);
-                        break;
-                    case 3:
-                        handleThreeWorks(works);
-                        break;
-                    case 4:
-                        handleFourWorks(works);
-                        break;
-                    default:
-                        handleMoreTHenFourWorks(works);
-                }
+                setWorksDataAdapter(works);
+                setActivityTemplatesAdapter();
             }
 
             @Override
@@ -134,71 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private void handleEmptyWorks() {
-        activityMainBinding.firstWork.setText(R.string.main_empty_works);
-    }
-
-    private void handleOneWork(List<WorkModel> works) {
-        displayWorkName(activityMainBinding.firstWork, 1, works);
-    }
-
-    private void handleTwoWorks(List<WorkModel> works) {
-        displayWorkName(activityMainBinding.firstWork, 1, works);
-        displayWorkName(activityMainBinding.secondWork, 2, works);
-
-    }
-
-    private void handleThreeWorks(List<WorkModel> works) {
-        displayWorkName(activityMainBinding.firstWork, 1, works);
-        displayWorkName(activityMainBinding.secondWork, 2, works);
-        displayWorkName(activityMainBinding.thirdWork, 3, works);
-
-    }
-
-    private void handleFourWorks(List<WorkModel> works) {
-        displayWorkName(activityMainBinding.firstWork, 1, works);
-        displayWorkName(activityMainBinding.secondWork, 2, works);
-        displayWorkName(activityMainBinding.thirdWork, 3, works);
-        displayWorkName(activityMainBinding.fourthWork, 4, works);
-    }
-
-    private void handleMoreTHenFourWorks(List<WorkModel> works) {
-        displayWorkName(activityMainBinding.firstWork, 1, works);
-        displayWorkName(activityMainBinding.secondWork, 2, works);
-        displayWorkName(activityMainBinding.thirdWork, 3, works);
-        displayWorkName(activityMainBinding.fourthWork, 4, works);
-        displayWorkName(activityMainBinding.fifthWork, 5, works);
-    }
-
-    public void displayWorkName(@NonNull TextView textView, Integer index,
-                                @NonNull List<WorkModel> works) {
-
-        String text = getString(R.string.main_work_name, works.get(works.size() - index).getName());
-        textView.setText(text);
-    }
-
-    private void onNextButtonClicked() {
-        Intent timerIntent = new Intent(MainActivity.this, TimerActivity.class);
-        try {
-            if (workModel.getName().equals("")) {
-                throw new NullPointerException();
-            } else {
-                timerIntent.putExtra(WORK_NAME, workModel.getName());
-                timerIntent.putExtra(WORK_ID, workModel.getId());
-                timerIntent.putExtra(WORK_OBJECT_ID, workModel.getObjectId());
-                startActivity(timerIntent);
-            }
-        } catch (NullPointerException exception) {
-            showToastMessage("Work name is empty");
-            activityMainBinding.next.setEnabled(false);
-        }
-    }
-
-    private void moveToArchiveScreen() {
-        Intent archiveIntent = new Intent(MainActivity.this, CompletedWorks.class);
-        startActivity(archiveIntent);
     }
 
     private void createWork() {
@@ -214,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             showToastMessage("Work created");
                             activityMainBinding.inputWork.setText(null);
-                            activityMainBinding.next.setEnabled(true);
                             getWorkObjectIdByName();
                             startWorkService();
                         } else {
@@ -245,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<WorkModel> works) {
                 setWorkObjectId(works);
+                startTimerActivity();
             }
 
             @Override
@@ -262,8 +165,70 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void insertPredefinedWorkName(Integer preDefinedWork) {
-        activityMainBinding.inputWork.setText(preDefinedWork);
+    private void setToolbar() {
+        toolbar = findViewById(R.id.main_screen_toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    private void setWorksDataAdapter(List<WorkModel> works) {
+        mainRecyclerView = findViewById(R.id.mainRecyclerView);
+        DataAdapterMain dataAdapterMain = new DataAdapterMain(this, works);
+        mainRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mainRecyclerView.setAdapter(dataAdapterMain);
+    }
+
+    private void createActivityTemplates() {
+        activityTemplates.add(new ActivityTemplatesModel("Run activity", R.drawable.run_twice));
+        activityTemplates.add(new ActivityTemplatesModel("Walk activity", R.drawable.walking_activity));
+        activityTemplates.add(new ActivityTemplatesModel("Sleep activity", R.drawable.sand_clocks));
+        activityTemplates.add(new ActivityTemplatesModel("Physical activity", R.drawable.physical));
+    }
+
+    private void setActivityTemplatesAdapter() {
+        worksTemplatesRecyclerView = findViewById(R.id.predefinedWorksRecyclerView);
+        ActivityTemplatesAdapter.OnUserClickListener onUserClickListener =
+                new ActivityTemplatesAdapter.OnUserClickListener() {
+                    @Override
+                    public void onUserClick(@NotNull ActivityTemplatesModel activityTemplatesModel) {
+                        activityMainBinding.inputWork.setText(activityTemplatesModel.getActivityDescription());
+                    }
+                };
+        ActivityTemplatesAdapter templates = new ActivityTemplatesAdapter(this,
+                activityTemplates, onUserClickListener);
+        worksTemplatesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        worksTemplatesRecyclerView.setAdapter(templates);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.archive_activity_toolbar) {
+            Intent intent = new Intent(this, ArchiveActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.timer_activity_toolbar) {
+            Intent intent = new Intent(this, TimerActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.home_activity_toolbar) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.comments_activity_toolbar) {
+            Intent intent = new Intent(this, CommentActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void startTimerActivity() {
+        Intent timerIntent = new Intent(MainActivity.this, TimerActivity.class);
+        timerIntent.putExtra(WORK_NAME, workModel.getName());
+        timerIntent.putExtra(WORK_ID, workModel.getId());
+        timerIntent.putExtra(WORK_OBJECT_ID, workModel.getObjectId());
+        startActivity(timerIntent);
     }
 
     private void startWorkService() {
