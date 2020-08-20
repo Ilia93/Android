@@ -8,6 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+        <!-- Customize your theme here. -->
+    <!-- Customize your theme here.
+    <style name="AppTheme.Launch" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@drawable/splash_screen_drawable</item>
+    </style>-->
+
+
     <style name="ArchiveTextRecyclerView">
         <item name="android:textSize">@dimen/textSize_all_11sp</item>
         <item name="android:layout_marginLeft">@dimen/common_margin</item>

@@ -12,6 +12,7 @@
     <dimen name="textSize_all_15sp">15sp</dimen>
     <dimen name="textSize_all_18sp">18sp</dimen>
     <dimen name="textSize_all_page_name_22sp">22sp</dimen>
+    <dimen name="textSize_splash_screen_48sp">48sp</dimen>
     <dimen name="timer_size">40sp</dimen>
     <dimen name="main_btn_create_dimen">240dp</dimen>
 </resources>

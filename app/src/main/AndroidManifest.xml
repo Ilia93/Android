@@ -14,14 +14,14 @@
         <service
             android:name=".presentation.service.notifications.NotificationService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"/>
 
         <receiver
             android:name=".presentation.service.receiver.NotificationReceiver"
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".presentation.screen.main.MainActivity">
+        <activity android:name=".presentation.screen.splash.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,6 +32,7 @@
         <activity android:name=".presentation.screen.archive.ArchiveActivity" />
         <activity android:name=".presentation.screen.archive.CompletedWorksInformation" />
         <activity android:name=".presentation.screen.comment.CommentActivity" />
+        <activity android:name=".presentation.screen.main.MainActivity" />
     </application>
 
 </manifest>

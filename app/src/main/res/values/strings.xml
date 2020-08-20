@@ -66,4 +66,5 @@
     <string name="timer_dialog_header">Add comment</string>
     <string name="timer_dialog_create">Create</string>
     <string name="timer_dialog_cancel">Cancel</string>
+    <string name="splash_screen_text">Work app</string>
 </resources>

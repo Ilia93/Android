@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -40,7 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TimerActivity extends AppCompatActivity implements StartTimerFragment.TimerClickListener,
-        StopTimerFragment.TimerCloseable, CommentDialog.EditNameDialogListener {
+        StopTimerFragment.TimerCloseable, CommentDialog.DialogListener {
 
     public static Date timeOfTimerStart, timeOfTimerPauseStart, timeOfTimerPauseFinish;
     public static boolean isStarted, isPaused, isResumed = false;
@@ -204,7 +202,7 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
         startActivity(intent);
     }
 
-    private void createCommentOnServer(DialogFragment dialog) {
+    private void createCommentOnServer(String text) {
         Call<CommentsModel> call = NetworkClient.getCommentAPI().createComment(commentsModel);
         call.enqueue(new Callback<CommentsModel>() {
             @Override
@@ -213,8 +211,7 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
                 if (response.isSuccessful()) {
                     commentsModel.setTime(timerOperations.setTime());
                     commentsModel.setWorkId(getIntent().getStringExtra("workId"));
-                    commentsModel.setText(((EditText) dialog.getDialog().findViewById
-                            (R.id.inputDialogComment)).getText().toString());
+                    commentsModel.setText(text);
                     showToastMessage("Comment created");
                 } else {
                     try {
@@ -313,8 +310,18 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
     }*/
 
     @Override
-    public void onFinishEditDialog(String inputText) {
-        createCommentOnServer();
+    public void onPositiveClicked(String text) {
+        CommentDialog commentDialog = new CommentDialog();
+        createCommentOnServer(text);
+        commentDialog.dismiss();
+    }
 
+    @Override
+    public void onNegativeClicked() {
+        Fragment dialog1 = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (dialog1 instanceof CommentDialog) {
+            CommentDialog commentDialog = (CommentDialog) dialog1;
+            commentDialog.dismiss();
+        }
     }
 }
