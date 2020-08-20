@@ -4,4 +4,6 @@
     android:id="@+id/main_screen_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?android:actionBarSize"
-    app:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+    android:background="@color/blue_1"
+    android:fitsSystemWindows="true"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />

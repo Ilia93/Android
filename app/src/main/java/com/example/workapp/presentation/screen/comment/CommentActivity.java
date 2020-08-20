@@ -31,7 +31,6 @@ public class CommentActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
-        setToolbar();
         showComments();
     }
 
@@ -52,34 +51,5 @@ public class CommentActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private void setToolbar() {
-        toolbar = findViewById(R.id.main_screen_toolbar);
-        setSupportActionBar(toolbar);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.archive_activity_toolbar) {
-            Intent intent = new Intent(this, ArchiveActivity.class);
-            startActivity(intent);
-        } else if (item.getItemId() == R.id.timer_activity_toolbar) {
-            Intent intent = new Intent(this, TimerActivity.class);
-            startActivity(intent);
-        } else if (item.getItemId() == R.id.home_activity_toolbar) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else if (item.getItemId() == R.id.comments_activity_toolbar) {
-            Intent intent = new Intent(this, CommentActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -12,8 +12,11 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,10 +26,9 @@ import com.example.workapp.data.network.model.work.WorkActionResult;
 import com.example.workapp.data.network.model.work.WorkCloudDataSource;
 import com.example.workapp.data.network.model.work.WorkModel;
 import com.example.workapp.databinding.ActivityMainBinding;
-import com.example.workapp.presentation.screen.archive.ArchiveActivity;
-import com.example.workapp.presentation.screen.comment.CommentActivity;
 import com.example.workapp.presentation.screen.timer.timer.TimerActivity;
 import com.example.workapp.presentation.service.notifications.NotificationService;
+import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static NotificationService notificationService;
     public static ServiceConnection serviceConnection = new ServiceConnection() {
@@ -62,30 +64,71 @@ public class MainActivity extends AppCompatActivity {
     public final String WORK_NAME = "workName";
     public final String WORK_OBJECT_ID = "workObjectId";
     public WorkModel workModel = new WorkModel();
+    public Toolbar toolbar;
     List<ActivityTemplatesModel> activityTemplates = new ArrayList<>();
-    Toolbar toolbar;
     ActivityMainBinding activityMainBinding;
     RecyclerView mainRecyclerView, worksTemplatesRecyclerView;
-
     OnClickListener mainScreen = v -> {
         if (v.getId() == R.id.createWork) {
             createWork();
         }
     };
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
+        setScreenElements();
         setClickListeners();
-        setToolbar();
         createActivityTemplates();
         showWorks();
     }
 
     public void setClickListeners() {
         activityMainBinding.createWork.setOnClickListener(mainScreen);
+    }
+
+    private void setScreenElements() {
+        toolbar = findViewById(R.id.main_screen_toolbar);
+        setSupportActionBar(toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.nav_archive_fragment) {
+            showToastMessage("Archive clicked");
+        } else if (id == R.id.nav_home_fragment) {
+            showToastMessage("Home clicked");
+        } else if (id == R.id.nav_timer_fragment) {
+            showToastMessage("Timer clicked");
+        } else if (id == R.id.nav_comments_fragment) {
+            showToastMessage("Comments clicked");
+        }
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     public void showWorks() {
@@ -165,11 +208,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setToolbar() {
-        toolbar = findViewById(R.id.main_screen_toolbar);
-        setSupportActionBar(toolbar);
-    }
-
     private void setWorksDataAdapter(List<WorkModel> works) {
         mainRecyclerView = findViewById(R.id.mainRecyclerView);
         DataAdapterMain dataAdapterMain = new DataAdapterMain(this, works);
@@ -201,24 +239,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.drawer_view, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.archive_activity_toolbar) {
-            Intent intent = new Intent(this, ArchiveActivity.class);
-            startActivity(intent);
-        } else if (item.getItemId() == R.id.timer_activity_toolbar) {
-            Intent intent = new Intent(this, TimerActivity.class);
-            startActivity(intent);
-        } else if (item.getItemId() == R.id.home_activity_toolbar) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else if (item.getItemId() == R.id.comments_activity_toolbar) {
-            Intent intent = new Intent(this, CommentActivity.class);
-            startActivity(intent);
+        if (item.getItemId() == R.id.home_toolbar) {
+            drawerLayout.openDrawer(GravityCompat.START);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

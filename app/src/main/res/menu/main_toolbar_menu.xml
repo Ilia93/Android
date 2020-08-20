@@ -2,25 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/archive_activity_toolbar"
+        android:id="@+id/home_toolbar"
         android:icon="@drawable/ic_archive_white_24dp"
-        android:title="@string/main_screen_archive_activity_toolbar"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/home_activity_toolbar"
-        android:icon="@drawable/ic_main_screen_home_white_24dp"
-        android:title="@string/main_screen_home"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/timer_activity_toolbar"
-        android:icon="@drawable/ic_timer_activity_toolbar_24dp"
-        android:title="@string/timer_activity_toolbar"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/comments_activity_toolbar"
-        android:icon="@drawable/ic_comment_white_24dp"
-        android:title="@string/comment_activity_toolbar"
-        app:showAsAction="always" />
-
+        android:title="Tools"
+        app:showAsAction="collapseActionView" />
 </menu>

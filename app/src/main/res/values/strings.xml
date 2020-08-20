@@ -67,4 +67,6 @@
     <string name="timer_dialog_create">Create</string>
     <string name="timer_dialog_cancel">Cancel</string>
     <string name="splash_screen_text">Work app</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

@@ -14,7 +14,7 @@ import com.example.workapp.R;
 
 public class CommentDialog extends DialogFragment {
 
-    private DialogListener dialogListener;
+    DialogListener dialogListener;
     private EditText userInput;
 
     @Nullable
