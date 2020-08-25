@@ -15,15 +15,15 @@ import com.example.workapp.R;
 
 import java.util.List;
 
-public class ActivityTemplatesAdapter extends RecyclerView
-        .Adapter<ActivityTemplatesAdapter.ViewHolder> {
+public class MainWorkTemplatesAdapter extends RecyclerView
+        .Adapter<MainWorkTemplatesAdapter.ViewHolder> {
     private LayoutInflater layoutInflater;
-    private List<ActivityTemplatesModel> listOfTemplates;
+    private List<MainTemplatesModel> listOfTemplates;
     private OnUserClickListener onUserClickListener;
 
 
-    public ActivityTemplatesAdapter(Context context
-            , List<ActivityTemplatesModel> listOfTemplates
+    public MainWorkTemplatesAdapter(Context context
+            , List<MainTemplatesModel> listOfTemplates
             , OnUserClickListener onUserClickListener) {
         this.layoutInflater = LayoutInflater.from(context);
         this.listOfTemplates = listOfTemplates;
@@ -33,14 +33,14 @@ public class ActivityTemplatesAdapter extends RecyclerView
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.main_predefined_works_list, parent,
+        View view = layoutInflater.inflate(R.layout.main_recycler_view_work_templates, parent,
                 false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ActivityTemplatesModel workTemplates = listOfTemplates.get(position);
+        MainTemplatesModel workTemplates = listOfTemplates.get(position);
         holder.activityDescription.setImageResource(workTemplates.getWorkImage());
         holder.activityTemplate.setText(workTemplates.getActivityDescription());
     }
@@ -51,7 +51,7 @@ public class ActivityTemplatesAdapter extends RecyclerView
     }
 
     public interface OnUserClickListener {
-        void onUserClick(ActivityTemplatesModel activityTemplatesModel);
+        void onUserClick(MainTemplatesModel mainTemplatesModel);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -68,8 +68,8 @@ public class ActivityTemplatesAdapter extends RecyclerView
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ActivityTemplatesModel activityTemplatesModel = listOfTemplates.get(getLayoutPosition());
-                    onUserClickListener.onUserClick(activityTemplatesModel);
+                    MainTemplatesModel mainTemplatesModel = listOfTemplates.get(getLayoutPosition());
+                    onUserClickListener.onUserClick(mainTemplatesModel);
                 }
             });
         }

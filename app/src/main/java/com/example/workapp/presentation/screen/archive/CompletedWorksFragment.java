@@ -1,12 +1,14 @@
 package com.example.workapp.presentation.screen.archive;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.workapp.R;
 import com.example.workapp.data.network.model.comments.CommentsActionResult;
@@ -18,26 +20,40 @@ import com.example.workapp.data.network.model.timer.TimerModel;
 import com.example.workapp.data.network.model.work.WorkActionResult;
 import com.example.workapp.data.network.model.work.WorkCloudDataSource;
 import com.example.workapp.data.network.model.work.WorkModel;
-import com.example.workapp.databinding.ActivityCompletedWorksInformationBinding;
-import com.example.workapp.presentation.screen.main.MainActivity;
+import com.example.workapp.databinding.FragmentCompletedWorksBinding;
+import com.example.workapp.presentation.screen.main.MainFragment;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CompletedWorksInformation extends AppCompatActivity {
+public class CompletedWorksFragment extends Fragment {
 
-    ActivityCompletedWorksInformationBinding binding;
+    FragmentCompletedWorksBinding binding;
+    MainFragment mainFragment = new MainFragment();
     private WorkModel workModel = new WorkModel();
     private TimerModel timerModel = new TimerModel();
     private CommentsModel commentsModel = new CommentsModel();
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityCompletedWorksInformationBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentCompletedWorksBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        setOnClickListener();
         getCommonWorksInformation();
+        return view;
+    }
+
+    private void setOnClickListener() {
+        binding.completedWorksExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().add(R.id.navigation_content_frame, mainFragment);
+                getFragmentManager().beginTransaction().addToBackStack(null);
+                getFragmentManager().beginTransaction().commit();
+            }
+        });
     }
 
     private void getCommonWorksInformation() {
@@ -106,7 +122,7 @@ public class CompletedWorksInformation extends AppCompatActivity {
     private void displayServerWorksData(@NonNull TextView textView,
                                         @NonNull List<WorkModel> works) {
         StringBuilder stringBuilder = new StringBuilder();
-        String id = (getIntent().getStringExtra("NOTE_CLICKED_ID_ARG"));
+        String id = (getArguments().getString("NOTE_CLICKED_ID_ARG"));
         for (int i = 0; i < works.size(); i++) {
             if ((works.get(i).getId().equals(id))) {
                 stringBuilder.append(getString(R.string.archive_works_name))
@@ -119,7 +135,7 @@ public class CompletedWorksInformation extends AppCompatActivity {
     private void displayServerTimerData(@NonNull TextView textView,
                                         @NonNull List<TimerModel> timerModel) {
         StringBuilder stringBuilder = new StringBuilder();
-        String id = (getIntent().getStringExtra("NOTE_CLICKED_ID_ARG"));
+        String id = (getArguments().getString("NOTE_CLICKED_ID_ARG"));
         for (int i = 0; i < timerModel.size(); i++) {
             if (timerModel.get(i).getWorkId().equals(id)) {
                 stringBuilder.append(getString(R.string.archive_work_started))
@@ -144,7 +160,7 @@ public class CompletedWorksInformation extends AppCompatActivity {
         String allWorkComments = "";
         for (int i = 0; i < comments.size(); i++) {
             do {
-                if (comments.get(i).getWorkId().equals(getIntent().getStringExtra("NOTE_CLICKED_ID_ARG"))) {
+                if (comments.get(i).getWorkId().equals(getArguments().getString("NOTE_CLICKED_ID_ARG"))) {
                     allWorkComments = allWorkComments.concat(comments.get(i).getText() + " at " +
                             comments.get(i).getTime() + "\n");
                 }
@@ -154,16 +170,5 @@ public class CompletedWorksInformation extends AppCompatActivity {
                 .append("\n")
                 .append(allWorkComments);
         textView.setText(stringBuilder);
-    }
-
-    public void moveToMainScreen(View view) {
-        Intent closeWorks = new Intent(CompletedWorksInformation.this, MainActivity.class);
-        startActivity(closeWorks);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
     }
 }

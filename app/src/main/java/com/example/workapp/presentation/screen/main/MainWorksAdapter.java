@@ -14,12 +14,12 @@ import com.example.workapp.data.network.model.work.WorkModel;
 
 import java.util.List;
 
-public class DataAdapterMain extends RecyclerView.Adapter<DataAdapterMain.ViewHolder> {
+public class MainWorksAdapter extends RecyclerView.Adapter<MainWorksAdapter.ViewHolder> {
     private LayoutInflater layoutInflater;
     private List<WorkModel> listOfWorks;
     String activity_template = "Activity";
 
-    DataAdapterMain(Context context, List<WorkModel> listOfWorks) {
+    MainWorksAdapter(Context context, List<WorkModel> listOfWorks) {
         this.layoutInflater = LayoutInflater.from(context);
         this.listOfWorks = listOfWorks;
 
@@ -28,7 +28,7 @@ public class DataAdapterMain extends RecyclerView.Adapter<DataAdapterMain.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.main_list_of_items, parent, false);
+        View view = layoutInflater.inflate(R.layout.main_recycler_view_works, parent, false);
         return new ViewHolder(view);
     }
 

@@ -28,10 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.screen.timer.timer.TimerActivity" />
-        <activity android:name=".presentation.screen.archive.ArchiveActivity" />
-        <activity android:name=".presentation.screen.archive.CompletedWorksInformation" />
-        <activity android:name=".presentation.screen.comment.CommentActivity" />
+        <activity android:name=".presentation.screen.comment.CommentFragment" />
         <activity android:name=".presentation.screen.main.MainActivity" />
     </application>
 

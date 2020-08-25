@@ -13,6 +13,7 @@
     <dimen name="textSize_all_18sp">18sp</dimen>
     <dimen name="textSize_all_page_name_22sp">22sp</dimen>
     <dimen name="textSize_splash_screen_48sp">48sp</dimen>
+    <dimen name="padding_main_screen_drawer_header_30dp">30dp</dimen>
     <dimen name="timer_size">40sp</dimen>
     <dimen name="main_btn_create_dimen">240dp</dimen>
 </resources>

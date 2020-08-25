@@ -20,7 +20,7 @@ public class CommentDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.timer_comment_dialog, container);
+        return inflater.inflate(R.layout.timer_dialog_add_comment, container);
     }
 
     @Override

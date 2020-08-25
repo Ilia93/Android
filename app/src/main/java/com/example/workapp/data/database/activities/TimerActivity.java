@@ -30,7 +30,7 @@ import java.util.TimerTask;
 //import com.example.workapp.database.room_dao.TimerDao;
 //import com.example.workapp.database.room_dao.WorkDao;
 
-public class TimerActivity extends AppCompatActivity implements StartTimerFragment.TimerClickListener,
+public class TimerFragment extends AppCompatActivity implements StartTimerFragment.TimerClickListener,
         StopTimerFragment.TimerCloseable, AddTimerCommentFragment.CreateCommentsListener {
     TimerDao timerDao = db.timerDao();
     WorkDao workDao = db.workDao();
@@ -50,7 +50,7 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timer);
+        setContentView(R.layout.timer_fragment);
         if (savedInstanceState == null) {
             myFragmentManager = getSupportFragmentManager();
             startTimerFragment = new StartTimerFragment();
@@ -152,7 +152,7 @@ public class TimerActivity extends AppCompatActivity implements StartTimerFragme
 
     @Override
     public void timerExit() {
-        Intent intent = new Intent(TimerActivity.this, MainActivity.class);
+        Intent intent = new Intent(TimerFragment.this, MainActivity.class);
         startActivity(intent);
     }
 

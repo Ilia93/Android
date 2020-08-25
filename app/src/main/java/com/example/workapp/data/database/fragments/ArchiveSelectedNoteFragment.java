@@ -15,11 +15,11 @@ import com.example.workapp.R;
 
 import java.util.List;
 
-import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isClickedFifthNote;
-import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isClickedFourthNote;
-import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isClickedSecondNote;
-import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isClickedThirdNote;
-import static com.example.workapp.presentation.screen.archive.ArchiveActivity.isIsClickedFirstNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveFragment.isClickedFifthNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveFragment.isClickedFourthNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveFragment.isClickedSecondNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveFragment.isClickedThirdNote;
+import static com.example.workapp.presentation.screen.archive.ArchiveFragment.isIsClickedFirstNote;
 
 import com.example.workapp.database.entity.AppTimer;
 import com.example.workapp.database.querries.WorkWithComments;
@@ -27,13 +27,13 @@ import com.example.workapp.database.querries.WorkWithTimer;
 import com.example.workapp.database.room_dao.WorkDao;
 import static com.example.workapp.presentation.screen.main.MainActivity.db;
 
-public class CompletedWorksInformation extends Fragment {
+public class CompletedWorksFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_completed_works_information, container, false);
+        View view = inflater.inflate(R.layout.fragment_completed_works, container, false);
         //WorkDao workDao = db.workDao();
         //List<WorkWithComments> works = workDao.getWorkComments();
         //List<WorkWithTimer> worksAndTimer = workDao.getWorkAndTimer();

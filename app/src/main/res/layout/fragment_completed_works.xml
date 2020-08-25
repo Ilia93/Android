@@ -15,7 +15,6 @@
         android:layout_marginTop="@dimen/layoutTop_margin"
         android:layout_marginEnd="@dimen/common_margin"
         android:background="@drawable/white_buttons"
-        android:onClick="moveToMainScreen"
         android:text="@string/timer_exit_activity" />
 
     <androidx.cardview.widget.CardView

@@ -1,10 +1,10 @@
 package com.example.workapp.presentation.screen.main;
 
-public class ActivityTemplatesModel {
+public class MainTemplatesModel {
     private String activityDescription;
     private int workImage;
 
-    public ActivityTemplatesModel(String activityDescription, int workImage) {
+    public MainTemplatesModel(String activityDescription, int workImage) {
         this.activityDescription = activityDescription;
         this.workImage = workImage;
     }

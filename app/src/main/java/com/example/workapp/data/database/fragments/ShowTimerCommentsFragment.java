@@ -24,7 +24,7 @@ public class ShowTimerCommentsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_comment, container, false);
+        View view = inflater.inflate(R.layout.comments_fragment, container, false);
         List<Comment> listOfComments = commentDao.getall();
         if (listOfComments.size() == 0) {
             String noComments = "There are no any comments";

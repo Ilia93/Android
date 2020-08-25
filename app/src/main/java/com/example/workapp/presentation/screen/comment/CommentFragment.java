@@ -1,14 +1,15 @@
 package com.example.workapp.presentation.screen.comment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,33 +17,30 @@ import com.example.workapp.R;
 import com.example.workapp.data.network.model.comments.CommentsActionResult;
 import com.example.workapp.data.network.model.comments.CommentsCloudDataSource;
 import com.example.workapp.data.network.model.comments.CommentsModel;
-import com.example.workapp.presentation.screen.archive.ArchiveActivity;
-import com.example.workapp.presentation.screen.main.MainActivity;
-import com.example.workapp.presentation.screen.timer.timer.TimerActivity;
 
 import java.util.List;
 
-public class CommentActivity extends AppCompatActivity {
+public class CommentFragment extends Fragment {
     private RecyclerView commentsRecyclerView;
     private CommentsModel commentsModel = new CommentsModel();
-    Toolbar toolbar;
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comment);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.comments_fragment, container, false);
+        commentsRecyclerView = view.findViewById(R.id.commentsRecyclerView);
         showComments();
+        return view;
     }
 
     private void showComments() {
-        commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
         CommentsCloudDataSource commentsCloudDataSource = new CommentsCloudDataSource();
         commentsCloudDataSource.getComments(commentsModel.getText(), new CommentsActionResult() {
 
             @Override
             public void onSuccess(List<CommentsModel> comments) {
-                CommentsAdapter commentsAdapter = new CommentsAdapter(CommentActivity.this, comments);
-                commentsRecyclerView.setLayoutManager(new LinearLayoutManager(CommentActivity.this));
+                CommentsAdapter commentsAdapter = new CommentsAdapter(getActivity().getApplicationContext(), comments);
+                commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 commentsRecyclerView.setAdapter(commentsAdapter);
             }
 

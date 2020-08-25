@@ -20,12 +20,12 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.workapp.presentation.screen.timer.timer.TimerActivity.isPaused;
-import static com.example.workapp.presentation.screen.timer.timer.TimerActivity.isResumed;
-import static com.example.workapp.presentation.screen.timer.timer.TimerActivity.isStarted;
-import static com.example.workapp.presentation.screen.timer.timer.TimerActivity.timeOfPauseFinish;
-import static com.example.workapp.presentation.screen.timer.timer.TimerActivity.timeOfPauseStart;
-import static com.example.workapp.presentation.screen.timer.timer.TimerActivity.timeOfStart;
+import static com.example.workapp.presentation.screen.timer.timer.TimerFragment.isPaused;
+import static com.example.workapp.presentation.screen.timer.timer.TimerFragment.isResumed;
+import static com.example.workapp.presentation.screen.timer.timer.TimerFragment.isStarted;
+import static com.example.workapp.presentation.screen.timer.timer.TimerFragment.timeOfPauseFinish;
+import static com.example.workapp.presentation.screen.timer.timer.TimerFragment.timeOfPauseStart;
+import static com.example.workapp.presentation.screen.timer.timer.TimerFragment.timeOfStart;
 
 public class StartTimerFragment extends Fragment {
     @SuppressLint("SimpleDateFormat")

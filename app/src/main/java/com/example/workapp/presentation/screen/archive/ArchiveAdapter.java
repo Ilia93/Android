@@ -1,6 +1,5 @@
 package com.example.workapp.presentation.screen.archive;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,10 @@ import com.example.workapp.data.network.model.work.WorkModel;
 import java.util.List;
 
 class ArchiveAdapter extends RecyclerView.Adapter<ArchiveAdapter.ViewHolder> {
-    private LayoutInflater layoutInflater;
     private List<WorkModel> listOfWorks;
     private OnUserClickListener onUserClickListener;
 
-    ArchiveAdapter(Context context, List<WorkModel> listOfWorks, OnUserClickListener onUserClickListener) {
-        this.layoutInflater = LayoutInflater.from(context);
+    ArchiveAdapter(List<WorkModel> listOfWorks, OnUserClickListener onUserClickListener) {
         this.listOfWorks = listOfWorks;
         this.onUserClickListener = onUserClickListener;
     }
@@ -29,7 +26,7 @@ class ArchiveAdapter extends RecyclerView.Adapter<ArchiveAdapter.ViewHolder> {
     @NonNull
     @Override
     public ArchiveAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.archive_list_of_items, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.archive_recycler_view, parent, false);
         return new ViewHolder(view);
     }
 

@@ -15,15 +15,15 @@ import com.example.workapp.R;
 
 import java.util.List;
 
-public class TimerAdapter extends RecyclerView
-        .Adapter<TimerAdapter.ViewHolder> {
+public class TimerMenuAdapter extends RecyclerView
+        .Adapter<TimerMenuAdapter.ViewHolder> {
     private LayoutInflater layoutInflater;
     private List<TimerMenuModel> timerMenuModelList;
     private OnUserClickListener onUserClickListener;
 
 
-    public TimerAdapter(Context context, List<TimerMenuModel> timerMenuModelList,
-                        OnUserClickListener onUserClickListener) {
+    public TimerMenuAdapter(Context context, List<TimerMenuModel> timerMenuModelList,
+                            OnUserClickListener onUserClickListener) {
         this.layoutInflater = LayoutInflater.from(context);
         this.timerMenuModelList = timerMenuModelList;
         this.onUserClickListener = onUserClickListener;
@@ -31,13 +31,13 @@ public class TimerAdapter extends RecyclerView
 
     @NonNull
     @Override
-    public TimerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.timer_list_of_items, parent, false);
+    public TimerMenuAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = layoutInflater.inflate(R.layout.timer_recycler_view_menu, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TimerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TimerMenuAdapter.ViewHolder holder, int position) {
         TimerMenuModel model = timerMenuModelList.get(position);
         holder.timerMenuText.setText(model.getText());
         holder.menuImage.setImageResource(model.getImage());

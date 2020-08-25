@@ -24,28 +24,12 @@ public class StopTimerFragment extends Fragment {
     private TimerFinishWorkFragmentBinding binding;
     private TimerModel timerModel = new TimerModel();
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof TimerActivity) {
-            timerCloseable = (TimerCloseable) context;
-        } else {
-            throw new ClassCastException(context.toString() + "wrong implementation");
-        }
-    }
-
-    public interface TimerCloseable {
-        void onTimerClosed();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = TimerFinishWorkFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-
         setTimerCloseableListener(view);
-
         TimerCloudDataSource timerCloudDataSource = new TimerCloudDataSource();
         timerCloudDataSource.getTimer(timerModel.getStartTime(), new TimerActionResult() {
             @Override
@@ -72,5 +56,9 @@ public class StopTimerFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public interface TimerCloseable {
+        void onTimerClosed();
     }
 }

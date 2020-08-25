@@ -35,7 +35,7 @@ public class ArchiveStartFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_archive, container, false);
+        View view = inflater.inflate(R.layout.archive_fragment, container, false);
         if (workList.size() == 0) {
             ((TextView) view.findViewById(R.id.firstArchiveNote)).setText("There are no any works");
         } else if (workList.size() == 1) {
