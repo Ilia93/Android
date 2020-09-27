@@ -26,6 +26,7 @@
                 android:id="@+id/user_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_account_circle_50"
                 app:layout_collapseMode="parallax" />
 

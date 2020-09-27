@@ -2,11 +2,13 @@ package com.example.workapp.presentation.screen.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static com.example.workapp.presentation.screen.user.UserAccountActivity.USER_STORAGE_PHOTO_PATH;
 import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_ID;
 import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_ID_PREFERENCES;
 
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onSuccess(List<UserModel> users) {
                 getUserForNavigationView(users);
+                getUserPhotoForNavigationView();
             }
 
             @Override
@@ -98,6 +102,19 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
             }
+        }
+    }
+
+    private void getUserPhotoForNavigationView() {
+        ImageView userRoundImage = findViewById(R.id.main_header_image);
+        try {
+            if (sharedPreferences.contains(USER_STORAGE_PHOTO_PATH)) {
+                Drawable drawable = Drawable.createFromPath
+                        (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, ""));
+                userRoundImage.setImageDrawable(drawable);
+            }
+        } catch (NullPointerException exception) {
+            showToastMessage("Empty  photo");
         }
     }
 

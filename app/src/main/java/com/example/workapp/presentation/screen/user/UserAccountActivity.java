@@ -2,18 +2,15 @@ package com.example.workapp.presentation.screen.user;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.workapp.R;
@@ -25,9 +22,6 @@ import com.example.workapp.databinding.UserAccountBinding;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_ID;
@@ -35,11 +29,12 @@ import static com.example.workapp.presentation.screen.user.UserEditActivity.USER
 
 public class UserAccountActivity extends AppCompatActivity {
 
+    public static final String USER_STORAGE_PHOTO_PATH = "user_photo_path";
+    public static String photoPath;
     public final int REQUEST_CODE_EDIT_DATA = 0;
     public final int REQUEST_CODE_PHOTO = 1;
     public final int REQUEST_CODE_FILE_STORAGE = 2;
     SharedPreferences sharedPreferences;
-    private String photoPath;
     private UserAccountBinding binding;
     private UserModel userModel = new UserModel();
 
@@ -50,14 +45,10 @@ public class UserAccountActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
         setSupportActionBar(binding.userToolbar);
-        loadUserFromServer();
-        setClickListeners();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         setSharedPreferences();
+        loadUserPhoto();
+        loadUserDataFromServer();
+        setClickListeners();
     }
 
     private void setSharedPreferences() {
@@ -82,7 +73,7 @@ public class UserAccountActivity extends AppCompatActivity {
         });
     }
 
-    private void loadUserFromServer() {
+    private void loadUserDataFromServer() {
         UserCloudSource userCloudSource = new UserCloudSource();
         userCloudSource.getUser(userModel.getUserName(), new UserActionResult() {
             @Override
@@ -108,6 +99,19 @@ public class UserAccountActivity extends AppCompatActivity {
         });
     }
 
+    private void loadUserPhoto() {
+        ImageView imageView = findViewById(R.id.user_image);
+        try {
+            if (sharedPreferences.contains(USER_STORAGE_PHOTO_PATH)) {
+                Drawable drawable = Drawable.createFromPath
+                        (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, " "));
+                imageView.setImageDrawable(drawable);
+            }
+        } catch (NullPointerException exception) {
+            imageView.setImageResource(R.drawable.blank_profile_picture_80_80);
+        }
+    }
+
     private void setUndefinedFields() {
         binding.userName.setText(R.string.user_empty_field);
         binding.userSecondName.setText(R.string.user_empty_field);
@@ -129,7 +133,6 @@ public class UserAccountActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap imageBitmap;
         ImageView imageView = findViewById(R.id.user_image);
         if (requestCode == REQUEST_CODE_EDIT_DATA && resultCode == RESULT_OK) {
             if (data != null) {
@@ -146,48 +149,14 @@ public class UserAccountActivity extends AppCompatActivity {
             }
         } else if (requestCode == REQUEST_CODE_PHOTO && resultCode == RESULT_OK) {
             if (data != null) {
-                createStoragePhoto();
                 galleryAddPhoto();
-                Bundle imageExtra = data.getExtras();
-                imageBitmap = (Bitmap) imageExtra.get("data");
-                imageView.setImageBitmap(imageBitmap);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(USER_STORAGE_PHOTO_PATH, photoPath);
+                editor.apply();
+                Drawable drawable = Drawable.createFromPath(photoPath);
+                imageView.setImageDrawable(drawable);
             }
         }
-    }
-
-    private void createStoragePhoto() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                showToastMessage("IO exception");
-
-            }
-            if (photoFile != null) {
-                Uri imageURI = FileProvider.getUriForFile(getApplicationContext(),
-                        "com.example.android.fileProvider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
-                startActivityForResult(takePictureIntent, REQUEST_CODE_PHOTO);
-            }
-        }
-    }
-
-    @NotNull
-    private File createImageFile() throws IOException {
-        String pattern = "MM-dd-yyyy";
-        String timeTrigger = new SimpleDateFormat(pattern).format(new Date());
-        String imageName = "Camera" + timeTrigger + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = File.createTempFile(
-                imageName,
-                ".jpg",
-                storageDir
-        );
-        photoPath = imageFile.getAbsolutePath();
-        return imageFile;
     }
 
     private void galleryAddPhoto() {

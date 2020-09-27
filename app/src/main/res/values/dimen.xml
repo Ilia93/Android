@@ -17,6 +17,7 @@
     <dimen name="textSize_splash_screen_48sp">48sp</dimen>
     <dimen name="padding_main_screen_drawer_header_30dp">30dp</dimen>
     <dimen name="timer_size">40sp</dimen>
+    <dimen name="header_margin_text_start_17dp">17dp</dimen>
     <dimen name="text_size_user_dialog_buttons_10sp">10sp</dimen>
     <dimen name="margin_user_dialog_buttons_5dp">5dp</dimen>
     <dimen name="main_btn_create_dimen">240dp</dimen>

@@ -18,7 +18,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_margin"
+        android:layout_marginStart="@dimen/header_margin_text_start_17dp"
         android:layout_marginTop="@dimen/common_margin"
         android:orientation="horizontal">
 
