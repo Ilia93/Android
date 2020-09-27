@@ -20,14 +20,10 @@ public class CommentDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.timer_dialog_add_comment, container);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setListeners(view);
+        View view = inflater.inflate(R.layout.timer_dialog_add_comment, container, false);
         userInput = view.findViewById(R.id.inputDialogComment);
+        setListeners(view);
+        return view;
     }
 
     private void setListeners(View view) {
@@ -39,19 +35,23 @@ public class CommentDialog extends DialogFragment {
         view.findViewById(id).setOnClickListener(v -> {
             switch (v.getId()) {
                 case R.id.dialog_cancel:
-                    dialogListener.onNegativeClicked();
+                    dismiss();
                     break;
                 case R.id.dialog_create:
-                    dialogListener.onPositiveClicked(userInput.getText().toString());
+                    sendBackResult();
                     break;
             }
         });
     }
 
+    public void sendBackResult() {
+        dialogListener = (DialogListener) getTargetFragment();
+        dialogListener.onPositiveClicked(userInput.getText().toString());
+        dismiss();
+    }
+
     public interface DialogListener {
 
-        void onPositiveClicked(String text);
-
-        void onNegativeClicked();
+        void onPositiveClicked(String inputText);
     }
 }

@@ -1,10 +1,10 @@
-package com.example.workapp.presentation.screen.main;
+package com.example.workapp.presentation.screen.main.recycler_view;
 
-public class MainTemplatesModel {
+public class WorkTemplatesModel {
     private String activityDescription;
     private int workImage;
 
-    public MainTemplatesModel(String activityDescription, int workImage) {
+    public WorkTemplatesModel(String activityDescription, int workImage) {
         this.activityDescription = activityDescription;
         this.workImage = workImage;
     }

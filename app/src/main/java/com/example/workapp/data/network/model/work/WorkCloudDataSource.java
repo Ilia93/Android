@@ -25,27 +25,27 @@ public final class WorkCloudDataSource {
     }
 
     private void serverCall(@NonNull Call<List<WorkModel>> call, final WorkActionResult action) {
-        call.enqueue(new Callback<List<WorkModel>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<WorkModel>> call,
-                                   @NonNull Response<List<WorkModel>> response) {
-                if (response.isSuccessful()) {
-                    if (action != null) {
-                        action.onSuccess(response.body());
+                call.enqueue(new Callback<List<WorkModel>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<WorkModel>> call,
+                                           @NonNull Response<List<WorkModel>> response) {
+                        if (response.isSuccessful()) {
+                            if (action != null) {
+                                action.onSuccess(response.body());
+                            }
+                        } else {
+                            if (action != null) {
+                                action.onFailure("Something went wrong.");
+                            }
+                        }
                     }
-                } else {
-                    if (action != null) {
-                        action.onFailure("Something went wrong.");
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<List<WorkModel>> call, @NonNull Throwable t) {
-                if (action != null) {
-                    action.onFailure(t.getMessage());
-                }
-            }
+                    @Override
+                    public void onFailure(@NonNull Call<List<WorkModel>> call, @NonNull Throwable t) {
+                        if (action != null) {
+                            action.onFailure(t.getMessage());
+                        }
+                    }
         });
     }
 }

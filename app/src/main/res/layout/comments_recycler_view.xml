@@ -21,7 +21,7 @@
             android:layout_marginStart="@dimen/common_margin"
             android:textColor="@color/blue_1"
             android:textStyle="bold"
-            android:textSize="@dimen/archive_text_major_size" />
+            android:textSize="@dimen/textSize_all_18sp" />
 
     </LinearLayout>
 

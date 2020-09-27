@@ -1,6 +1,7 @@
 package com.example.workapp.presentation;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +13,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class App extends Application {
+
+    private static App instance;
+
+    public static App getInstance() {
+        return instance;
+    }
 
     public static void putCommentOnServer(CommentsModel commentsModel) {
         Call<CommentsModel> call = NetworkClient.getCommentAPI().createComment(commentsModel);
@@ -38,5 +45,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
     }
 }

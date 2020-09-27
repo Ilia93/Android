@@ -1,6 +1,5 @@
 package com.example.workapp.presentation.screen.comment;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +16,17 @@ import java.util.List;
 public class CommentsAdapter extends RecyclerView
         .Adapter<CommentsAdapter.ViewHolder> {
 
-    private LayoutInflater layoutInflater;
     private List<CommentsModel> commentsModelList;
 
-    public CommentsAdapter(Context context, List<CommentsModel> commentsModelList) {
-        this.layoutInflater = LayoutInflater.from(context);
+    public CommentsAdapter(List<CommentsModel> commentsModelList) {
         this.commentsModelList = commentsModelList;
     }
 
     @NonNull
     @Override
     public CommentsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.comments_recycler_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.comments_recycler_view, parent, false);
         return new ViewHolder(view);
     }
 

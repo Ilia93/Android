@@ -1,5 +1,6 @@
 package com.example.workapp.presentation.screen.archive;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.workapp.R;
 import com.example.workapp.data.network.model.comments.CommentsActionResult;
@@ -20,7 +22,9 @@ import com.example.workapp.data.network.model.timer.TimerModel;
 import com.example.workapp.data.network.model.work.WorkActionResult;
 import com.example.workapp.data.network.model.work.WorkCloudDataSource;
 import com.example.workapp.data.network.model.work.WorkModel;
-import com.example.workapp.databinding.FragmentCompletedWorksBinding;
+import com.example.workapp.databinding.ArchiveCompletedWorksFragmentBinding;
+import com.example.workapp.presentation.App;
+import com.example.workapp.presentation.screen.main.MainActivity;
 import com.example.workapp.presentation.screen.main.MainFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,16 +33,27 @@ import java.util.List;
 
 public class CompletedWorksFragment extends Fragment {
 
-    FragmentCompletedWorksBinding binding;
+    ArchiveCompletedWorksFragmentBinding binding;
     MainFragment mainFragment = new MainFragment();
+    FragmentActivity fragmentActivity;
+
     private WorkModel workModel = new WorkModel();
     private TimerModel timerModel = new TimerModel();
     private CommentsModel commentsModel = new CommentsModel();
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        if (context instanceof MainActivity) {
+            this.fragmentActivity = (FragmentActivity) context;
+        }
+        super.onAttach(context);
+    }
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentCompletedWorksBinding.inflate(inflater, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = ArchiveCompletedWorksFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         setOnClickListener();
         getCommonWorksInformation();
@@ -49,9 +64,10 @@ public class CompletedWorksFragment extends Fragment {
         binding.completedWorksExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().add(R.id.navigation_content_frame, mainFragment);
-                getFragmentManager().beginTransaction().addToBackStack(null);
-                getFragmentManager().beginTransaction().commit();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.navigation_content_frame, mainFragment)
+                        .addToBackStack(null).commit();
             }
         });
     }
@@ -94,7 +110,6 @@ public class CompletedWorksFragment extends Fragment {
         });
     }
 
-
     private void displayCommonWorkInformation(@NonNull List<WorkModel> works) {
         if (works.size() == 0) {
             binding.firstInformationNote.setText(R.string.main_empty_works);
@@ -125,7 +140,7 @@ public class CompletedWorksFragment extends Fragment {
         String id = (getArguments().getString("NOTE_CLICKED_ID_ARG"));
         for (int i = 0; i < works.size(); i++) {
             if ((works.get(i).getId().equals(id))) {
-                stringBuilder.append(getString(R.string.archive_works_name))
+                stringBuilder.append(App.getInstance().getString(R.string.archive_works_name))
                         .append(works.get(i).getName());
             }
         }
@@ -160,7 +175,8 @@ public class CompletedWorksFragment extends Fragment {
         String allWorkComments = "";
         for (int i = 0; i < comments.size(); i++) {
             do {
-                if (comments.get(i).getWorkId().equals(getArguments().getString("NOTE_CLICKED_ID_ARG"))) {
+                if (comments.get(i).getWorkId().equals
+                        (getArguments().getString("NOTE_CLICKED_ID_ARG"))) {
                     allWorkComments = allWorkComments.concat(comments.get(i).getText() + " at " +
                             comments.get(i).getTime() + "\n");
                 }

@@ -9,7 +9,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,33 +25,27 @@ import java.util.List;
 public class ArchiveFragment extends Fragment {
 
     private final String CLICKED_ID_ARG = "NOTE_CLICKED_ID_ARG";
-    RecyclerView recyclerView;
-    FragmentManager fragmentManager;
-    Fragment completedWorksFragment = new CompletedWorksFragment();
-    private WorkModel workModel = new WorkModel();
 
-    @Override
-    public void onResume() {
-        fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.popBackStack();
-        super.onResume();
-    }
+    private RecyclerView recyclerView;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private WorkModel workModel = new WorkModel();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.archive_fragment, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-        displayCompletedWorks(view);
+        displayCompletedWorks();
         return view;
     }
 
-    private void displayCompletedWorks(View view) {
+    private void displayCompletedWorks() {
         WorkCloudDataSource workCloudDataSource = new WorkCloudDataSource();
         workCloudDataSource.getWork(workModel.getName(), new WorkActionResult() {
             @Override
             public void onSuccess(List<WorkModel> works) {
-                setDataAdapter(works, view);
+                setDataAdapter(works);
             }
 
             @Override
@@ -59,18 +55,27 @@ public class ArchiveFragment extends Fragment {
         });
     }
 
-    private void setDataAdapter(List<WorkModel> works, View view) {
-        Bundle bundle = new Bundle();
+    private void setDataAdapter(List<WorkModel> works) {
         ArchiveAdapter.OnUserClickListener onUserClickListener = workModel -> {
-            bundle.putString(CLICKED_ID_ARG, workModel.getId());
-            completedWorksFragment.setArguments(bundle);
-            assert getFragmentManager() != null;
-            getFragmentManager().beginTransaction().replace(R.id.navigation_content_frame, completedWorksFragment);
-            getFragmentManager().beginTransaction().addToBackStack(null);
-            getFragmentManager().beginTransaction().commit();
+            FragmentActivity activity = getActivity();
+            if (activity != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString(CLICKED_ID_ARG, workModel.getId());
+                Fragment completedWorksFragment = new CompletedWorksFragment();
+                completedWorksFragment.setArguments(bundle);
+                fragmentManager = activity.getSupportFragmentManager();
+                fragmentTransaction = fragmentManager
+                        .beginTransaction()
+                        .replace(
+                                R.id.navigation_content_frame,
+                                completedWorksFragment
+                        );
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
         };
         ArchiveAdapter archiveAdapter = new ArchiveAdapter(works, onUserClickListener);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(archiveAdapter);
     }
 

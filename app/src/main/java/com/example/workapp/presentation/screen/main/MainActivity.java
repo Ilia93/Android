@@ -1,8 +1,14 @@
 package com.example.workapp.presentation.screen.main;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,17 +21,32 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.workapp.R;
+import com.example.workapp.data.network.model.user.UserActionResult;
+import com.example.workapp.data.network.model.user.UserCloudSource;
+import com.example.workapp.data.network.model.user.UserModel;
 import com.example.workapp.presentation.screen.archive.ArchiveFragment;
 import com.example.workapp.presentation.screen.comment.CommentFragment;
 import com.example.workapp.presentation.screen.timer.timer.TimerFragment;
+import com.example.workapp.presentation.screen.user.UserAccountActivity;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
+import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_ID;
+import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_ID_PREFERENCES;
+
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+    ImageButton addUser;
     Toolbar toolbar;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     Fragment mainFragment = new MainFragment();
+    UserModel userModel = new UserModel();
+    SharedPreferences sharedPreferences;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -33,11 +54,64 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
+        setScreenElements();
+        initializePreferences();
         if (savedInstanceState == null) {
             replaceFragment(mainFragment);
         }
-        setScreenElements();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UserCloudSource userCloudSource = new UserCloudSource();
+        userCloudSource.getUser(userModel.getUserName(), new UserActionResult() {
+            @Override
+            public void onSuccess(List<UserModel> users) {
+                getUserForNavigationView(users);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                showToastMessage(message);
+            }
+        });
+    }
+
+    private void initializePreferences() {
+        sharedPreferences = getSharedPreferences(USER_ID_PREFERENCES, MODE_PRIVATE);
+    }
+
+    private void getUserForNavigationView(@NotNull List<UserModel> users) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (users.size() == 0) {
+            stringBuilder
+                    .append("Undefined");
+            ((TextView) findViewById(R.id.main_header_label)).setText(stringBuilder.toString());
+        } else if (users.size() > 0) {
+            if (sharedPreferences.contains(USER_ID)) {
+                for (int i = 0; i < users.size(); i++) {
+                    if (users.get(i).getUserId().equals(sharedPreferences.getString(USER_ID, ""))) {
+                        ((TextView) findViewById(R.id.main_header_label)).setText
+                                (users.get(i).getUserName() + " " + users.get(i).getUserSecondName());
+                    }
+                }
+            }
+        }
+    }
+
+    private void setClickListener() {
+        addUser = findViewById(R.id.add_header_user);
+        addUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent userIntent = new Intent(getApplicationContext(), UserAccountActivity.class);
+                startActivity(userIntent);
+                DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
     }
 
     private void setScreenElements() {
@@ -62,13 +136,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        item.setChecked(true);
         int id = item.getItemId();
         if (id == R.id.nav_archive_fragment) {
             Fragment archiveFragment = new ArchiveFragment();
             replaceFragment(archiveFragment);
         } else if (id == R.id.nav_home_fragment) {
-            //Fragment mainFragment = new MainFragment();
-            //replaceFragment(mainFragment);
+            Fragment mainFragment = new MainFragment();
+            replaceFragment(mainFragment);
         } else if (id == R.id.nav_timer_fragment) {
             Fragment timerFragment = new TimerFragment();
             replaceFragment(timerFragment);
@@ -93,16 +168,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        setClickListener();
         getMenuInflater().inflate(R.menu.drawer_view, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.home_toolbar) {
+        if (item.getItemId() == android.R.id.home) {
             drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showToastMessage(String text) {
+        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

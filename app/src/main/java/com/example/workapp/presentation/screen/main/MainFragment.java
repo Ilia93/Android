@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.example.workapp.data.network.model.work.WorkActionResult;
 import com.example.workapp.data.network.model.work.WorkCloudDataSource;
 import com.example.workapp.data.network.model.work.WorkModel;
 import com.example.workapp.databinding.MainFragmentBinding;
+import com.example.workapp.presentation.screen.main.recycler_view.WorkTemplatesModel;
 import com.example.workapp.presentation.screen.timer.timer.TimerFragment;
 import com.example.workapp.presentation.service.notifications.NotificationService;
 
@@ -66,27 +68,20 @@ public class MainFragment extends Fragment {
     MainFragmentBinding binding;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
-    List<MainTemplatesModel> activityTemplates = new ArrayList<>();
-    RecyclerView mainRecyclerView, worksTemplatesRecyclerView;
+    List<Object> activities = new ArrayList<>();
+    RecyclerView mainRecyclerView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = MainFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        worksTemplatesRecyclerView = view.findViewById(R.id.predefinedWorksRecyclerView);
-        mainRecyclerView = view.findViewById(R.id.mainRecyclerView);
+        mainRecyclerView = view.findViewById(R.id.mainWorksRecyclerView);
         createClickListener();
-        showWorks();
+       // showWorks();
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.popBackStack();
-    }
 
     private void createClickListener() {
         binding.createWork.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +97,8 @@ public class MainFragment extends Fragment {
         workCloudDataSource.getWork(workModel.getName(), new WorkActionResult() {
             @Override
             public void onSuccess(List<WorkModel> works) {
-                setWorksDataAdapter(works);
-                setActivityTemplatesAdapter();
+                setActivityTemplatesAdapter(works);
+                createActivityTemplates();
             }
 
             @Override
@@ -113,32 +108,24 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void setWorksDataAdapter(List<WorkModel> works) {
-        MainWorksAdapter mainWorksAdapter = new MainWorksAdapter(getContext(), works);
+    private void setActivityTemplatesAdapter(List<WorkModel> works) {
+        activities.addAll(works);
+        MainWorkAdapter workAdapter = new MainWorkAdapter(activities);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mainRecyclerView.setAdapter(mainWorksAdapter);
+        mainRecyclerView.setAdapter(workAdapter);
     }
 
     private void createActivityTemplates() {
-        activityTemplates.add(new MainTemplatesModel("Run activity", R.drawable.run_twice));
-        activityTemplates.add(new MainTemplatesModel("Walk activity", R.drawable.walking_activity));
-        activityTemplates.add(new MainTemplatesModel("Sleep activity", R.drawable.sand_clocks));
-        activityTemplates.add(new MainTemplatesModel("Physical activity", R.drawable.physical));
-    }
-
-    private void setActivityTemplatesAdapter() {
-        createActivityTemplates();
-        MainWorkTemplatesAdapter.OnUserClickListener onUserClickListener =
-                new MainWorkTemplatesAdapter.OnUserClickListener() {
-                    @Override
-                    public void onUserClick(@NotNull MainTemplatesModel activityTemplatesModel) {
-                        binding.inputWork.setText(activityTemplatesModel.getActivityDescription());
-                    }
-                };
-        MainWorkTemplatesAdapter templates = new MainWorkTemplatesAdapter(getContext(),
-                activityTemplates, onUserClickListener);
-        worksTemplatesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        worksTemplatesRecyclerView.setAdapter(templates);
+        activities.add(R.string.main_work_templates);
+        activities.add
+                (new WorkTemplatesModel(getString(R.string.main_run_activity), R.drawable.run_twice_400_225));
+        activities.add
+                (new WorkTemplatesModel(getString(R.string.main_walk_activity), R.drawable.walking_activity_400_225));
+        activities.add
+                (new WorkTemplatesModel(getString(R.string.main_sleep_activity), R.drawable.sand_clocks_400_225));
+        activities.add
+                (new WorkTemplatesModel(getString(R.string.main_physical_activity), R.drawable.gym_400_225));
+        activities.add(R.string.main_latest_works);
     }
 
     private void createWork() {
@@ -210,20 +197,22 @@ public class MainFragment extends Fragment {
             }
         }
     }
-//TODO fix this place
-    private void startTimerActivity() {
-        TimerFragment timerFragment = new TimerFragment();
-        Bundle timerBundle = new Bundle();
-        timerBundle.putString(WORK_ID, workModel.getId());
-        timerBundle.putString(WORK_NAME, workModel.getName());
-        timerBundle.putString(WORK_OBJECT_ID, workModel.getObjectId());
-        timerFragment.setArguments(timerBundle);
-        fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction()
-                .add(R.id.navigation_content_frame, timerFragment);
-        fragmentTransaction.addToBackStack("timer_fragment");
-        fragmentTransaction.commit();
 
+    private void startTimerActivity() {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            TimerFragment timerFragment = new TimerFragment();
+            Bundle timerBundle = new Bundle();
+            timerBundle.putString(WORK_ID, workModel.getId());
+            timerBundle.putString(WORK_NAME, workModel.getName());
+            timerBundle.putString(WORK_OBJECT_ID, workModel.getObjectId());
+            timerFragment.setArguments(timerBundle);
+            fragmentManager = activity.getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction()
+                    .add(R.id.navigation_content_frame, timerFragment);
+            fragmentTransaction.addToBackStack("timer_fragment");
+            fragmentTransaction.commit();
+        }
     }
 
     public void showToastMessage(String text) {
@@ -231,3 +220,7 @@ public class MainFragment extends Fragment {
         toast.show();
     }
 }
+//TODO Main screen one RecyclerView, пофиксить баги +
+// стабишьность, навигатион вью добавить иконку добавления профиля(базовая информация + загрузить фото из галереи или камеры
+// NavigationView full screen
+

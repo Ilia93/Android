@@ -1,5 +1,6 @@
 package com.example.workapp.presentation.screen.comment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +22,11 @@ import java.util.List;
 public class CommentFragment extends Fragment {
     private RecyclerView commentsRecyclerView;
     private CommentsModel commentsModel = new CommentsModel();
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+    }
 
     @Nullable
     @Override
@@ -39,7 +43,7 @@ public class CommentFragment extends Fragment {
 
             @Override
             public void onSuccess(List<CommentsModel> comments) {
-                CommentsAdapter commentsAdapter = new CommentsAdapter(getActivity().getApplicationContext(), comments);
+                CommentsAdapter commentsAdapter = new CommentsAdapter(comments);
                 commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 commentsRecyclerView.setAdapter(commentsAdapter);
             }

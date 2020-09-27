@@ -25,5 +25,4 @@ public interface WorkApi {
 
     @PUT("data/Work/{objectID}")
     Call<WorkModel> updateWork(@Path("objectID")String objectID, @Body WorkModel workModel);
-
 }

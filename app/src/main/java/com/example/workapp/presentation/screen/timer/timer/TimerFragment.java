@@ -1,6 +1,5 @@
 package com.example.workapp.presentation.screen.timer.timer;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -42,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TimerFragment extends Fragment {
+public class TimerFragment extends Fragment implements CommentDialog.DialogListener {
 
     public static Date timeOfTimerStart, timeOfTimerPauseStart, timeOfTimerPauseFinish;
     public static boolean isStarted, isPaused, isResumed = false;
@@ -57,6 +57,7 @@ public class TimerFragment extends Fragment {
     Timer timer;
     TimerTask timerTask;
     Fragment mainFragment = new MainFragment();
+    Fragment commentFragment = new CommentFragment();
     TimerFragmentBinding binding;
     Handler uiHandler = new Handler();
     Runnable runnable;
@@ -119,15 +120,24 @@ public class TimerFragment extends Fragment {
     }
 
     private void setMenuAdapter() {
+        FragmentActivity activity = getActivity();
         TimerMenuAdapter.OnUserClickListener onUserClickListener = new TimerMenuAdapter.OnUserClickListener() {
             @Override
             public void onClick(@NotNull TimerMenuModel timerMenuModel) {
                 if (timerMenuModel.getText().equals("Watch comments")) {
-                    Intent intent = new Intent(getContext(), CommentFragment.class);
-                    startActivity(intent);
+                    if (activity != null) {
+                        fragmentManager = activity.getSupportFragmentManager();
+                        fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.navigation_content_frame, commentFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
                 } else if (timerMenuModel.getText().equals("Add comment")) {
-                    CommentDialog commentDialog = new CommentDialog();
-                    commentDialog.show(getActivity().getSupportFragmentManager(), "dialog");
+                    if (activity != null) {
+                        fragmentManager = activity.getSupportFragmentManager();
+                        CommentDialog commentDialog = new CommentDialog();
+                        commentDialog.setTargetFragment(TimerFragment.this, 300);
+                        commentDialog.show(fragmentManager, "dialog");
+                    }
                 }
             }
         };
@@ -140,22 +150,26 @@ public class TimerFragment extends Fragment {
         isStarted = true;
         timeOfTimerStart = timerOperations.getCalendarInstance();
         timerModel.setStartTime(timerOperations.setTime());
-        timerModel.setWorkId(getArguments().getString("workId"));
-        timer = new Timer();
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.timerStartView.setText(timerOperations.setTime());
-                    }
-                };
-                uiHandler.postDelayed(runnable, 1000);
-            }
-        };
-        timer.schedule(timerTask, 0);
-        showToastMessage("Timer started");
+        if (getArguments() != null) {
+            timerModel.setWorkId(getArguments().getString("workId"));
+            timer = new Timer();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.timerStartView.setText(timerOperations.setTime());
+                        }
+                    };
+                    uiHandler.postDelayed(runnable, 1000);
+                }
+            };
+            timer.schedule(timerTask, 0);
+            showToastMessage("Timer started");
+        } else {
+            showToastMessage("Wrong workId arguments");
+        }
     }
 
     public void onTimerStopped() {
@@ -163,47 +177,49 @@ public class TimerFragment extends Fragment {
         isResumed = false;
         isPaused = false;
         binding.startTimer.setEnabled(true);
-        workModel.setId(getArguments().getString("workId"));
-        workModel.setName(getArguments().getString("workName"));
-        workModel.setCompleted(true);
-        workModel.setObjectId(getArguments().getString("workObjectId"));
-        Call<WorkModel> call = NetworkClient.getWorkApi().updateWork(workModel
-                .getObjectId(), workModel);
-        call.enqueue(new Callback<WorkModel>() {
-            @Override
-            public void onResponse(@NonNull Call<WorkModel> call,
-                                   @NonNull Response<WorkModel> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        timerModel.setFinishTime(timerOperations.setTime());
-                        timeOfFinish = timerOperations.getCalendarInstance();
-                        timerModel.setElapsedTime(timerOperations.calculateDifference
-                                (timeOfTimerStart, timeOfFinish));
-                        Call<TimerModel> elapsedTimeCall = NetworkClient.getTimerAPI()
-                                .createTimer(timerModel);
-                        createTimer(elapsedTimeCall);
-                        stopService();
-                    } catch (NullPointerException exception) {
-                        showToastMessage("Timer isn't created");
-                    }
-
-                } else {
-                    try {
-                        if (response.errorBody() != null) {
-                            showToastMessage(response.errorBody().string());
+        if (getArguments() != null) {
+            workModel.setId(getArguments().getString("workId"));
+            workModel.setName(getArguments().getString("workName"));
+            workModel.setCompleted(true);
+            workModel.setObjectId(getArguments().getString("workObjectId"));
+            Call<WorkModel> call = NetworkClient.getWorkApi().updateWork(workModel
+                    .getObjectId(), workModel);
+            call.enqueue(new Callback<WorkModel>() {
+                @Override
+                public void onResponse(@NonNull Call<WorkModel> call,
+                                       @NonNull Response<WorkModel> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            timerModel.setFinishTime(timerOperations.setTime());
+                            timeOfFinish = timerOperations.getCalendarInstance();
+                            timerModel.setElapsedTime(timerOperations.calculateDifference
+                                    (timeOfTimerStart, timeOfFinish));
+                            Call<TimerModel> elapsedTimeCall = NetworkClient.getTimerAPI()
+                                    .createTimer(timerModel);
+                            createTimer(elapsedTimeCall);
+                            stopService();
+                        } catch (NullPointerException exception) {
+                            showToastMessage("Timer isn't created");
                         }
-                    } catch (IOException e) {
-                        showToastMessage("IO exception");
+
+                    } else {
+                        try {
+                            if (response.errorBody() != null) {
+                                showToastMessage(response.errorBody().string());
+                            }
+                        } catch (IOException e) {
+                            showToastMessage("IO exception");
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<WorkModel> call, @NonNull Throwable t) {
-                showToastMessage(t.getMessage());
-            }
-        });
-
+                @Override
+                public void onFailure(@NonNull Call<WorkModel> call, @NonNull Throwable t) {
+                    showToastMessage(t.getMessage());
+                }
+            });
+        }
+        showToastMessage("Wrong workId arguments");
     }
 
     private void createTimer(@NotNull Call<TimerModel> call) {
@@ -214,7 +230,7 @@ public class TimerFragment extends Fragment {
                     try {
                         timer.cancel();
                     } catch (NullPointerException exception) {
-                        showToastMessage("Timer isn't created");
+                        showToastMessage("Timer didn't created");
                     }
                     showToastMessage("Timer stopped");
                     replaceFragment(stopTimerFragment, null);
@@ -244,7 +260,7 @@ public class TimerFragment extends Fragment {
                     (timeOfTimerPauseStart, timeOfTimerPauseFinish));
             binding.timerEndPauseView.setText(timerOperations.setTime());
         } catch (NullPointerException exception) {
-            showToastMessage("Timer isn't created");
+            showToastMessage("Timer didn't created");
         }
     }
 
@@ -258,7 +274,7 @@ public class TimerFragment extends Fragment {
                 binding.timerPauseStartView.setText(timerOperations.setTime());
             }
         } catch (NullPointerException exception) {
-            showToastMessage("Timer isn't created");
+            showToastMessage("Timer didn't created");
         }
     }
 
@@ -266,16 +282,13 @@ public class TimerFragment extends Fragment {
         replaceFragment(mainFragment, null);
     }
 
-    private void createCommentOnServer(String text) {
+    private void createCommentOnServer() {
         Call<CommentsModel> call = NetworkClient.getCommentAPI().createComment(commentsModel);
         call.enqueue(new Callback<CommentsModel>() {
             @Override
             public void onResponse(@NonNull Call<CommentsModel> call,
                                    @NonNull Response<CommentsModel> response) {
                 if (response.isSuccessful()) {
-                    commentsModel.setTime(timerOperations.setTime());
-                    commentsModel.setWorkId(getArguments().getString("workId"));
-                    commentsModel.setText(text);
                     showToastMessage("Comment created");
                 } else {
                     try {
@@ -303,7 +316,6 @@ public class TimerFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    //TODO make fragmentManager static
     private void showToastMessage(String text) {
         Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
         toast.show();
@@ -313,54 +325,50 @@ public class TimerFragment extends Fragment {
         try {
             getActivity().getApplicationContext().unbindService(MainFragment.serviceConnection);
         } catch (IllegalArgumentException exception) {
-            showToastMessage("Work isn't existed");
+            showToastMessage("Work don't exist");
         }
     }
 
-   /* @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        Fragment dialog1 = getSupportFragmentManager().findFragmentByTag("dialog");
-        if (dialog1 instanceof CommentDialog){
-            CommentDialog commentDialog = (CommentDialog) dialog1;
-            commentDialog.getText()
+    /* @Override
+     public void onDialogPositiveClick(DialogFragment dialog) {
+         Fragment dialog1 = getSupportFragmentManager().findFragmentByTag("dialog");
+         if (dialog1 instanceof CommentDialog){
+             CommentDialog commentDialog = (CommentDialog) dialog1;
+             commentDialog.getText()
 
-        }
-        //try {
-            if (((EditText) dialog.getDialog().findViewById(R.id.inputDialogComment))
-                    .getText().equals("")) {
-          //      throw new NullPointerException();
-          //  } else {
-                createCommentOnServer(dialog);
-            }
-       // } catch (NullPointerException exception) {
-       //     showToastMessage("Comment can't be empty");
-       // }
-    }
+         }
+         //try {
+             if (((EditText) dialog.getDialog().findViewById(R.id.inputDialogComment))
+                     .getText().equals("")) {
+           //      throw new NullPointerException();
+           //  } else {
+                 createCommentOnServer(dialog);
+             }
+        // } catch (NullPointerException exception) {
+        //     showToastMessage("Comment can't be empty");
+        // }
+     }
 
+     @Override
+     public void onDialogNegativeClick(DialogFragment dialog) {
+         Fragment dialog1 = getSupportFragmentManager();
+         if (dialog1 instanceof CommentDialog){
+             CommentDialog commentDialog = (CommentDialog) dialog1;
+             commentDialog.dismiss();
+         }
+     }
+ */
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-        Fragment dialog1 = getSupportFragmentManager().findFragmentByTag("dialog");
-        if (dialog1 instanceof CommentDialog){
-            CommentDialog commentDialog = (CommentDialog) dialog1;
-            commentDialog.dismiss();
+    public void onPositiveClicked(String inputText) {
+        if (getArguments() != null) {
+            commentsModel.setText(inputText);
+            commentsModel.setTime(timerOperations.setTime());
+            commentsModel.setWorkId(getArguments().getString("workId"));
+            createCommentOnServer();
+        } else {
+            showToastMessage("Work don't exist");
         }
     }
-
-    @Override
-    public void onPositiveClicked(String text) {
-        CommentDialog commentDialog = new CommentDialog();
-        createCommentOnServer(text);
-        commentDialog.dismiss();
-    }
-
-    @Override
-    public void onNegativeClicked() {
-        Fragment dialog1 = getActivity().getSupportFragmentManager().findFragmentByTag("dialog");
-        if (dialog1 instanceof CommentDialog) {
-            CommentDialog commentDialog = (CommentDialog) dialog1;
-            commentDialog.dismiss();
-        }
-    }*/
 
     private void saveData() {
         if (isStarted) {
