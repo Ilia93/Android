@@ -4,8 +4,8 @@
     <ripple android:color="?attr/colorButtonNormal">
         <item>
             <shape android:shape="rectangle"
-                android:tint="#01589b">
-                <corners android:radius="10dp"/>
+                android:tint="#11a4b4">
+                <corners android:radius="20dp"/>
             </shape>
         </item>
     </ripple>

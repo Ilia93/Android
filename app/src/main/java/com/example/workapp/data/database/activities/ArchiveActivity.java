@@ -12,10 +12,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.workapp.R;
-import com.example.workapp.data.room_app.fragments.CompletedWorksInformation;
+import com.example.workapp.data.room_app.fragments.CompletedWorksFragment;
 import com.example.workapp.data.room_app.fragments.ArchiveStartFragment;
 
-public class CompletedWorks extends AppCompatActivity implements ArchiveStartFragment.Clickable {
+public class ArchiveFragment extends AppCompatActivity implements ArchiveStartFragment.Clickable {
     Button archiveExit;
     FragmentManager myFragmentManager;
     FragmentTransaction transaction;
@@ -29,7 +29,7 @@ public class CompletedWorks extends AppCompatActivity implements ArchiveStartFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_completed_works);
+        setContentView(R.layout.archive_fragment);
         if (savedInstanceState == null) {
             myFragmentManager = getSupportFragmentManager();
             archiveStartFragment = new ArchiveStartFragment();
@@ -52,7 +52,7 @@ public class CompletedWorks extends AppCompatActivity implements ArchiveStartFra
     OnClickListener archiveListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent archiveClose = new Intent(CompletedWorks.this, MainActivity.class);
+            Intent archiveClose = new Intent(ArchiveFragment.this, MainActivity.class);
             startActivity(archiveClose);
         }
     };
@@ -89,7 +89,7 @@ public class CompletedWorks extends AppCompatActivity implements ArchiveStartFra
     }
 
     public void setSelectedNote() {
-        archiveSelectedNoteFragment = new CompletedWorksInformation();
+        archiveSelectedNoteFragment = new CompletedWorksFragment();
         transaction = myFragmentManager.beginTransaction();
         transaction.replace(R.id.ArchiveFragmentFrame, archiveSelectedNoteFragment);
         transaction.addToBackStack(null);

@@ -2,6 +2,7 @@ package com.example.workapp.data.network;
 
 import com.example.workapp.data.network.api.CommentsApi;
 import com.example.workapp.data.network.api.TimerApi;
+import com.example.workapp.data.network.api.UserApi;
 import com.example.workapp.data.network.api.WorkApi;
 
 import retrofit2.Retrofit;
@@ -18,6 +19,18 @@ public final class NetworkClient {
     private static WorkApi workApi;
     private static TimerApi timerApi;
     private static CommentsApi commentsApi;
+    private static UserApi userApi;
+
+    private NetworkClient() {
+        setupRetrofit();
+    }
+
+    private void setupRetrofit() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
 
     public static NetworkClient getInstance() {
         if (instance != null) {
@@ -29,17 +42,6 @@ public final class NetworkClient {
             }
         }
         return instance;
-    }
-
-    private NetworkClient() {
-        setupRetrofit();
-    }
-
-    private void setupRetrofit() {
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
     }
 
     public static WorkApi getWorkApi() {
@@ -61,5 +63,12 @@ public final class NetworkClient {
             commentsApi = retrofit.create(CommentsApi.class);
         }
         return commentsApi;
+    }
+
+    public static UserApi getUserApi() {
+        if (userApi == null) {
+            userApi = retrofit.create(UserApi.class);
+        }
+        return userApi;
     }
 }

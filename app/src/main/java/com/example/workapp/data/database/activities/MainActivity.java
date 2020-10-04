@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         setVariables();
         setOnclickListeners();
         showWorks();
@@ -75,11 +75,11 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.archive:
-                    Intent archiveIntent = new Intent(MainActivity.this, CompletedWorks.class);
+                    Intent archiveIntent = new Intent(MainActivity.this, ArchiveFragment.class);
                     startActivity(archiveIntent);
                     break;
                 case R.id.next:
-                    Intent timerIntent = new Intent(MainActivity.this, TimerActivity.class);
+                    Intent timerIntent = new Intent(MainActivity.this, TimerFragment.class);
                     timerIntent.putExtra("workId", work.getId());
                     timerIntent.putExtra("workName", work.getName());
                     startActivity(timerIntent);

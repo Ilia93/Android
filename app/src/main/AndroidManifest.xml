@@ -3,34 +3,50 @@
     package="com.example.workapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera2" />
 
     <application
+        android:name=".presentation.App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.android.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
+
         <service
             android:name=".presentation.service.notifications.NotificationService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <receiver
             android:name=".presentation.service.receiver.NotificationReceiver"
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".presentation.screen.main.MainActivity">
+        <activity android:name=".presentation.screen.splash.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.screen.timer.timer.TimerActivity" />
-        <activity android:name=".presentation.screen.archive.CompletedWorks" />
-        <activity android:name=".presentation.screen.archive.CompletedWorksInformation" />
+        <activity android:name=".presentation.screen.main.MainActivity" />
+        <activity android:name=".presentation.screen.user.UserAccountActivity" />
+        <activity android:name=".presentation.screen.user.UserEditActivity" />
     </application>
 
 </manifest>

@@ -4,9 +4,16 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="orange_1">#f1a108</color>
-    <color name="blue_1">#01589b</color>
-    <color name="appBackGround">#282c36</color>
+    <color name="blue_1">#0F7CD5</color>
+    <color name="light_blue">#11a4b4</color>
     <color name="green_1">#11b719</color>
     <color name="red_1">#dc4d41</color>
     <color name="white_1">#ffffff</color>
+    <color name="sandy_brown">#F7A265</color>
+    <color name="black">#000000</color>
+    <color name="dark_blue">#140735</color>
+    <color name="appBackGround">#282c36</color>
+    <color name="web_orange">#FFAB00</color>
+    <color name="pink">#C52258</color>
+    <color name="light_grey">#AEAEAE</color>
 </resources>

@@ -13,6 +13,12 @@ import retrofit2.Response;
 
 public class App extends Application {
 
+    private static App instance;
+
+    public static App getInstance() {
+        return instance;
+    }
+
     public static void putCommentOnServer(CommentsModel commentsModel) {
         Call<CommentsModel> call = NetworkClient.getCommentAPI().createComment(commentsModel);
         call.enqueue(new Callback<CommentsModel>() {
@@ -38,5 +44,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
     }
 }

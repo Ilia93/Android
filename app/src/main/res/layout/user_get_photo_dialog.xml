@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/user_dialog_camera"
+            style="@style/UserDialogButtons"
+            android:text="@string/user_dialog_camera" />
+
+        <Button
+            android:id="@+id/user_dialog_storage"
+            style="@style/UserDialogButtons"
+            android:text="@string/user_dialog_file_storage" />
+
+        <Button
+            android:id="@+id/user_dialog_cancel"
+            style="@style/UserDialogButtons"
+            android:text="@string/user_dialog_cancel" />
+
+    </LinearLayout>
+
+</LinearLayout>
