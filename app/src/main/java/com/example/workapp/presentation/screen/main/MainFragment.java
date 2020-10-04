@@ -26,7 +26,7 @@ import com.example.workapp.data.network.model.work.WorkActionResult;
 import com.example.workapp.data.network.model.work.WorkCloudDataSource;
 import com.example.workapp.data.network.model.work.WorkModel;
 import com.example.workapp.databinding.MainFragmentBinding;
-import com.example.workapp.presentation.screen.main.recycler_view.WorkTemplatesModel;
+import com.example.workapp.presentation.screen.main.recyclerview.WorkTemplatesModel;
 import com.example.workapp.presentation.screen.timer.timer.TimerFragment;
 import com.example.workapp.presentation.service.notifications.NotificationService;
 
@@ -78,11 +78,11 @@ public class MainFragment extends Fragment {
         View view = binding.getRoot();
         mainRecyclerView = view.findViewById(R.id.mainWorksRecyclerView);
         createClickListener();
-       // showWorks();
+        showWorks();
         return view;
     }
 
-
+    //TODO navigation view callback
     private void createClickListener() {
         binding.createWork.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,8 +97,8 @@ public class MainFragment extends Fragment {
         workCloudDataSource.getWork(workModel.getName(), new WorkActionResult() {
             @Override
             public void onSuccess(List<WorkModel> works) {
-                setActivityTemplatesAdapter(works);
                 createActivityTemplates();
+                setActivityTemplatesAdapter(works);
             }
 
             @Override
@@ -116,7 +116,7 @@ public class MainFragment extends Fragment {
     }
 
     private void createActivityTemplates() {
-        activities.add(R.string.main_work_templates);
+        activities.add("Activity templates");
         activities.add
                 (new WorkTemplatesModel(getString(R.string.main_run_activity), R.drawable.run_twice_400_225));
         activities.add
@@ -125,7 +125,7 @@ public class MainFragment extends Fragment {
                 (new WorkTemplatesModel(getString(R.string.main_sleep_activity), R.drawable.sand_clocks_400_225));
         activities.add
                 (new WorkTemplatesModel(getString(R.string.main_physical_activity), R.drawable.gym_400_225));
-        activities.add(R.string.main_latest_works);
+        activities.add("Latest works");
     }
 
     private void createWork() {

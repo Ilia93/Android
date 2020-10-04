@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -44,7 +45,6 @@ public class UserAccountActivity extends AppCompatActivity {
         binding = UserAccountBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        setSupportActionBar(binding.userToolbar);
         setSharedPreferences();
         loadUserPhoto();
         loadUserDataFromServer();
@@ -55,20 +55,22 @@ public class UserAccountActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(USER_ID_PREFERENCES, MODE_PRIVATE);
     }
 
-    private void setClickListeners() {
-        binding.userAddPhoto.setOnClickListener(new View.OnClickListener() {
+    private void loadUserPhoto() {
+        ImageView imageView = findViewById(R.id.user_image);
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
             @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                UserCameraDialog userCameraDialog = UserCameraDialog.getNewInstance();
-                userCameraDialog.show(fragmentManager, "user_fragment");
-            }
-        });
-        binding.userEditData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent editUserIntent = new Intent(getApplicationContext(), UserEditActivity.class);
-                startActivityForResult(editUserIntent, REQUEST_CODE_EDIT_DATA);
+            public void run() {
+                try {
+                    if (sharedPreferences.contains(USER_STORAGE_PHOTO_PATH)) {
+                        Drawable drawable = Drawable.createFromPath
+                                (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, " "));
+                        imageView.setImageDrawable(drawable);
+                        //TODO продумать scaletype для изображения
+                    }
+                } catch (NullPointerException exception) {
+                    imageView.setImageResource(R.drawable.ic_baseline_account_circle_50);
+                }
             }
         });
     }
@@ -99,19 +101,6 @@ public class UserAccountActivity extends AppCompatActivity {
         });
     }
 
-    private void loadUserPhoto() {
-        ImageView imageView = findViewById(R.id.user_image);
-        try {
-            if (sharedPreferences.contains(USER_STORAGE_PHOTO_PATH)) {
-                Drawable drawable = Drawable.createFromPath
-                        (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, " "));
-                imageView.setImageDrawable(drawable);
-            }
-        } catch (NullPointerException exception) {
-            imageView.setImageResource(R.drawable.blank_profile_picture_80_80);
-        }
-    }
-
     private void setUndefinedFields() {
         binding.userName.setText(R.string.user_empty_field);
         binding.userSecondName.setText(R.string.user_empty_field);
@@ -126,10 +115,30 @@ public class UserAccountActivity extends AppCompatActivity {
         binding.userAge.setText(users.get(i).getUserAge());
         binding.userGender.setText(users.get(i).getUserGender());
         binding.userWeight.setText(users.get(i).getUserWeight());
-        getSupportActionBar().setTitle(users.get(i).getUserName());
+        setSupportActionBar(binding.userToolbar);
+        getSupportActionBar().setTitle(users.get(i).getUserName()
+                + " "
+                + users.get(i).getUserSecondName());
     }
 
-
+    private void setClickListeners() {
+        binding.userAddPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                UserCameraDialog userCameraDialog = UserCameraDialog.getNewInstance();
+                userCameraDialog.show(fragmentManager, "user_fragment");
+            }
+        });
+        binding.userEditData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent editUserIntent = new Intent(getApplicationContext(), UserEditActivity.class);
+                startActivityForResult(editUserIntent, REQUEST_CODE_EDIT_DATA);
+            }
+        });
+    }
+//TODO убрать всплывающую клавиатуру
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -141,22 +150,31 @@ public class UserAccountActivity extends AppCompatActivity {
                 binding.userAge.setText(data.getStringExtra("userAge"));
                 binding.userGender.setText(data.getStringExtra("userGender"));
                 binding.userWeight.setText(data.getStringExtra("userWeight"));
+                binding.userImage.setImageResource(R.drawable.ic_baseline_account_circle_50);
+
+                binding.userToolbar.setTitle(data.getStringExtra("userName")
+                        + " "
+                        + data.getStringExtra("userSecondName"));
+                setSupportActionBar(binding.userToolbar);
             }
         } else if (requestCode == REQUEST_CODE_FILE_STORAGE && resultCode == RESULT_OK) {
             if (data != null) {
-                Uri selectedImage = data.getData();
-                imageView.setImageURI(selectedImage);
+                getDataFromStorage(imageView, data);
             }
         } else if (requestCode == REQUEST_CODE_PHOTO && resultCode == RESULT_OK) {
             if (data != null) {
                 galleryAddPhoto();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(USER_STORAGE_PHOTO_PATH, photoPath);
-                editor.apply();
-                Drawable drawable = Drawable.createFromPath(photoPath);
-                imageView.setImageDrawable(drawable);
+                setUserPhoto();
             }
         }
+    }
+//TODO разобраться с тулбаром
+    //TODO validation for fields, add spinner for different fields, make picture more smaller, floatingbutton hide or float under keyboard
+    //TODO не прятать тулбар в home screen, + сделать как floatingbutton
+
+    private void getDataFromStorage(@NotNull ImageView imageView, @NotNull Intent data) {
+        Uri selectedImage = data.getData();
+        imageView.setImageURI(selectedImage);
     }
 
     private void galleryAddPhoto() {
@@ -165,6 +183,15 @@ public class UserAccountActivity extends AppCompatActivity {
         Uri contentUri = Uri.fromFile(galleryPathFile);
         mediaScanIntent.setData(contentUri);
         sendBroadcast(mediaScanIntent);
+    }
+
+    private void setUserPhoto() {
+        ImageView imageView = findViewById(R.id.user_image);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_STORAGE_PHOTO_PATH, photoPath);
+        editor.apply();
+        Drawable drawable = Drawable.createFromPath(photoPath);
+        imageView.setImageDrawable(drawable);
     }
 
     private void showToastMessage(String text) {

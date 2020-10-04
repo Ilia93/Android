@@ -1,4 +1,4 @@
-package com.example.workapp.presentation.screen.main.recycler_view;
+package com.example.workapp.presentation.screen.main.recyclerview;
 
 import android.view.View;
 import android.widget.TextView;

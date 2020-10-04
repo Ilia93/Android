@@ -61,4 +61,12 @@
         <item name="android:background">@drawable/bg_blue_btn</item>
     </style>
 
+    <style name="UserEditText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/white_1</item>
+        <item name="android:textColorHint">@color/white_1</item>
+        <item name="android:textSize">@dimen/textSize_all_15sp</item>
+    </style>
+
 </resources>

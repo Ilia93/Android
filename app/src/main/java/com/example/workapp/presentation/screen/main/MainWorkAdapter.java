@@ -9,11 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workapp.R;
 import com.example.workapp.data.network.model.work.WorkModel;
-import com.example.workapp.presentation.screen.main.recycler_view.TextHolder;
-import com.example.workapp.presentation.screen.main.recycler_view.TextHolderModel;
-import com.example.workapp.presentation.screen.main.recycler_view.WorkHolder;
-import com.example.workapp.presentation.screen.main.recycler_view.WorkTemplatesHolder;
-import com.example.workapp.presentation.screen.main.recycler_view.WorkTemplatesModel;
+import com.example.workapp.presentation.screen.main.recyclerview.TextHolder;
+import com.example.workapp.presentation.screen.main.recyclerview.WorkHolder;
+import com.example.workapp.presentation.screen.main.recyclerview.WorkTemplatesHolder;
+import com.example.workapp.presentation.screen.main.recyclerview.WorkTemplatesModel;
 
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class MainWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
             default:
                 view = layoutInflater.inflate(R.layout.main_recycler_view_work_templates, parent, false);
-                viewHolder = new WorkTemplatesHolder(view);
+                viewHolder = new WorkTemplatesHolder(view, listOfWorks);
                 break;
         }
         return viewHolder;
@@ -81,10 +80,7 @@ public class MainWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
             case HEADER_TYPE:
                 TextHolder textHolder = (TextHolder) holder;
-                TextHolderModel textHolderModel = (TextHolderModel) listOfWorks.get(position);
-                if (textHolderModel != null) {
-                    textHolder.getTextHeader().setText(textHolderModel.getWorkHeader().getText());
-                }
+                textHolder.getTextHeader().setText((CharSequence) listOfWorks.get(position));
                 break;
             default:
                 WorkTemplatesHolder workTemplatesHolder = (WorkTemplatesHolder) holder;

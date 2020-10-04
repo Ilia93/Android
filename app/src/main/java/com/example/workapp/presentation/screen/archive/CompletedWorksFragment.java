@@ -128,7 +128,7 @@ public class CompletedWorksFragment extends Fragment {
 
     private void displayCommonCommentInformation(@NotNull List<CommentsModel> comments) {
         if (comments.size() == 0) {
-            binding.thirdInformationNote.setText(R.string.archive_works_name);
+            binding.thirdInformationNote.setText(R.string.archive_latest_comments);
         } else {
             displayServerCommentInformation(binding.thirdInformationNote, comments);
         }
@@ -142,6 +142,8 @@ public class CompletedWorksFragment extends Fragment {
             if ((works.get(i).getId().equals(id))) {
                 stringBuilder.append(App.getInstance().getString(R.string.archive_works_name))
                         .append(works.get(i).getName());
+            } else {
+                stringBuilder.append("Didn't created");
             }
         }
         textView.setText(stringBuilder);
@@ -151,40 +153,45 @@ public class CompletedWorksFragment extends Fragment {
                                         @NonNull List<TimerModel> timerModel) {
         StringBuilder stringBuilder = new StringBuilder();
         String id = (getArguments().getString("NOTE_CLICKED_ID_ARG"));
-        for (int i = 0; i < timerModel.size(); i++) {
-            if (timerModel.get(i).getWorkId().equals(id)) {
-                stringBuilder.append(getString(R.string.archive_work_started))
-                        .append(timerModel.get(i).getStartTime())
-                        .append("\n")
-                        .append(getString(R.string.archive_work_finished))
-                        .append(timerModel.get(i).getFinishTime())
-                        .append("\n")
-                        .append(getString(R.string.archive_activity_elapsed_time))
-                        .append(timerModel.get(i).getElapsedTime())
-                        .append("\n")
-                        .append(getString(R.string.archive_activity_pause_time))
-                        .append(timerModel.get(i).getTimeInPause());
+        try {
+            for (int i = 0; i < timerModel.size(); i++) {
+                if (timerModel.get(i).getWorkId().equals(id)) {
+                    stringBuilder.append(getString(R.string.archive_work_started))
+                            .append(timerModel.get(i).getStartTime())
+                            .append("\n")
+                            .append(getString(R.string.archive_work_finished))
+                            .append(timerModel.get(i).getFinishTime())
+                            .append("\n")
+                            .append(getString(R.string.archive_activity_elapsed_time))
+                            .append(timerModel.get(i).getElapsedTime())
+                            .append("\n")
+                            .append(getString(R.string.archive_activity_pause_time))
+                            .append(timerModel.get(i).getTimeInPause());
+                }
             }
+        } catch (NullPointerException exception) {
+            stringBuilder.append("Didn't created");
         }
+        //TODO продумать стабильность приложения
         textView.setText(stringBuilder);
     }
 
     private void displayServerCommentInformation(@NonNull TextView textView,
                                                  @NonNull List<CommentsModel> comments) {
         StringBuilder stringBuilder = new StringBuilder();
-        String allWorkComments = "";
         for (int i = 0; i < comments.size(); i++) {
             do {
                 if (comments.get(i).getWorkId().equals
                         (getArguments().getString("NOTE_CLICKED_ID_ARG"))) {
-                    allWorkComments = allWorkComments.concat(comments.get(i).getText() + " at " +
-                            comments.get(i).getTime() + "\n");
+                    stringBuilder.append(getString(R.string.archive_latest_comments))
+                            .append("\n")
+                            .append(comments.get(i).getText())
+                            .append(" at ")
+                            .append(comments.get(i).getTime())
+                            .append("\n");
                 }
             } while (i == comments.size());
         }
-        stringBuilder.append(getString(R.string.archive_latest_comments))
-                .append("\n")
-                .append(allWorkComments);
         textView.setText(stringBuilder);
     }
 }

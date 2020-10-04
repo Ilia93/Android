@@ -29,7 +29,6 @@
     <string name="main_sleep_template">Sleep</string>
     <string name="main_physical_work_template">Ph.work</string>
     <string name="main_run_template">Run</string>
-    <string name="main_latest_works">Latest works</string>
     <string name="main_editText_autofill">Input work name</string>
     <!--timer screen-->
     <string name="timer_watch_comments">Watch comments</string>

@@ -16,48 +16,28 @@
 
         <EditText
             android:id="@+id/user_edit_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/user_edit_name"
-            android:textColor="@color/white_1"
-            android:textColorHint="@color/white_1"
-            android:textSize="@dimen/textSize_all_15sp" />
+            style="@style/UserEditText"
+            android:hint="@string/user_edit_name" />
 
         <EditText
             android:id="@+id/user_edit_second_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/user_edit_second_name"
-            android:textColor="@color/white_1"
-            android:textColorHint="@color/white_1"
-            android:textSize="@dimen/textSize_all_15sp" />
+            style="@style/UserEditText"
+            android:hint="@string/user_edit_second_name" />
 
         <EditText
             android:id="@+id/user_edit_age"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/user_edit_age"
-            android:textColor="@color/white_1"
-            android:textColorHint="@color/white_1"
-            android:textSize="@dimen/textSize_all_15sp" />
+            style="@style/UserEditText"
+            android:hint="@string/user_edit_age" />
 
         <EditText
             android:id="@+id/user_edit_gender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/user_edit_gender"
-            android:textColor="@color/white_1"
-            android:textColorHint="@color/white_1"
-            android:textSize="@dimen/textSize_all_15sp" />
+            style="@style/UserEditText"
+            android:hint="@string/user_edit_gender" />
 
         <EditText
             android:id="@+id/user_edit_weight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/user_edit_weight"
-            android:textColor="@color/white_1"
-            android:textColorHint="@color/white_1"
-            android:textSize="@dimen/textSize_all_15sp" />
+            style="@style/UserEditText"
+            android:hint="@string/user_edit_weight" />
 
     </LinearLayout>
 

@@ -102,7 +102,6 @@ public class NotificationService extends Service {
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        assert notificationManager != null;
         notificationManager.notify(NOTIFICATION_STOP_ID, builder.build());
         stopForeground(true);
         handler.removeCallbacks(runnable);

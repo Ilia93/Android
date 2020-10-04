@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_all_5dp"
         android:layout_marginTop="@dimen/margin_all_5dp"
+        android:textAlignment="center"
         android:textColor="@color/white_1"
         android:textSize="@dimen/textSize_all_18sp"
         android:textStyle="bold" />

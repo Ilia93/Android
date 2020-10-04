@@ -60,7 +60,6 @@ public class NotificationReceiver extends BroadcastReceiver {
     private void showNotification(@NotNull Context context) {
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(NOTIFICATION_SERVICE);
-        assert notificationManager != null;
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 

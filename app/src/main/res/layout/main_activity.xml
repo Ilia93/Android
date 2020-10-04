@@ -9,27 +9,40 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <include layout="@layout/main_toolbar" />
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/main_app_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true">
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/main_screen_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?android:actionBarSize"
+                        android:background="@color/light_blue"
+                        app:layout_scrollFlags="scroll|enterAlways"
+                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <FrameLayout
+                    android:id="@+id/navigation_content_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
             </LinearLayout>
-
-            <FrameLayout
-                android:id="@+id/navigation_content_frame"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </ScrollView>
 
     <com.google.android.material.navigation.NavigationView
@@ -37,8 +50,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/main_navigation_header"
         android:background="@android:color/white"
+        app:headerLayout="@layout/main_navigation_header"
         app:menu="@menu/drawer_view" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

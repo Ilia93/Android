@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-
+//TODO обработать нажатие пользователя назад 2 раза (нужен тост с текстом Для выхода нажмите еще раз)
     private void getUserPhotoForNavigationView() {
         ImageView userRoundImage = findViewById(R.id.main_header_image);
         try {
@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity
                 Drawable drawable = Drawable.createFromPath
                         (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, ""));
                 userRoundImage.setImageDrawable(drawable);
+                userRoundImage.setRotation(90);
+            } else {
+                userRoundImage.setImageResource(R.drawable.blank_profile_picture_80_80);
             }
         } catch (NullPointerException exception) {
             showToastMessage("Empty  photo");
@@ -153,7 +156,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        item.setChecked(true);
+        item.setCheckable(true);
         int id = item.getItemId();
         if (id == R.id.nav_archive_fragment) {
             Fragment archiveFragment = new ArchiveFragment();
