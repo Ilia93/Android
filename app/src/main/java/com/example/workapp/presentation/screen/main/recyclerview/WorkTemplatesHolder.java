@@ -17,7 +17,7 @@ public class WorkTemplatesHolder extends RecyclerView.ViewHolder {
     private TextView activityDescription;
     private ImageView workImage;
     private CardView cardView;
-    //private OnUserCardClickListener onUserClickListener;
+    private OnUserCardClickListener onUserClickListener;
 
     public WorkTemplatesHolder(@NonNull View itemView, List<Object> listOfWorks) {
         super(itemView);
@@ -25,13 +25,13 @@ public class WorkTemplatesHolder extends RecyclerView.ViewHolder {
         workImage = itemView.findViewById(R.id.activityTemplateImage);
         cardView = itemView.findViewById(R.id.mainCardView);
 
-      /* cardView.setOnClickListener(new View.OnClickListener() {
+      cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 WorkTemplatesModel workTemplatesModel = (WorkTemplatesModel) listOfWorks.get(getLayoutPosition());
                 onUserClickListener.onUserClick(workTemplatesModel);
             }
-        });*/
+        });
     }
 
     public CardView getCardView() {

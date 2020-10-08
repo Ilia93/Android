@@ -14,30 +14,38 @@
         android:layout_marginEnd="@dimen/common_margin"
         android:orientation="vertical">
 
+
         <EditText
             android:id="@+id/user_edit_name"
             style="@style/UserEditText"
-            android:hint="@string/user_edit_name" />
+            android:hint="@string/user_edit_name"
+            android:inputType="text"/>
 
         <EditText
             android:id="@+id/user_edit_second_name"
             style="@style/UserEditText"
-            android:hint="@string/user_edit_second_name" />
+            android:hint="@string/user_edit_second_name"
+            android:autofillHints=""
+            android:inputType="text" />
 
-        <EditText
-            android:id="@+id/user_edit_age"
-            style="@style/UserEditText"
-            android:hint="@string/user_edit_age" />
+        <Spinner
+            android:id="@+id/user_age_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"/>
 
-        <EditText
-            android:id="@+id/user_edit_gender"
-            style="@style/UserEditText"
-            android:hint="@string/user_edit_gender" />
+        <Spinner
+            android:id="@+id/user_gender_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/gender"
+            android:spinnerMode="dialog"/>
 
-        <EditText
-            android:id="@+id/user_edit_weight"
-            style="@style/UserEditText"
-            android:hint="@string/user_edit_weight" />
+        <Spinner
+            android:id="@+id/user_weight_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"/>
 
     </LinearLayout>
 

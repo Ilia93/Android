@@ -169,7 +169,7 @@ public class UserAccountActivity extends AppCompatActivity {
         }
     }
 //TODO разобраться с тулбаром
-    //TODO validation for fields, add spinner for different fields, make picture more smaller, floatingbutton hide or float under keyboard
+    //TODO floatingbutton hide or float under keyboard
     //TODO не прятать тулбар в home screen, + сделать как floatingbutton
 
     private void getDataFromStorage(@NotNull ImageView imageView, @NotNull Intent data) {
