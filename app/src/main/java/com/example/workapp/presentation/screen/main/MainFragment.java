@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -29,6 +30,7 @@ import com.example.workapp.databinding.MainFragmentBinding;
 import com.example.workapp.presentation.screen.main.recyclerview.WorkTemplatesModel;
 import com.example.workapp.presentation.screen.timer.timer.TimerFragment;
 import com.example.workapp.presentation.service.notifications.NotificationService;
+import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -82,7 +84,6 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    //TODO navigation view callback
     private void createClickListener() {
         binding.createWork.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,8 +111,15 @@ public class MainFragment extends Fragment {
 
     private void setActivityTemplatesAdapter(List<WorkModel> works) {
         activities.addAll(works);
-        MainWorkAdapter workAdapter = new MainWorkAdapter(activities);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        MainWorkAdapter.OnUserCardClickListener onUserCardClickListener = new MainWorkAdapter.OnUserCardClickListener() {
+            @Override
+            public void onUserClick(@NotNull WorkTemplatesModel mainTemplatesModel) {
+                binding.inputWork.setText(mainTemplatesModel.getActivityDescription());
+                createWork();
+            }
+        };
+        MainWorkAdapter workAdapter = new MainWorkAdapter(activities, onUserCardClickListener);
         mainRecyclerView.setAdapter(workAdapter);
     }
 
@@ -140,7 +148,6 @@ public class MainFragment extends Fragment {
                     public void onResponse(@NonNull Call<WorkModel> call, @NonNull Response<WorkModel> response) {
                         if (response.isSuccessful()) {
                             showToastMessage("Work created");
-                            binding.inputWork.setText(null);
                             getWorkObjectIdByName();
                             startWorkService();
                         } else {
@@ -166,12 +173,15 @@ public class MainFragment extends Fragment {
     }
 
     private void startWorkService() {
-        Intent serviceIntent = new Intent(getContext(), NotificationService.class);
-        serviceIntent.setAction(Intent.ACTION_ANSWER);
-        serviceIntent.putExtra(SERVICE_WORK_NAME, workModel.getName());
-        serviceIntent.putExtra(SERVICE_NOTIFICATION_ID, "1");
-        serviceIntent.putExtra(SERVICE_WORK_ID, workModel.getId());
-        getActivity().getApplicationContext().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            Intent serviceIntent = new Intent(getContext(), NotificationService.class);
+            serviceIntent.setAction(Intent.ACTION_ANSWER);
+            serviceIntent.putExtra(SERVICE_WORK_NAME, workModel.getName());
+            serviceIntent.putExtra(SERVICE_NOTIFICATION_ID, "1");
+            serviceIntent.putExtra(SERVICE_WORK_ID, workModel.getId());
+            getActivity().getApplicationContext().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     private void getWorkObjectIdByName() {
@@ -180,7 +190,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onSuccess(List<WorkModel> works) {
                 setWorkObjectId(works);
-                startTimerActivity();
+                startTimer();
             }
 
             @Override
@@ -198,7 +208,7 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void startTimerActivity() {
+    private void startTimer() {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             TimerFragment timerFragment = new TimerFragment();
@@ -216,11 +226,11 @@ public class MainFragment extends Fragment {
     }
 
     public void showToastMessage(String text) {
-        Toast toast = Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT);
-        toast.show();
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
-}
-//TODO Main screen one RecyclerView, пофиксить баги +
-// стабишьность, навигатион вью добавить иконку добавления профиля(базовая информация + загрузить фото из галереи или камеры
-// NavigationView full screen
 
+}

@@ -66,7 +66,6 @@ public class UserAccountActivity extends AppCompatActivity {
                         Drawable drawable = Drawable.createFromPath
                                 (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, " "));
                         imageView.setImageDrawable(drawable);
-                        //TODO продумать scaletype для изображения
                     }
                 } catch (NullPointerException exception) {
                     imageView.setImageResource(R.drawable.ic_baseline_account_circle_50);
@@ -138,7 +137,7 @@ public class UserAccountActivity extends AppCompatActivity {
             }
         });
     }
-//TODO убрать всплывающую клавиатуру
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -168,10 +167,9 @@ public class UserAccountActivity extends AppCompatActivity {
             }
         }
     }
-//TODO разобраться с тулбаром
-    //TODO floatingbutton hide or float under keyboard
-    //TODO не прятать тулбар в home screen, + сделать как floatingbutton
 
+    //TODO разобраться с тулбаром
+    //TODO ND full screen
     private void getDataFromStorage(@NotNull ImageView imageView, @NotNull Intent data) {
         Uri selectedImage = data.getData();
         imageView.setImageURI(selectedImage);

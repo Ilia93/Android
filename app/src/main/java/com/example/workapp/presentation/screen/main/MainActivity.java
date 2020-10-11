@@ -1,5 +1,6 @@
 package com.example.workapp.presentation.screen.main;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -43,6 +44,11 @@ import static com.example.workapp.presentation.screen.user.UserEditActivity.USER
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final int FRAGMENT_MAIN_TYPE = 0;
+    public static final int FRAGMENT_TIMER_TYPE = 1;
+    public static final int FRAGMENT_COMMENT_TYPE = 2;
+    public static final int FRAGMENT_ARCHIVE_TYPE = 3;
+
     ImageButton addUser;
     Toolbar toolbar;
     FragmentManager fragmentManager;
@@ -50,9 +56,8 @@ public class MainActivity extends AppCompatActivity
     Fragment mainFragment = new MainFragment();
     UserModel userModel = new UserModel();
     SharedPreferences sharedPreferences;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity
         sharedPreferences = getSharedPreferences(USER_ID_PREFERENCES, MODE_PRIVATE);
     }
 
+    @SuppressLint("SetTextI18n")
     private void getUserForNavigationView(@NotNull List<UserModel> users) {
         StringBuilder stringBuilder = new StringBuilder();
         if (users.size() == 0) {
@@ -104,7 +110,8 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-//TODO обработать нажатие пользователя назад 2 раза (нужен тост с текстом Для выхода нажмите еще раз)
+
+    //TODO обработать нажатие пользователя назад 2 раза (нужен тост с текстом Для выхода нажмите еще раз)
     private void getUserPhotoForNavigationView() {
         ImageView userRoundImage = findViewById(R.id.main_header_image);
         try {
@@ -128,10 +135,18 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent userIntent = new Intent(getApplicationContext(), UserAccountActivity.class);
                 startActivity(userIntent);
-                DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.getItem(0).setVisible(false);
+        menu.getItem(1).setVisible(false);
+        menu.getItem(2).setVisible(false);
+        menu.getItem(3).setVisible(false);
+        return true;
     }
 
     private void setScreenElements() {
@@ -140,7 +155,7 @@ public class MainActivity extends AppCompatActivity
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -171,16 +186,14 @@ public class MainActivity extends AppCompatActivity
             Fragment commentFragment = new CommentFragment();
             replaceFragment(commentFragment);
         }
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }

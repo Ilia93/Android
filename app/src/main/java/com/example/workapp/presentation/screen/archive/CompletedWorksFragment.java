@@ -64,10 +64,13 @@ public class CompletedWorksFragment extends Fragment {
         binding.completedWorksExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.navigation_content_frame, mainFragment)
-                        .addToBackStack(null).commit();
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.navigation_content_frame, mainFragment)
+                            .addToBackStack(null).commit();
+                }
             }
         });
     }
@@ -137,61 +140,64 @@ public class CompletedWorksFragment extends Fragment {
     private void displayServerWorksData(@NonNull TextView textView,
                                         @NonNull List<WorkModel> works) {
         StringBuilder stringBuilder = new StringBuilder();
-        String id = (getArguments().getString("NOTE_CLICKED_ID_ARG"));
-        for (int i = 0; i < works.size(); i++) {
-            if ((works.get(i).getId().equals(id))) {
-                stringBuilder.append(App.getInstance().getString(R.string.archive_works_name))
-                        .append(works.get(i).getName());
-            } else {
-                stringBuilder.append("Didn't created");
+        if (getArguments() != null) {
+            String id = (getArguments().getString("NOTE_CLICKED_ID_ARG"));
+            for (int i = 0; i < works.size(); i++) {
+                if ((works.get(i).getId().equals(id))) {
+                    stringBuilder.append(App.getInstance().getString(R.string.archive_works_name))
+                            .append(works.get(i).getName());
+                }
             }
+            textView.setText(stringBuilder);
         }
-        textView.setText(stringBuilder);
     }
 
     private void displayServerTimerData(@NonNull TextView textView,
                                         @NonNull List<TimerModel> timerModel) {
         StringBuilder stringBuilder = new StringBuilder();
-        String id = (getArguments().getString("NOTE_CLICKED_ID_ARG"));
-        try {
-            for (int i = 0; i < timerModel.size(); i++) {
-                if (timerModel.get(i).getWorkId().equals(id)) {
-                    stringBuilder.append(getString(R.string.archive_work_started))
-                            .append(timerModel.get(i).getStartTime())
-                            .append("\n")
-                            .append(getString(R.string.archive_work_finished))
-                            .append(timerModel.get(i).getFinishTime())
-                            .append("\n")
-                            .append(getString(R.string.archive_activity_elapsed_time))
-                            .append(timerModel.get(i).getElapsedTime())
-                            .append("\n")
-                            .append(getString(R.string.archive_activity_pause_time))
-                            .append(timerModel.get(i).getTimeInPause());
+        if (getArguments() != null) {
+            String id = (getArguments().getString("NOTE_CLICKED_ID_ARG"));
+            try {
+                for (int i = 0; i < timerModel.size(); i++) {
+                    if (timerModel.get(i).getWorkId().equals(id)) {
+                        stringBuilder.append(getString(R.string.archive_work_started))
+                                .append(timerModel.get(i).getStartTime())
+                                .append("\n")
+                                .append(getString(R.string.archive_work_finished))
+                                .append(timerModel.get(i).getFinishTime())
+                                .append("\n")
+                                .append(getString(R.string.archive_activity_elapsed_time))
+                                .append(timerModel.get(i).getElapsedTime())
+                                .append("\n")
+                                .append(getString(R.string.archive_activity_pause_time))
+                                .append(timerModel.get(i).getTimeInPause());
+                    }
                 }
+            } catch (NullPointerException exception) {
+                stringBuilder.append("Didn't created");
             }
-        } catch (NullPointerException exception) {
-            stringBuilder.append("Didn't created");
+            textView.setText(stringBuilder);
         }
-        //TODO продумать стабильность приложения
-        textView.setText(stringBuilder);
     }
 
     private void displayServerCommentInformation(@NonNull TextView textView,
                                                  @NonNull List<CommentsModel> comments) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < comments.size(); i++) {
-            do {
-                if (comments.get(i).getWorkId().equals
-                        (getArguments().getString("NOTE_CLICKED_ID_ARG"))) {
-                    stringBuilder.append(getString(R.string.archive_latest_comments))
-                            .append("\n")
-                            .append(comments.get(i).getText())
-                            .append(" at ")
-                            .append(comments.get(i).getTime())
-                            .append("\n");
-                }
-            } while (i == comments.size());
+        if (getArguments() != null) {
+            for (int i = 0; i < comments.size(); i++) {
+                do {
+                    if (comments.get(i).getWorkId().equals
+                            (getArguments().getString("NOTE_CLICKED_ID_ARG"))) {
+                        stringBuilder.append(getString(R.string.archive_latest_comments))
+                                .append("\n")
+                                .append(comments.get(i).getText())
+                                .append(" at ")
+                                .append(comments.get(i).getTime())
+                                .append("\n");
+                    }
+                } while (i == comments.size());
+            }
+            textView.setText(stringBuilder);
         }
-        textView.setText(stringBuilder);
     }
 }

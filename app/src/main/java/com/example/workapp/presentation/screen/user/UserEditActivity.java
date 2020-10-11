@@ -86,11 +86,16 @@ public class UserEditActivity extends AppCompatActivity {
         List<Integer> age = new ArrayList<>();
         List<Integer> weight = new ArrayList<>();
         initializeGenderSpinner();
-        initializeSpinnerArrayAdapter(age,
+        initializeSpinnerArrayAdapter(
+                age,
                 binding.userAgeSpinner,
                 90, 10,
                 "Select user age");
-        initializeSpinnerArrayAdapter(weight, binding.userWeightSpinner, 150, 15, "Select user weight");
+        initializeSpinnerArrayAdapter(
+                weight,
+                binding.userWeightSpinner,
+                150, 15,
+                "Select user weight");
     }
 
     private void initializeSpinnerArrayAdapter(List<Integer> arrayList, Spinner spinner, int maxValue,

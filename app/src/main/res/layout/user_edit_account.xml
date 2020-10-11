@@ -8,12 +8,11 @@
     <LinearLayout
         android:id="@+id/user_edit_data_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="@dimen/common_margin"
         android:layout_marginTop="@dimen/margin_edit_user_30dp"
         android:layout_marginEnd="@dimen/common_margin"
         android:orientation="vertical">
-
 
         <EditText
             android:id="@+id/user_edit_name"
@@ -32,7 +31,7 @@
             android:id="@+id/user_age_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:spinnerMode="dialog"/>
+            android:spinnerMode="dialog" />
 
         <Spinner
             android:id="@+id/user_gender_spinner"
@@ -54,6 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_round_done_outline_24"
+        android:layout_margin="@dimen/common_margin"
         app:layout_anchor="@id/user_edit_data_layout"
         app:layout_anchorGravity="bottom|right|end" />
 

@@ -7,43 +7,38 @@
     android:background="@drawable/abstract_mountains"
     android:orientation="vertical">
 
-    <ScrollView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/main_app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:fitsSystemWindows="true">
 
-                <com.google.android.material.appbar.AppBarLayout
-                    android:id="@+id/main_app_bar"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/main_screen_toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fitsSystemWindows="true">
+                    android:layout_height="?android:actionBarSize"
+                    android:background="@color/light_blue"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            </com.google.android.material.appbar.AppBarLayout>
 
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/main_screen_toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?android:actionBarSize"
-                        android:background="@color/light_blue"
-                        app:layout_scrollFlags="scroll|enterAlways"
-                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-                </com.google.android.material.appbar.AppBarLayout>
+            <FrameLayout
+                android:id="@+id/navigation_content_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                <FrameLayout
-                    android:id="@+id/navigation_content_frame"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-            </LinearLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </ScrollView>
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
