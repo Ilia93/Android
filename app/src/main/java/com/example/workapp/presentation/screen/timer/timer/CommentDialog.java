@@ -1,4 +1,4 @@
-package com.example.workapp.presentation.screen.comment;
+package com.example.workapp.presentation.screen.timer.timer;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

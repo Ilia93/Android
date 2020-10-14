@@ -13,12 +13,15 @@ import com.example.workapp.R;
 import com.example.workapp.data.network.model.comments.CommentsModel;
 import com.example.workapp.presentation.App;
 import com.example.workapp.presentation.screen.timer.operations.TimerOperations;
+import com.example.workapp.presentation.screen.timer.timer.TimerFragment;
 import com.example.workapp.presentation.service.notifications.NotificationService;
 
 import org.jetbrains.annotations.NotNull;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.example.workapp.presentation.service.notifications.NotificationService.NOTIFICATION_ID;
+import static com.example.workapp.presentation.service.notifications.NotificationService.NOTIFICATION_LEAVE;
+import static com.example.workapp.presentation.service.notifications.NotificationService.NOTIFICATION_STOP_ID;
 
 public class NotificationReceiver extends BroadcastReceiver {
     CommentsModel commentsModel = new CommentsModel();

@@ -44,11 +44,6 @@ import static com.example.workapp.presentation.screen.user.UserEditActivity.USER
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final int FRAGMENT_MAIN_TYPE = 0;
-    public static final int FRAGMENT_TIMER_TYPE = 1;
-    public static final int FRAGMENT_COMMENT_TYPE = 2;
-    public static final int FRAGMENT_ARCHIVE_TYPE = 3;
-
     ImageButton addUser;
     Toolbar toolbar;
     FragmentManager fragmentManager;
@@ -68,6 +63,7 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             replaceFragment(mainFragment);
         }
+        setFragmentBackStackListener();
     }
 
     @Override
@@ -86,6 +82,28 @@ public class MainActivity extends AppCompatActivity
                 showToastMessage(message);
             }
         });
+    }
+
+    private void setFragmentBackStackListener() {
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    @Override
+                    public void onBackStackChanged() {
+                        Fragment fragment = getSupportFragmentManager().
+                                findFragmentById(R.id.navigation_content_frame);
+                        if (fragment instanceof ArchiveFragment) {
+                            navigationView.setCheckedItem(R.id.nav_archive_fragment);
+                        } else if (fragment instanceof CommentFragment) {
+                            navigationView.setCheckedItem(R.id.nav_comments_fragment);
+                        } else if (fragment instanceof MainFragment) {
+                            navigationView.setCheckedItem(R.id.nav_home_fragment);
+                        } else if (fragment instanceof TimerFragment) {
+                            navigationView.setCheckedItem(R.id.nav_timer_fragment);
+                        } else {
+                            showToastMessage("Press again for exit");
+                        }
+                    }
+                });
     }
 
     private void initializePreferences() {
@@ -111,7 +129,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //TODO обработать нажатие пользователя назад 2 раза (нужен тост с текстом Для выхода нажмите еще раз)
     private void getUserPhotoForNavigationView() {
         ImageView userRoundImage = findViewById(R.id.main_header_image);
         try {
@@ -138,15 +155,6 @@ public class MainActivity extends AppCompatActivity
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.getItem(0).setVisible(false);
-        menu.getItem(1).setVisible(false);
-        menu.getItem(2).setVisible(false);
-        menu.getItem(3).setVisible(false);
-        return true;
     }
 
     private void setScreenElements() {
@@ -213,6 +221,15 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.getItem(0).setVisible(false);
+        menu.getItem(1).setVisible(false);
+        menu.getItem(2).setVisible(false);
+        menu.getItem(3).setVisible(false);
+        return true;
     }
 
     public void showToastMessage(String text) {

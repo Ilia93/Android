@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.workapp.R;
 
@@ -71,20 +73,23 @@ public class UserCameraDialog extends DialogFragment {
 
     private void createStoragePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                showToastMessage("IO exception");
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    showToastMessage("IO exception");
 
-            }
-            if (photoFile != null) {
-                Uri imageURI = FileProvider.getUriForFile(getActivity().getApplicationContext(),
-                        "com.example.android.fileProvider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
-                getActivity().startActivityForResult(takePictureIntent, REQUEST_CODE_PHOTO);
+                }
+                if (photoFile != null) {
+                    Uri imageURI = FileProvider.getUriForFile(activity.getApplicationContext(),
+                            "com.example.android.fileProvider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
+                    getActivity().startActivityForResult(takePictureIntent, REQUEST_CODE_PHOTO);
+                }
             }
         }
     }

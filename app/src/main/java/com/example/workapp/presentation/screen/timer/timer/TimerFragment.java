@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workapp.R;
 import com.example.workapp.data.network.NetworkClient;
@@ -24,7 +23,6 @@ import com.example.workapp.data.network.model.comments.CommentsModel;
 import com.example.workapp.data.network.model.timer.TimerModel;
 import com.example.workapp.data.network.model.work.WorkModel;
 import com.example.workapp.databinding.TimerFragmentBinding;
-import com.example.workapp.presentation.screen.comment.CommentDialog;
 import com.example.workapp.presentation.screen.comment.CommentFragment;
 import com.example.workapp.presentation.screen.main.MainFragment;
 import com.example.workapp.presentation.screen.timer.operations.TimerOperations;
@@ -61,8 +59,8 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     TimerFragmentBinding binding;
     Handler uiHandler = new Handler();
     Runnable runnable;
+    @SuppressLint("SimpleDateFormat")
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-    private List<TimerMenuModel> menuModelList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -87,60 +85,41 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     }
 
     private void setClickListeners() {
-        binding.startTimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onTimerStarted();
-            }
-        });
-        binding.stopTimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onTimerStopped();
-            }
-        });
-        binding.pauseTimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onTimerPaused();
-            }
-        });
-        binding.resumeTimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onTimerResumed();
-            }
-        });
+        binding.startTimer.setOnClickListener(v -> onTimerStarted());
+        binding.stopTimer.setOnClickListener(v -> onTimerStopped());
+        binding.pauseTimer.setOnClickListener(v -> onTimerPaused());
+        binding.resumeTimer.setOnClickListener(v -> onTimerResumed());
     }
 
-    private void initializeMenuModel() {
+    @NotNull
+    private List<TimerMenuModel> initializeMenuModel() {
+        List<TimerMenuModel> menuModelList = new ArrayList<>();
         menuModelList.add(new TimerMenuModel("Watch comments", R.drawable.ic_watch_comments_48dp));
         menuModelList.add(new TimerMenuModel("Add comment", R.drawable.ic_add_commen_48dp));
+        return menuModelList;
     }
 
     private void setMenuAdapter() {
-        FragmentActivity activity = getActivity();
-        TimerMenuAdapter.OnUserClickListener onUserClickListener = new TimerMenuAdapter.OnUserClickListener() {
-            @Override
-            public void onClick(@NotNull TimerMenuModel timerMenuModel) {
-                if (timerMenuModel.getText().equals("Watch comments")) {
-                    if (activity != null) {
-                        fragmentManager = activity.getSupportFragmentManager();
-                        fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.navigation_content_frame, commentFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
-                    }
-                } else if (timerMenuModel.getText().equals("Add comment")) {
-                    if (activity != null) {
-                        fragmentManager = activity.getSupportFragmentManager();
-                        CommentDialog commentDialog = new CommentDialog();
-                        commentDialog.setTargetFragment(TimerFragment.this, 300);
-                        commentDialog.show(fragmentManager, "dialog");
-                    }
+        TimerMenuAdapter.OnUserClickListener onUserClickListener = timerMenuModel -> {
+            if (timerMenuModel.getText().equals("Watch comments")) {
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    fragmentManager = activity.getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.navigation_content_frame, commentFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            } else if (timerMenuModel.getText().equals("Add comment")) {
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    fragmentManager = activity.getSupportFragmentManager();
+                    CommentDialog commentDialog = new CommentDialog();
+                    commentDialog.setTargetFragment(TimerFragment.this, 300);
+                    commentDialog.show(fragmentManager, "dialog");
                 }
             }
         };
-        TimerMenuAdapter timerMenuAdapter = new TimerMenuAdapter(getActivity(), menuModelList, onUserClickListener);
+        TimerMenuAdapter timerMenuAdapter = new TimerMenuAdapter(getActivity(), initializeMenuModel(), onUserClickListener);
         binding.timerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         binding.timerRecyclerView.setAdapter(timerMenuAdapter);
     }
@@ -155,12 +134,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
             timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            binding.timerStartView.setText(timerOperations.setTime());
-                        }
-                    };
+                    runnable = () -> binding.timerStartView.setText(timerOperations.setTime());
                     uiHandler.postDelayed(runnable, 1000);
                 }
             };
@@ -218,7 +192,6 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                 }
             });
         }
-        showToastMessage("Wrong workId arguments");
     }
 
     private void createTimer(@NotNull Call<TimerModel> call) {
@@ -232,7 +205,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                         showToastMessage("Timer didn't created");
                     }
                     showToastMessage("Timer stopped");
-                    replaceFragment(stopTimerFragment, null);
+                    replaceFragment(stopTimerFragment);
                 } else {
                     try {
                         if (response.errorBody() != null) {
@@ -303,13 +276,13 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
         });
     }
 
-    private void replaceFragment(Fragment fragmentName, String backStackName) {
+    private void replaceFragment(Fragment fragmentName) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             fragmentManager = getActivity().getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction()
                     .add(R.id.navigation_content_frame, fragmentName);
-            fragmentTransaction.addToBackStack(backStackName);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     }
