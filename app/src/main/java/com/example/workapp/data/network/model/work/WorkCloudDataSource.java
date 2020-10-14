@@ -11,7 +11,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public final class WorkCloudDataSource {
-    // TODO: почитать про Java Callbacks + Anonymous function+ classes
     public void getWork(String workName, final WorkActionResult action) {
         NetworkClient.getInstance();
         Call<List<WorkModel>> call = NetworkClient.getWorkApi().getWorkName(workName);

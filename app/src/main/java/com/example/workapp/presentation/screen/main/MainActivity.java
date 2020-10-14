@@ -1,5 +1,6 @@
 package com.example.workapp.presentation.screen.main;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -50,9 +51,8 @@ public class MainActivity extends AppCompatActivity
     Fragment mainFragment = new MainFragment();
     UserModel userModel = new UserModel();
     SharedPreferences sharedPreferences;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             replaceFragment(mainFragment);
         }
+        setFragmentBackStackListener();
     }
 
     @Override
@@ -83,10 +84,33 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void setFragmentBackStackListener() {
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    @Override
+                    public void onBackStackChanged() {
+                        Fragment fragment = getSupportFragmentManager().
+                                findFragmentById(R.id.navigation_content_frame);
+                        if (fragment instanceof ArchiveFragment) {
+                            navigationView.setCheckedItem(R.id.nav_archive_fragment);
+                        } else if (fragment instanceof CommentFragment) {
+                            navigationView.setCheckedItem(R.id.nav_comments_fragment);
+                        } else if (fragment instanceof MainFragment) {
+                            navigationView.setCheckedItem(R.id.nav_home_fragment);
+                        } else if (fragment instanceof TimerFragment) {
+                            navigationView.setCheckedItem(R.id.nav_timer_fragment);
+                        } else {
+                            showToastMessage("Press again for exit");
+                        }
+                    }
+                });
+    }
+
     private void initializePreferences() {
         sharedPreferences = getSharedPreferences(USER_ID_PREFERENCES, MODE_PRIVATE);
     }
 
+    @SuppressLint("SetTextI18n")
     private void getUserForNavigationView(@NotNull List<UserModel> users) {
         StringBuilder stringBuilder = new StringBuilder();
         if (users.size() == 0) {
@@ -104,7 +128,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-//TODO обработать нажатие пользователя назад 2 раза (нужен тост с текстом Для выхода нажмите еще раз)
+
     private void getUserPhotoForNavigationView() {
         ImageView userRoundImage = findViewById(R.id.main_header_image);
         try {
@@ -128,7 +152,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent userIntent = new Intent(getApplicationContext(), UserAccountActivity.class);
                 startActivity(userIntent);
-                DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
@@ -140,7 +163,7 @@ public class MainActivity extends AppCompatActivity
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -171,16 +194,14 @@ public class MainActivity extends AppCompatActivity
             Fragment commentFragment = new CommentFragment();
             replaceFragment(commentFragment);
         }
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -200,6 +221,15 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.getItem(0).setVisible(false);
+        menu.getItem(1).setVisible(false);
+        menu.getItem(2).setVisible(false);
+        menu.getItem(3).setVisible(false);
+        return true;
     }
 
     public void showToastMessage(String text) {

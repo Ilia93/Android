@@ -63,12 +63,9 @@ public class TimerMenuAdapter extends RecyclerView
             timerMenuText = itemView.findViewById(R.id.timerCommentSampleText);
             cardView = itemView.findViewById(R.id.timerCardView);
 
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TimerMenuModel timerMenuModel = timerMenuModelList.get(getLayoutPosition());
-                    onUserClickListener.onClick(timerMenuModel);
-                }
+            cardView.setOnClickListener(v -> {
+                TimerMenuModel timerMenuModel = timerMenuModelList.get(getLayoutPosition());
+                onUserClickListener.onClick(timerMenuModel);
             });
         }
     }

@@ -11,9 +11,9 @@
     <application
         android:name=".presentation.App"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/work_app_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/work_app_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
@@ -35,7 +35,11 @@
         <receiver
             android:name=".presentation.service.receiver.NotificationReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false">
+            <intent-filter>
+                <action android:name="leave_service" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".presentation.screen.splash.SplashScreenActivity">
             <intent-filter>
@@ -44,9 +48,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.screen.main.MainActivity" />
+        <activity
+            android:name=".presentation.screen.main.MainActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".presentation.screen.user.UserAccountActivity" />
-        <activity android:name=".presentation.screen.user.UserEditActivity" />
+        <activity
+            android:name=".presentation.screen.user.UserEditActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

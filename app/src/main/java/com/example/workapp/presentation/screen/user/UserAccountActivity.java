@@ -6,10 +6,13 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -19,6 +22,7 @@ import com.example.workapp.data.network.model.user.UserActionResult;
 import com.example.workapp.data.network.model.user.UserCloudSource;
 import com.example.workapp.data.network.model.user.UserModel;
 import com.example.workapp.databinding.UserAccountBinding;
+import com.example.workapp.presentation.screen.main.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -66,7 +70,6 @@ public class UserAccountActivity extends AppCompatActivity {
                         Drawable drawable = Drawable.createFromPath
                                 (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, " "));
                         imageView.setImageDrawable(drawable);
-                        //TODO продумать scaletype для изображения
                     }
                 } catch (NullPointerException exception) {
                     imageView.setImageResource(R.drawable.ic_baseline_account_circle_50);
@@ -138,7 +141,7 @@ public class UserAccountActivity extends AppCompatActivity {
             }
         });
     }
-//TODO убрать всплывающую клавиатуру
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -151,11 +154,10 @@ public class UserAccountActivity extends AppCompatActivity {
                 binding.userGender.setText(data.getStringExtra("userGender"));
                 binding.userWeight.setText(data.getStringExtra("userWeight"));
                 binding.userImage.setImageResource(R.drawable.ic_baseline_account_circle_50);
-
-                binding.userToolbar.setTitle(data.getStringExtra("userName")
+                setSupportActionBar(binding.userToolbar);
+                getSupportActionBar().setTitle(data.getStringExtra("userName")
                         + " "
                         + data.getStringExtra("userSecondName"));
-                setSupportActionBar(binding.userToolbar);
             }
         } else if (requestCode == REQUEST_CODE_FILE_STORAGE && resultCode == RESULT_OK) {
             if (data != null) {
@@ -168,9 +170,6 @@ public class UserAccountActivity extends AppCompatActivity {
             }
         }
     }
-//TODO разобраться с тулбаром
-    //TODO validation for fields, add spinner for different fields, make picture more smaller, floatingbutton hide or float under keyboard
-    //TODO не прятать тулбар в home screen, + сделать как floatingbutton
 
     private void getDataFromStorage(@NotNull ImageView imageView, @NotNull Intent data) {
         Uri selectedImage = data.getData();
@@ -192,6 +191,22 @@ public class UserAccountActivity extends AppCompatActivity {
         editor.apply();
         Drawable drawable = Drawable.createFromPath(photoPath);
         imageView.setImageDrawable(drawable);
+        imageView.setRotation(0);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.user_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.user_back) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void showToastMessage(String text) {

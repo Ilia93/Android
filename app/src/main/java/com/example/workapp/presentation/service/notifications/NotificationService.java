@@ -23,11 +23,10 @@ public class NotificationService extends Service {
 
     public static final int NOTIFICATION_ID = 1;
     public static final int NOTIFICATION_STOP_ID = 2;
+    public static final String NOTIFICATION_LEAVE = "Leave notification";
     public static String KEY_TEXT_REPLY = "key_text_reply";
-
     public final String CHANNEL_ID = "1";
     public final String REPLY_TITLE = "Add comment";
-    public final String NOTIFICATION_LEAVE = "Leave notification";
     public final String NOTIFICATION_WORK_ID = "work_id";
     public final String CHANNEL_NAME = "MyChannel";
     private final String NOTIFICATION_REPLY_ID = "Enter your text";
@@ -80,6 +79,30 @@ public class NotificationService extends Service {
         createNotification(intent);
     }
 
+    private void createReplyAction(@NotNull Intent intent, RemoteInput remoteInput) {
+        replyIntent = new Intent(this, NotificationReceiver.class);
+        replyIntent.putExtra(NOTIFICATION_WORK_ID, intent.getStringExtra("workId"));
+
+        pendingIntent = PendingIntent.getBroadcast(this, 0,
+                replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        replyAction = new NotificationCompat.Action.Builder(
+                R.drawable.ic_send_black_24dp, REPLY_TITLE, pendingIntent)
+                .addRemoteInput(remoteInput)
+                .build();
+    }
+
+    public void createLeaveNotificationIntent() {
+        leaveNotification = new Intent(this, NotificationReceiver.class);
+        leaveNotification.putExtra(NOTIFICATION_LEAVE, NOTIFICATION_STOP_ID);
+        leaveNotificationPending = PendingIntent.getBroadcast(this, 0,
+                leaveNotification, PendingIntent.FLAG_ONE_SHOT);
+
+        leaveNotificationAction = new NotificationCompat.Action.Builder(
+                R.drawable.ic_clear_black_24dp, NOTIFICATION_LEAVE, leaveNotificationPending)
+                .build();
+    }
+
     private void createNotification(@NotNull Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
@@ -112,30 +135,6 @@ public class NotificationService extends Service {
     private RemoteInput createRemoteInput() {
         return new RemoteInput.Builder(KEY_TEXT_REPLY)
                 .setLabel(NOTIFICATION_REPLY_ID)
-                .build();
-    }
-
-    private void createReplyAction(@NotNull Intent intent, RemoteInput remoteInput) {
-        replyIntent = new Intent(this, NotificationReceiver.class);
-        replyIntent.putExtra(NOTIFICATION_WORK_ID, intent.getStringExtra("workId"));
-
-        pendingIntent = PendingIntent.getBroadcast(this, 0,
-                replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        replyAction = new NotificationCompat.Action.Builder(
-                R.drawable.ic_send_black_24dp, REPLY_TITLE, pendingIntent)
-                .addRemoteInput(remoteInput)
-                .build();
-    }
-
-    public void createLeaveNotificationIntent() {
-        leaveNotification = new Intent(this, NotificationReceiver.class);
-
-        leaveNotificationPending = PendingIntent.getBroadcast(this, 0,
-                leaveNotification, PendingIntent.FLAG_ONE_SHOT);
-
-        leaveNotificationAction = new NotificationCompat.Action.Builder(
-                R.drawable.ic_clear_black_24dp, NOTIFICATION_LEAVE, leaveNotificationPending)
                 .build();
     }
 

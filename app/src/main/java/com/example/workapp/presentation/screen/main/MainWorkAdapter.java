@@ -23,9 +23,11 @@ public class MainWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int HEADER_TYPE = 2;
 
     private List<Object> listOfWorks;
+    private OnUserCardClickListener onUserCardClickListener;
 
-    public MainWorkAdapter(List<Object> listOfWorks) {
+    public MainWorkAdapter(List<Object> listOfWorks, OnUserCardClickListener onUserCardClickListener) {
         this.listOfWorks = listOfWorks;
+        this.onUserCardClickListener = onUserCardClickListener;
     }
 
     @NonNull
@@ -47,7 +49,7 @@ public class MainWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
             default:
                 view = layoutInflater.inflate(R.layout.main_recycler_view_work_templates, parent, false);
-                viewHolder = new WorkTemplatesHolder(view, listOfWorks);
+                viewHolder = new WorkTemplatesHolder(view, listOfWorks, onUserCardClickListener);
                 break;
         }
         return viewHolder;
@@ -91,5 +93,9 @@ public class MainWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
                 break;
         }
+    }
+
+    public interface OnUserCardClickListener {
+        void onUserClick(WorkTemplatesModel mainTemplatesModel);
     }
 }
