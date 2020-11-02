@@ -39,7 +39,6 @@ import java.util.List;
 
 import static com.example.workapp.presentation.screen.user.UserAccountActivity.USER_STORAGE_PHOTO_PATH;
 import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_ID;
-import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_ID_PREFERENCES;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -99,15 +98,13 @@ public class MainActivity extends AppCompatActivity
                             navigationView.setCheckedItem(R.id.nav_home_fragment);
                         } else if (fragment instanceof TimerFragment) {
                             navigationView.setCheckedItem(R.id.nav_timer_fragment);
-                        } else {
-                            showToastMessage("Press again for exit");
                         }
                     }
                 });
     }
 
     private void initializePreferences() {
-        sharedPreferences = getSharedPreferences(USER_ID_PREFERENCES, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
     }
 
     @SuppressLint("SetTextI18n")
@@ -163,8 +160,10 @@ public class MainActivity extends AppCompatActivity
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                toolbar, R.string.drawer_open, R.string.drawer_close);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle
+                (this, drawerLayout,
+                        toolbar, R.string.drawer_open,
+                        R.string.drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }

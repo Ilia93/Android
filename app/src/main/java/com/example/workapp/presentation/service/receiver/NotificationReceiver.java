@@ -12,6 +12,8 @@ import androidx.core.app.NotificationCompat;
 import com.example.workapp.R;
 import com.example.workapp.data.network.model.comments.CommentsModel;
 import com.example.workapp.presentation.App;
+import com.example.workapp.presentation.screen.main.MainActivity;
+import com.example.workapp.presentation.screen.main.MainFragment;
 import com.example.workapp.presentation.screen.timer.operations.TimerOperations;
 import com.example.workapp.presentation.screen.timer.timer.TimerFragment;
 import com.example.workapp.presentation.service.notifications.NotificationService;
@@ -20,13 +22,13 @@ import org.jetbrains.annotations.NotNull;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.example.workapp.presentation.service.notifications.NotificationService.NOTIFICATION_ID;
-import static com.example.workapp.presentation.service.notifications.NotificationService.NOTIFICATION_LEAVE;
-import static com.example.workapp.presentation.service.notifications.NotificationService.NOTIFICATION_STOP_ID;
+import static com.example.workapp.presentation.service.notifications.NotificationService.STOP_NOTIFICATION;
 
 public class NotificationReceiver extends BroadcastReceiver {
     CommentsModel commentsModel = new CommentsModel();
     NotificationService notificationService = new NotificationService();
     TimerOperations timerOperations = new TimerOperations();
+    TimerFragment timerFragment = new TimerFragment();
     NotificationCompat.Builder builder;
 
     @Override
@@ -34,6 +36,14 @@ public class NotificationReceiver extends BroadcastReceiver {
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
         if (remoteInput != null) {
             getBroadcastMessage(remoteInput, intent, context);
+        } else {
+            if (intent.getAction() != null) {
+                if (intent.getAction().equals(STOP_NOTIFICATION)) {
+                    context.unbindService(MainFragment.serviceConnection);
+                    Intent intent1 = new Intent(context, MainActivity.class);
+                    context.startActivity(intent1);
+                }
+            }
         }
     }
 

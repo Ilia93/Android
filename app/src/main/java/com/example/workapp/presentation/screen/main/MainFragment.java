@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -30,7 +29,6 @@ import com.example.workapp.databinding.MainFragmentBinding;
 import com.example.workapp.presentation.screen.main.recyclerview.WorkTemplatesModel;
 import com.example.workapp.presentation.screen.timer.timer.TimerFragment;
 import com.example.workapp.presentation.service.notifications.NotificationService;
-import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +73,9 @@ public class MainFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         binding = MainFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         mainRecyclerView = view.findViewById(R.id.mainWorksRecyclerView);
@@ -142,7 +142,8 @@ public class MainFragment extends Fragment {
                 Call<WorkModel> work = NetworkClient.getWorkApi().createWork(workModel);
                 work.enqueue(new Callback<WorkModel>() {
                     @Override
-                    public void onResponse(@NonNull Call<WorkModel> call, @NonNull Response<WorkModel> response) {
+                    public void onResponse(@NonNull Call<WorkModel> call,
+                                           @NonNull Response<WorkModel> response) {
                         if (response.isSuccessful()) {
                             showToastMessage("Work created");
                             getWorkObjectIdByName();
@@ -177,7 +178,10 @@ public class MainFragment extends Fragment {
             serviceIntent.putExtra(SERVICE_WORK_NAME, workModel.getName());
             serviceIntent.putExtra(SERVICE_NOTIFICATION_ID, "1");
             serviceIntent.putExtra(SERVICE_WORK_ID, workModel.getId());
-            getActivity().getApplicationContext().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+            getActivity().getApplicationContext().bindService(
+                    serviceIntent,
+                    serviceConnection,
+                    Context.BIND_AUTO_CREATE);
         }
     }
 

@@ -34,7 +34,9 @@ public class ArchiveFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.archive_fragment, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         displayCompletedWorks();
@@ -76,7 +78,8 @@ public class ArchiveFragment extends Fragment {
             }
         };
         ArchiveAdapter archiveAdapter = new ArchiveAdapter(works, onUserClickListener);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager
+                (getActivity(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(archiveAdapter);
     }
 

@@ -30,7 +30,9 @@ public class CommentFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.comments_fragment, container, false);
         commentsRecyclerView = view.findViewById(R.id.commentsRecyclerView);
         showComments();

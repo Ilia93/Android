@@ -31,17 +31,23 @@ public class StopTimerFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         binding = TimerFinishWorkFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         TimerCloudDataSource timerCloudDataSource = new TimerCloudDataSource();
         timerCloudDataSource.getTimer(timerModel.getStartTime(), new TimerActionResult() {
             @Override
             public void onSuccess(List<TimerModel> timerModel) {
-                binding.timerStartResultView.setText(timerModel.get(timerModel.size() - 1).getStartTime());
-                binding.timerFinishResultView.setText(timerModel.get(timerModel.size() - 1).getFinishTime());
-                binding.elapsedTimeView.setText(timerModel.get(timerModel.size() - 1).getElapsedTime());
-                binding.timeInPauseView.setText(timerModel.get(timerModel.size() - 1).getTimeInPause());
+                binding.timerStartResultView.setText
+                        (timerModel.get(timerModel.size() - 1).getStartTime());
+                binding.timerFinishResultView.setText
+                        (timerModel.get(timerModel.size() - 1).getFinishTime());
+                binding.elapsedTimeView.setText
+                        (timerModel.get(timerModel.size() - 1).getElapsedTime());
+                binding.timeInPauseView.setText
+                        (timerModel.get(timerModel.size() - 1).getTimeInPause());
             }
 
             @Override

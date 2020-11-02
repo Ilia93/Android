@@ -30,7 +30,8 @@ public class WorkTemplatesHolder extends RecyclerView.ViewHolder {
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WorkTemplatesModel workTemplatesModel = (WorkTemplatesModel) listOfWorks.get(getLayoutPosition());
+                WorkTemplatesModel workTemplatesModel =
+                        (WorkTemplatesModel) listOfWorks.get(getLayoutPosition());
                 onUserCardClickListener.onUserClick(workTemplatesModel);
             }
         });

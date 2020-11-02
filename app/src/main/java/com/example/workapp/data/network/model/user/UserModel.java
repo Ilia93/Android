@@ -18,9 +18,19 @@ public class UserModel {
     private String userGender;
     @SerializedName("userWeight")
     private String userWeight;
+    @SerializedName("objectId")
+    private String userObjectId;
 
     public UserModel() {
         userId = UUID.randomUUID().toString();
+    }
+
+    public String getUserObjectId() {
+        return userObjectId;
+    }
+
+    public void setUserObjectId(String userObjectId) {
+        this.userObjectId = userObjectId;
     }
 
     public String getUserId() {

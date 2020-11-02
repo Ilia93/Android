@@ -19,8 +19,12 @@ public class CommentDialog extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.timer_dialog_add_comment, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.timer_dialog_add_comment,
+                container,
+                false);
         userInput = view.findViewById(R.id.inputDialogComment);
         setListeners(view);
         return view;

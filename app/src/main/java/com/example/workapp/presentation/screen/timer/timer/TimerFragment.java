@@ -44,7 +44,9 @@ import retrofit2.Response;
 public class TimerFragment extends Fragment implements CommentDialog.DialogListener {
 
     public static Date timeOfTimerStart, timeOfTimerPauseStart, timeOfTimerPauseFinish;
-    public static boolean isStarted, isPaused, isResumed = false;
+    public static boolean isStarted = false;
+    public static boolean isPaused = false;
+    public static boolean isResumed = false;
     public Date timeOfFinish;
     TimerModel timerModel = new TimerModel();
     WorkModel workModel = new WorkModel();
@@ -76,6 +78,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     public void onResume() {
         super.onResume();
         saveData();
+        onTimerStarted();
     }
 
     @Override
@@ -85,7 +88,6 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     }
 
     private void setClickListeners() {
-        binding.startTimer.setOnClickListener(v -> onTimerStarted());
         binding.stopTimer.setOnClickListener(v -> onTimerStopped());
         binding.pauseTimer.setOnClickListener(v -> onTimerPaused());
         binding.resumeTimer.setOnClickListener(v -> onTimerResumed());
@@ -149,7 +151,6 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
         isStarted = false;
         isResumed = false;
         isPaused = false;
-        binding.startTimer.setEnabled(true);
         if (getArguments() != null) {
             workModel.setId(getArguments().getString("workId"));
             workModel.setName(getArguments().getString("workName"));
@@ -226,11 +227,15 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
 
     public void onTimerResumed() {
         try {
-            isResumed = true;
-            timeOfTimerPauseFinish = timerOperations.getCalendarInstance();
-            timerModel.setTimeInPause(timerOperations.calculateDifference
-                    (timeOfTimerPauseStart, timeOfTimerPauseFinish));
-            binding.timerEndPauseView.setText(timerOperations.setTime());
+            if (!isResumed) {
+                throw new NullPointerException();
+            } else {
+                isResumed = true;
+                timeOfTimerPauseFinish = timerOperations.getCalendarInstance();
+                timerModel.setTimeInPause(timerOperations.calculateDifference
+                        (timeOfTimerPauseStart, timeOfTimerPauseFinish));
+                binding.timerEndPauseView.setText(timerOperations.setTime());
+            }
         } catch (NullPointerException exception) {
             showToastMessage("Timer didn't created");
         }
@@ -238,7 +243,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
 
     public void onTimerPaused() {
         try {
-            if (!isStarted) {
+            if (!isPaused) {
                 throw new NullPointerException();
             } else {
                 isPaused = true;
@@ -292,7 +297,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
         toast.show();
     }
 
-    private void stopService() {
+    public void stopService() {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             try {
@@ -320,7 +325,6 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
         if (activity != null) {
             if (isStarted) {
                 setData(R.id.timerStartView, timeOfTimerStart);
-                getActivity().findViewById(R.id.startTimer).setEnabled(false);
             }
             if (isPaused) {
                 setData(R.id.timerPauseStartView, timeOfTimerPauseStart);

@@ -17,6 +17,12 @@ public final class UserCloudSource {
         serverCall(call, actionResult);
     }
 
+    public void getUserId(String userName, final UserActionResult userActionResult) {
+        NetworkClient.getInstance();
+        Call<List<UserModel>> call = NetworkClient.getUserApi().getUserObjectId(userName);
+        serverCall(call, userActionResult);
+    }
+
     private void serverCall(@NonNull Call<List<UserModel>> call, final UserActionResult action) {
         call.enqueue(new Callback<List<UserModel>>() {
             @Override

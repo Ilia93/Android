@@ -2,11 +2,15 @@ package com.example.workapp.presentation.screen.user;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
+import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.workapp.R;
+import com.example.workapp.data.network.NetworkClient;
 import com.example.workapp.data.network.model.user.UserActionResult;
 import com.example.workapp.data.network.model.user.UserCloudSource;
 import com.example.workapp.data.network.model.user.UserModel;
@@ -27,14 +32,27 @@ import com.example.workapp.presentation.screen.main.MainActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_ID;
-import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_ID_PREFERENCES;
+import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_PREFERENCES_NAME;
+import static com.example.workapp.presentation.screen.user.UserEditActivity.USER_PREFERENCES_SECOND_NAME;
+import static com.example.workapp.presentation.screen.user.UserEditActivity.isUpdated;
 
 public class UserAccountActivity extends AppCompatActivity {
 
     public static final String USER_STORAGE_PHOTO_PATH = "user_photo_path";
+    private static final String USER_NAME = "userName";
+    private static final String USER_SECOND_NAME = "userSecondName";
+    private static final String USER_AGE = "userAge";
+    private static final String USER_WEIGHT = "userWeight";
+    private static final String USER_GENDER = "userGender";
+    public static String USER_OBJECT_ID = null;
     public static String photoPath;
     public final int REQUEST_CODE_EDIT_DATA = 0;
     public final int REQUEST_CODE_PHOTO = 1;
@@ -49,6 +67,7 @@ public class UserAccountActivity extends AppCompatActivity {
         binding = UserAccountBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        setSupportActionBar(binding.userToolbar);
         setSharedPreferences();
         loadUserPhoto();
         loadUserDataFromServer();
@@ -56,7 +75,7 @@ public class UserAccountActivity extends AppCompatActivity {
     }
 
     private void setSharedPreferences() {
-        sharedPreferences = getSharedPreferences(USER_ID_PREFERENCES, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
     }
 
     private void loadUserPhoto() {
@@ -67,9 +86,8 @@ public class UserAccountActivity extends AppCompatActivity {
             public void run() {
                 try {
                     if (sharedPreferences.contains(USER_STORAGE_PHOTO_PATH)) {
-                        Drawable drawable = Drawable.createFromPath
-                                (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, " "));
-                        imageView.setImageDrawable(drawable);
+                        imageView.setImageBitmap(rotateImageOrientation(sharedPreferences
+                                .getString(USER_STORAGE_PHOTO_PATH, " ")));
                     }
                 } catch (NullPointerException exception) {
                     imageView.setImageResource(R.drawable.ic_baseline_account_circle_50);
@@ -83,9 +101,9 @@ public class UserAccountActivity extends AppCompatActivity {
         userCloudSource.getUser(userModel.getUserName(), new UserActionResult() {
             @Override
             public void onSuccess(List<UserModel> users) {
-                if (users.size() == 0) {
+                if (users.isEmpty()) {
                     setUndefinedFields();
-                } else if (users.size() > 0) {
+                } else {
                     if (sharedPreferences.contains(USER_ID)) {
                         for (int i = 0; i < users.size(); i++) {
                             if (users.get(i).getUserId().
@@ -99,7 +117,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                showToastMessage("Failed to load user");
+                showToastMessage();
             }
         });
     }
@@ -118,7 +136,6 @@ public class UserAccountActivity extends AppCompatActivity {
         binding.userAge.setText(users.get(i).getUserAge());
         binding.userGender.setText(users.get(i).getUserGender());
         binding.userWeight.setText(users.get(i).getUserWeight());
-        setSupportActionBar(binding.userToolbar);
         getSupportActionBar().setTitle(users.get(i).getUserName()
                 + " "
                 + users.get(i).getUserSecondName());
@@ -137,9 +154,18 @@ public class UserAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent editUserIntent = new Intent(getApplicationContext(), UserEditActivity.class);
-                startActivityForResult(editUserIntent, REQUEST_CODE_EDIT_DATA);
+                putUserDataExtrasToTheEditActivity(editUserIntent);
             }
         });
+    }
+
+    private void putUserDataExtrasToTheEditActivity(@NotNull Intent intent) {
+        intent.putExtra(USER_NAME, binding.userName.getText());
+        intent.putExtra(USER_SECOND_NAME, binding.userSecondName.getText());
+        intent.putExtra(USER_AGE, binding.userAge.getText());
+        intent.putExtra(USER_GENDER, binding.userGender.getText());
+        intent.putExtra(USER_WEIGHT, binding.userWeight.getText());
+        startActivityForResult(intent, REQUEST_CODE_EDIT_DATA);
     }
 
     @Override
@@ -154,10 +180,7 @@ public class UserAccountActivity extends AppCompatActivity {
                 binding.userGender.setText(data.getStringExtra("userGender"));
                 binding.userWeight.setText(data.getStringExtra("userWeight"));
                 binding.userImage.setImageResource(R.drawable.ic_baseline_account_circle_50);
-                setSupportActionBar(binding.userToolbar);
-                getSupportActionBar().setTitle(data.getStringExtra("userName")
-                        + " "
-                        + data.getStringExtra("userSecondName"));
+                isUpdated = false;
             }
         } else if (requestCode == REQUEST_CODE_FILE_STORAGE && resultCode == RESULT_OK) {
             if (data != null) {
@@ -173,7 +196,23 @@ public class UserAccountActivity extends AppCompatActivity {
 
     private void getDataFromStorage(@NotNull ImageView imageView, @NotNull Intent data) {
         Uri selectedImage = data.getData();
-        imageView.setImageURI(selectedImage);
+        Bitmap Image = loadFromUri(selectedImage);
+        imageView.setImageBitmap(Image);
+    }
+
+    public Bitmap loadFromUri(Uri photoUri) {
+        Bitmap image = null;
+        try {
+            if (Build.VERSION.SDK_INT > 27) {
+                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), photoUri);
+                image = ImageDecoder.decodeBitmap(source);
+            } else {
+                image = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
     private void galleryAddPhoto() {
@@ -189,28 +228,94 @@ public class UserAccountActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(USER_STORAGE_PHOTO_PATH, photoPath);
         editor.apply();
-        Drawable drawable = Drawable.createFromPath(photoPath);
-        imageView.setImageDrawable(drawable);
-        imageView.setRotation(0);
+        imageView.setImageBitmap(rotateImageOrientation(photoPath));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.user_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+    public Bitmap rotateImageOrientation(String photoFilePath) {
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoFilePath, bounds);
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        Bitmap bm = BitmapFactory.decodeFile(photoFilePath, opts);
+        int rotationAngle = 90;
+        Matrix matrix = new Matrix();
+        matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
+        return rotatedBitmap;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.user_back) {
+        if (item.getItemId() == android.R.id.home) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showToastMessage(String text) {
-        Toast toast = Toast.makeText(getApplication(), text, Toast.LENGTH_SHORT);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUserToolbarLabel();
+        setUserObjectId();
+    }
+
+    private void setUserToolbarLabel() {
+        sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
+        if (sharedPreferences.contains(USER_PREFERENCES_NAME)) {
+            binding.userCollapsingToolbar.setTitleEnabled(true);
+            binding.userCollapsingToolbar
+                    .setTitle(sharedPreferences.getString(USER_PREFERENCES_NAME, "")
+                            + " "
+                            + sharedPreferences.getString(USER_PREFERENCES_SECOND_NAME, ""));
+        }
+    }
+
+    private void setUserObjectId() {
+        NetworkClient.getInstance();
+        Call<List<UserModel>> userModelCall = NetworkClient
+                .getUserApi()
+                .getUser(userModel.getUserName());
+        userModelCall.enqueue(new Callback<List<UserModel>>() {
+            @Override
+            public void onResponse(@NotNull Call<List<UserModel>> call,
+                                   @NotNull Response<List<UserModel>> response) {
+                getUserObjectId();
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<List<UserModel>> call, @NotNull Throwable t) {
+
+            }
+        });
+    }
+
+    private void getUserObjectId() {
+        UserCloudSource userCloudSource = new UserCloudSource();
+        userCloudSource.getUserId(userModel.getUserName(), new UserActionResult() {
+            @Override
+            public void onSuccess(List<UserModel> users) {
+                findUserObjectIdOnServer(users);
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
+    }
+
+    private void findUserObjectIdOnServer(@NotNull List<UserModel> users) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(sharedPreferences.getString(USER_ID, " "))) {
+                userModel.setUserObjectId(users.get(i).getUserObjectId());
+                USER_OBJECT_ID = userModel.getUserObjectId();
+            }
+        }
+    }
+
+    private void showToastMessage() {
+        Toast toast = Toast.makeText(getApplication(), "Failed to load user", Toast.LENGTH_SHORT);
         toast.show();
     }
 }

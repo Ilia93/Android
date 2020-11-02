@@ -25,7 +25,8 @@ public class MainWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<Object> listOfWorks;
     private OnUserCardClickListener onUserCardClickListener;
 
-    public MainWorkAdapter(List<Object> listOfWorks, OnUserCardClickListener onUserCardClickListener) {
+    public MainWorkAdapter(List<Object> listOfWorks,
+                           OnUserCardClickListener onUserCardClickListener) {
         this.listOfWorks = listOfWorks;
         this.onUserCardClickListener = onUserCardClickListener;
     }
@@ -48,7 +49,9 @@ public class MainWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolder = new TextHolder(view);
                 break;
             default:
-                view = layoutInflater.inflate(R.layout.main_recycler_view_work_templates, parent, false);
+                view = layoutInflater.inflate(R.layout.main_recycler_view_work_templates,
+                        parent,
+                        false);
                 viewHolder = new WorkTemplatesHolder(view, listOfWorks, onUserCardClickListener);
                 break;
         }
@@ -86,10 +89,13 @@ public class MainWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
             default:
                 WorkTemplatesHolder workTemplatesHolder = (WorkTemplatesHolder) holder;
-                WorkTemplatesModel workTemplatesModel = (WorkTemplatesModel) listOfWorks.get(position);
+                WorkTemplatesModel workTemplatesModel =
+                        (WorkTemplatesModel) listOfWorks.get(position);
                 if (workTemplatesModel != null) {
-                    workTemplatesHolder.getWorkImage().setImageResource(workTemplatesModel.getWorkImage());
-                    workTemplatesHolder.getActivityDescription().setText(workTemplatesModel.getActivityDescription());
+                    workTemplatesHolder.getWorkImage()
+                            .setImageResource(workTemplatesModel.getWorkImage());
+                    workTemplatesHolder.getActivityDescription()
+                            .setText(workTemplatesModel.getActivityDescription());
                 }
                 break;
         }

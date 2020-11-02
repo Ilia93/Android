@@ -24,6 +24,7 @@ public class NotificationService extends Service {
     public static final int NOTIFICATION_ID = 1;
     public static final int NOTIFICATION_STOP_ID = 2;
     public static final String NOTIFICATION_LEAVE = "Leave notification";
+    public static final String STOP_NOTIFICATION = "com.example.service.LEAVE_NOTIFICATION";
     public static String KEY_TEXT_REPLY = "key_text_reply";
     public final String CHANNEL_ID = "1";
     public final String REPLY_TITLE = "Add comment";
@@ -32,17 +33,13 @@ public class NotificationService extends Service {
     private final String NOTIFICATION_REPLY_ID = "Enter your text";
     private final IBinder iBinder = new LocalBinder();
     Handler handler = new Handler();
-    Intent replyIntent;
-    Intent leaveNotification;
-    NotificationCompat.Action replyAction;
-    NotificationCompat.Action leaveNotificationAction;
-    PendingIntent pendingIntent;
-    PendingIntent leaveNotificationPending;
+    Intent leaveNotification, replyIntent;
+    NotificationCompat.Action replyAction, leaveNotificationAction;
+    PendingIntent pendingIntent, leaveNotificationPending;
     Runnable runnable;
+    private String stopServiceLabel = "Service stopped";
     private long serviceTimerStartTime;
-    private long milliseconds = 0L;
-    private long minutes = 0L;
-    private long seconds = 0L;
+    private long milliseconds, minutes, seconds = 0L;
     private String resultString = null;
 
     @Override
@@ -95,8 +92,9 @@ public class NotificationService extends Service {
     public void createLeaveNotificationIntent() {
         leaveNotification = new Intent(this, NotificationReceiver.class);
         leaveNotification.putExtra(NOTIFICATION_LEAVE, NOTIFICATION_STOP_ID);
+        leaveNotification.setAction(STOP_NOTIFICATION);
         leaveNotificationPending = PendingIntent.getBroadcast(this, 0,
-                leaveNotification, PendingIntent.FLAG_ONE_SHOT);
+                leaveNotification, PendingIntent.FLAG_UPDATE_CURRENT);
 
         leaveNotificationAction = new NotificationCompat.Action.Builder(
                 R.drawable.ic_clear_black_24dp, NOTIFICATION_LEAVE, leaveNotificationPending)
@@ -120,7 +118,7 @@ public class NotificationService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
-                .setContentText(getResources().getString(R.string.service_stop))
+                .setContentText(stopServiceLabel)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.running))
                 .setAutoCancel(true);
 
@@ -128,7 +126,7 @@ public class NotificationService extends Service {
         notificationManager.notify(NOTIFICATION_STOP_ID, builder.build());
         stopForeground(true);
         handler.removeCallbacks(runnable);
-        //TODO stopforeground and removecallbacks
+        //TODO stopforeground and removecallbacks разница + fix notificationstop
     }
 
     @NotNull
