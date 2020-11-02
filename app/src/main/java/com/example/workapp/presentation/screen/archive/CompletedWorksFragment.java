@@ -53,7 +53,10 @@ public class CompletedWorksFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = ArchiveCompletedWorksFragmentBinding.inflate(inflater, container, false);
+        binding = ArchiveCompletedWorksFragmentBinding.inflate(
+                inflater,
+                container,
+                false);
         View view = binding.getRoot();
         setOnClickListener();
         getCommonWorksInformation();

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -39,11 +38,14 @@ public class UserCameraDialog extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.user_get_photo_dialog, container, false);
         setListeners(view);
         return view;
     }
+
 
     private void setListeners(View view) {
         setOnDialogListeners(view, R.id.user_dialog_camera);
@@ -59,9 +61,13 @@ public class UserCameraDialog extends DialogFragment {
                     dismiss();
                     break;
                 case R.id.user_dialog_storage:
-                    Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK);
+                    Intent pickPhotoIntent = new Intent
+                            (Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     pickPhotoIntent.setType("image/*");
-                    getActivity().startActivityForResult(pickPhotoIntent, REQUEST_CODE_FILE_STORAGE);
+                    if (getActivity() != null) {
+                        getActivity().startActivityForResult
+                                (pickPhotoIntent, REQUEST_CODE_FILE_STORAGE);
+                    }
                     dismiss();
                     break;
                 case R.id.user_dialog_cancel:
@@ -71,7 +77,7 @@ public class UserCameraDialog extends DialogFragment {
         });
     }
 
-    private void createStoragePhoto() {
+    public void createStoragePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         FragmentActivity activity = getActivity();
         if (activity != null) {
@@ -80,8 +86,7 @@ public class UserCameraDialog extends DialogFragment {
                 try {
                     photoFile = createImageFile();
                 } catch (IOException ex) {
-                    showToastMessage("IO exception");
-
+                    showToastMessage();
                 }
                 if (photoFile != null) {
                     Uri imageURI = FileProvider.getUriForFile(activity.getApplicationContext(),
@@ -109,8 +114,8 @@ public class UserCameraDialog extends DialogFragment {
         return imageFile;
     }
 
-    private void showToastMessage(String text) {
-        Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
+    private void showToastMessage() {
+        Toast toast = Toast.makeText(getContext(), "IO exception", Toast.LENGTH_SHORT);
         toast.show();
     }
 }

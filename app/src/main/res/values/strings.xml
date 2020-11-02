@@ -85,4 +85,7 @@
     <string name="user_dialog_file_storage">File storage</string>
     <string name="user_dialog_cancel">Cancel</string>
     <string name="user_empty_field">Undefined</string>
+    <string name="user_edit_text_view_user_age">User\'s age</string>
+    <string name="user_edit_text_view_user_gender">User\'s gender</string>
+    <string name="user_edit_text_view_user_weight">User\'s weight</string>
 </resources>

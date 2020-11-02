@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.workapp.data.network.NetworkClient;
+import com.example.workapp.data.network.model.user.UserActionResult;
+import com.example.workapp.data.network.model.user.UserCloudSource;
 import com.example.workapp.data.network.model.user.UserModel;
 import com.example.workapp.databinding.UserEditAccountBinding;
 
@@ -28,10 +30,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.workapp.presentation.screen.user.UserAccountActivity.USER_OBJECT_ID;
+
 public class UserEditActivity extends AppCompatActivity {
 
-    public final static String USER_ID_PREFERENCES = "savedUserId";
     public final static String USER_ID = "userId";
+    public final static String USER_PREFERENCES_NAME = "userPreferencesName";
+    public final static String USER_PREFERENCES_SECOND_NAME = "userPreferencesSecondName";
+    public static boolean isUpdated = false;
     public final String USER_NAME = "userName";
     public final String USER_SECOND_NAME = "userSecondName";
     public final String USER_AGE = "userAge";
@@ -41,6 +47,7 @@ public class UserEditActivity extends AppCompatActivity {
     UserModel userModel = new UserModel();
     SharedPreferences sharedPreferences;
     String selectedAge, selectedGender, selectedWeight;
+    boolean isSelectedAge, isSelectedWeight, isSelectedGender = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,38 +55,8 @@ public class UserEditActivity extends AppCompatActivity {
         binding = UserEditAccountBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        setClickListener();
         setSpinnerAdapter();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initializeSharedPreferences();
-    }
-
-    private void initializeSharedPreferences() {
-        sharedPreferences = getSharedPreferences(USER_ID_PREFERENCES, Context.MODE_PRIVATE);
-    }
-
-    private void setClickListener() {
-        binding.userSaveEditData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    setUserData();
-                    saveUniqueUserId(clearOldUniqueUserId());
-                    putUserDataToServer();
-                    Intent userAccountIntent = new Intent(getApplicationContext(),
-                            UserAccountActivity.class);
-                    putUserAccountIntentExtras(userAccountIntent);
-                    setResult(RESULT_OK, userAccountIntent);
-                    finish();
-                } catch (NullPointerException exception) {
-                    showToastMessage("User name should be defined");
-                }
-            }
-        });
+        setClickListener();
     }
 
     private void setSpinnerAdapter() {
@@ -89,29 +66,43 @@ public class UserEditActivity extends AppCompatActivity {
         initializeSpinnerArrayAdapter(
                 age,
                 binding.userAgeSpinner,
-                90, 10,
-                "Select user age");
+                90, 10);
         initializeSpinnerArrayAdapter(
                 weight,
                 binding.userWeightSpinner,
-                150, 15,
-                "Select user weight");
+                150, 15);
     }
 
-    private void initializeSpinnerArrayAdapter(List<Integer> arrayList, Spinner spinner, int maxValue,
-                                               int minValue, String text) {
+    private void initializeSpinnerArrayAdapter(List<Integer> arrayList,
+                                               Spinner spinner,
+                                               int maxValue,
+                                               int minValue) {
         for (int i = minValue; i < maxValue; i++) {
             arrayList.add(i);
         }
-        ArrayAdapter<Integer> userAdapter = new ArrayAdapter<Integer>(this,
+        ArrayAdapter<Integer> userAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 arrayList);
         userAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                ((TextView) parent.getChildAt(0)).setText(text);
+                if (spinner.equals(binding.userAgeSpinner)) {
+                    if (!isSelectedAge) {
+                        setFieldSelection(parent, USER_AGE, null);
+                        isSelectedAge = true;
+                    } else {
+                        setFieldSelection(parent, null, binding.userAgeSpinner);
+                    }
+
+                } else if (spinner.equals(binding.userWeightSpinner)) {
+                    if (!isSelectedWeight) {
+                        setFieldSelection(parent, USER_WEIGHT, null);
+                        isSelectedWeight = true;
+                    } else {
+                        setFieldSelection(parent, null, binding.userWeightSpinner);
+                    }
+                }
             }
 
             @Override
@@ -127,15 +118,19 @@ public class UserEditActivity extends AppCompatActivity {
         gender.add("Male");
         gender.add("Female");
         gender.add("Other");
-        ArrayAdapter<String> userAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> userAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 gender);
         userAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         binding.userGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                ((TextView) parent.getChildAt(0)).setText("Select user gender");
+                if (!isSelectedGender) {
+                    setFieldSelection(parent, USER_GENDER, null);
+                    isSelectedGender = true;
+                } else {
+                    setFieldSelection(parent, null, binding.userGenderSpinner);
+                }
             }
 
             @Override
@@ -146,19 +141,62 @@ public class UserEditActivity extends AppCompatActivity {
         binding.userGenderSpinner.setAdapter(userAdapter);
     }
 
-    private void setUserData() {
-        getSpinnerUserData();
-        userNameAndSecondNameValidation();
-        setOtherUserData();
+    private void setFieldSelection(@NotNull AdapterView<?> parent, String intentTag, Spinner spinner) {
+        ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+        if (intentTag != null) {
+            ((TextView) parent.getChildAt(0)).setText(getIntent().getStringExtra(intentTag));
+        } else {
+            ((TextView) parent.getChildAt(0)).setText(spinner.getSelectedItem().toString());
+        }
     }
 
-    private void getSpinnerUserData() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initializeSharedPreferences();
+        getUserAccountData();
+    }
+
+    private void initializeSharedPreferences() {
+        sharedPreferences = getSharedPreferences(USER_ID, Context.MODE_PRIVATE);
+    }
+
+    private void getUserAccountData() {
+        if (getIntent().getStringExtra(USER_NAME).equals("Undefined")) {
+            binding.userEditName.setText(null);
+            binding.userEditSecondName.setText(null);
+        } else {
+            binding.userEditName.setText(getIntent().getStringExtra(USER_NAME));
+            binding.userEditSecondName.setText(getIntent().getStringExtra(USER_SECOND_NAME));
+        }
+    }
+
+    private void setClickListener() {
+        binding.userSaveEditData.setOnClickListener(v -> {
+            try {
+                setUserFields();
+                saveUniqueUserData(clearOldUniqueUserId());
+                checkUserStatus();
+            } catch (NullPointerException exception) {
+                showToastMessage("User name should be defined");
+            }
+        });
+    }
+
+    private void setUserFields() {
+        getUserSpinnerData();
+        checkIfUserNameDefined();
+        setFlagToUpdateOrCreateUser();
+        setUserModelData();
+    }
+
+    private void getUserSpinnerData() {
         selectedAge = binding.userAgeSpinner.getSelectedItem().toString();
         selectedGender = binding.userGenderSpinner.getSelectedItem().toString();
         selectedWeight = binding.userWeightSpinner.getSelectedItem().toString();
     }
 
-    private void userNameAndSecondNameValidation() {
+    private void checkIfUserNameDefined() {
         userModel.setUserName(binding.userEditName.getText().toString());
         userModel.setUserSecondName(binding.userEditSecondName.getText().toString());
         if (userModel.getUserName().equals("")) {
@@ -166,14 +204,25 @@ public class UserEditActivity extends AppCompatActivity {
         }
     }
 
-    private void setOtherUserData() {
+    private void setFlagToUpdateOrCreateUser() {
+        String userName = getIntent().getStringExtra(USER_NAME);
+        String userSecondName = getIntent().getStringExtra(USER_SECOND_NAME);
+        if (userModel.getUserName().equals(userName) &&
+                userModel.getUserSecondName().equals(userSecondName)) {
+            isUpdated = true;
+        }
+    }
+
+    private void setUserModelData() {
         userModel.setUserAge(selectedAge);
         userModel.setUserGender(selectedGender);
         userModel.setUserWeight(selectedWeight);
     }
 
-    private void saveUniqueUserId(@NotNull SharedPreferences.Editor editor) {
+    private void saveUniqueUserData(@NotNull SharedPreferences.Editor editor) {
         editor.putString(USER_ID, userModel.getUserId());
+        editor.putString(USER_PREFERENCES_NAME, userModel.getUserName());
+        editor.putString(USER_PREFERENCES_SECOND_NAME, userModel.getUserSecondName());
         editor.apply();
     }
 
@@ -184,20 +233,75 @@ public class UserEditActivity extends AppCompatActivity {
         return editor;
     }
 
+    private void checkUserStatus() {
+        UserCloudSource userCloudSource = new UserCloudSource();
+        userCloudSource.getUser(userModel.getUserName(), new UserActionResult() {
+            @Override
+            public void onSuccess(List<UserModel> users) {
+                if (users.isEmpty() || !isUpdated) {
+                    putUserDataToServer();
+                } else {
+                    for (int i = 0; i < users.size(); i++) {
+                        if (userModel.getUserName()
+                                .equals(users.get(i).getUserName())
+                                && userModel.getUserSecondName()
+                                .equals(users.get(i).getUserSecondName())) {
+                            updateUser();
+                            isUpdated = true;
+                            Intent userAccountIntent = new Intent(getApplicationContext(),
+                                    UserAccountActivity.class);
+                            putUserAccountIntentExtras(userAccountIntent);
+                            setResult(RESULT_OK, userAccountIntent);
+                            finish();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+                showToastMessage("User undefined");
+            }
+        });
+    }
+
     private void putUserDataToServer() {
         NetworkClient.getInstance();
         Call<UserModel> call = NetworkClient.getUserApi().createUser(userModel);
         call.enqueue(new Callback<UserModel>() {
             @Override
-            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+            public void onResponse(@NotNull Call<UserModel> call, @NotNull Response<UserModel> response) {
                 if (response.isSuccessful()) {
                     showToastMessage("User created");
+                    Intent userAccountIntent = new Intent(getApplicationContext(),
+                            UserAccountActivity.class);
+                    putUserAccountIntentExtras(userAccountIntent);
+                    setResult(RESULT_OK, userAccountIntent);
+                    finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<UserModel> call, Throwable t) {
+            public void onFailure(@NotNull Call<UserModel> call, @NotNull Throwable t) {
                 showToastMessage("User creation failed");
+            }
+        });
+    }
+
+    private void updateUser() {
+        NetworkClient.getInstance();
+        Call<UserModel> userModelCall = NetworkClient.getUserApi().updateUser(USER_OBJECT_ID, userModel);
+        userModelCall.enqueue(new Callback<UserModel>() {
+            @Override
+            public void onResponse(@NotNull Call<UserModel> call, @NotNull Response<UserModel> response) {
+                if (response.isSuccessful()) {
+                    showToastMessage("User updated");
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<UserModel> call, @NotNull Throwable t) {
+                showToastMessage("User isn't updates");
             }
         });
     }
@@ -208,6 +312,14 @@ public class UserEditActivity extends AppCompatActivity {
         userAccountIntent.putExtra(USER_AGE, userModel.getUserAge());
         userAccountIntent.putExtra(USER_GENDER, userModel.getUserGender());
         userAccountIntent.putExtra(USER_WEIGHT, userModel.getUserWeight());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isSelectedAge = false;
+        isSelectedWeight = false;
+        isSelectedGender = false;
     }
 
     private void showToastMessage(String text) {

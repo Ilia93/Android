@@ -32,7 +32,8 @@ public class TimerMenuAdapter extends RecyclerView
     @NonNull
     @Override
     public TimerMenuAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.timer_recycler_view_menu, parent, false);
+        View view = layoutInflater.inflate
+                (R.layout.timer_recycler_view_menu, parent, false);
         return new ViewHolder(view);
     }
 
