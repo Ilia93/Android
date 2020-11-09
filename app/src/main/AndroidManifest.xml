@@ -43,15 +43,15 @@
         </receiver>
 
         <activity android:name=".presentation.screen.splash.SplashScreenActivity">
-
-        </activity>
-        <activity
-            android:name=".presentation.screen.main.MainActivity"
-            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".presentation.screen.main.MainActivity"
+            android:windowSoftInputMode="adjustPan">
+
         </activity>
 
         <activity android:name=".presentation.screen.user.UserAccountActivity" />

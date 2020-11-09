@@ -64,12 +64,9 @@ class ArchiveAdapter extends RecyclerView.Adapter<ArchiveAdapter.ViewHolder> {
             workShortInfo = view.findViewById(R.id.work_short_info);
             workCompletedInformation = view.findViewById(R.id.work_completed_info);
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    WorkModel workModel = listOfWorks.get(getLayoutPosition());
-                    onUserClickListener.onUserClick(workModel);
-                }
+            view.setOnClickListener(v -> {
+                WorkModel workModel = listOfWorks.get(getLayoutPosition());
+                onUserClickListener.onUserClick(workModel);
             });
         }
     }

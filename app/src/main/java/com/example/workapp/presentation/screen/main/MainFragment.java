@@ -85,12 +85,7 @@ public class MainFragment extends Fragment {
     }
 
     private void createClickListener() {
-        binding.createWork.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createWork();
-            }
-        });
+        binding.createWork.setOnClickListener(v -> createWork());
     }
 
     public void showWorks() {
@@ -109,17 +104,6 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void setActivityTemplatesAdapter(List<WorkModel> works) {
-        activities.addAll(works);
-        mainRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        MainWorkAdapter.OnUserCardClickListener onUserCardClickListener = mainTemplatesModel -> {
-            binding.inputWork.setText(mainTemplatesModel.getActivityDescription());
-            createWork();
-        };
-        MainWorkAdapter workAdapter = new MainWorkAdapter(activities, onUserCardClickListener);
-        mainRecyclerView.setAdapter(workAdapter);
-    }
-
     private void createActivityTemplates() {
         activities.add("Activity templates");
         activities.add
@@ -131,6 +115,17 @@ public class MainFragment extends Fragment {
         activities.add
                 (new WorkTemplatesModel(getString(R.string.main_physical_activity), R.drawable.gym_400_225));
         activities.add("Latest works");
+    }
+
+    private void setActivityTemplatesAdapter(List<WorkModel> works) {
+        activities.addAll(works);
+        mainRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        MainWorkAdapter.OnUserCardClickListener onUserCardClickListener = mainTemplatesModel -> {
+            binding.inputWork.setText(mainTemplatesModel.getActivityDescription());
+            createWork();
+        };
+        MainWorkAdapter workAdapter = new MainWorkAdapter(activities, onUserCardClickListener);
+        mainRecyclerView.setAdapter(workAdapter);
     }
 
     private void createWork() {
@@ -170,18 +165,11 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void startWorkService() {
+    public void showToastMessage(String text) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            Intent serviceIntent = new Intent(getContext(), NotificationService.class);
-            serviceIntent.setAction(Intent.ACTION_ANSWER);
-            serviceIntent.putExtra(SERVICE_WORK_NAME, workModel.getName());
-            serviceIntent.putExtra(SERVICE_NOTIFICATION_ID, "1");
-            serviceIntent.putExtra(SERVICE_WORK_ID, workModel.getId());
-            getActivity().getApplicationContext().bindService(
-                    serviceIntent,
-                    serviceConnection,
-                    Context.BIND_AUTO_CREATE);
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 
@@ -226,12 +214,18 @@ public class MainFragment extends Fragment {
         }
     }
 
-    public void showToastMessage(String text) {
+    private void startWorkService() {
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT);
-            toast.show();
+            Intent serviceIntent = new Intent(getContext(), NotificationService.class);
+            serviceIntent.setAction(Intent.ACTION_ANSWER);
+            serviceIntent.putExtra(SERVICE_WORK_NAME, workModel.getName());
+            serviceIntent.putExtra(SERVICE_NOTIFICATION_ID, "1");
+            serviceIntent.putExtra(SERVICE_WORK_ID, workModel.getId());
+            getActivity().getApplicationContext().bindService(
+                    serviceIntent,
+                    serviceConnection,
+                    Context.BIND_AUTO_CREATE);
         }
     }
-
 }

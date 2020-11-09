@@ -17,7 +17,7 @@
 
             <ImageView
                 android:id="@+id/activityTemplateImage"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:scaleType="centerCrop"/>
 

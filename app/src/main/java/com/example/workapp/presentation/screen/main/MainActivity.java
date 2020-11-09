@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -65,95 +64,6 @@ public class MainActivity extends AppCompatActivity
         setFragmentBackStackListener();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        UserCloudSource userCloudSource = new UserCloudSource();
-        userCloudSource.getUser(userModel.getUserName(), new UserActionResult() {
-            @Override
-            public void onSuccess(List<UserModel> users) {
-                getUserForNavigationView(users);
-                getUserPhotoForNavigationView();
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showToastMessage(message);
-            }
-        });
-    }
-
-    private void setFragmentBackStackListener() {
-        getSupportFragmentManager().addOnBackStackChangedListener(
-                new FragmentManager.OnBackStackChangedListener() {
-                    @Override
-                    public void onBackStackChanged() {
-                        Fragment fragment = getSupportFragmentManager().
-                                findFragmentById(R.id.navigation_content_frame);
-                        if (fragment instanceof ArchiveFragment) {
-                            navigationView.setCheckedItem(R.id.nav_archive_fragment);
-                        } else if (fragment instanceof CommentFragment) {
-                            navigationView.setCheckedItem(R.id.nav_comments_fragment);
-                        } else if (fragment instanceof MainFragment) {
-                            navigationView.setCheckedItem(R.id.nav_home_fragment);
-                        } else if (fragment instanceof TimerFragment) {
-                            navigationView.setCheckedItem(R.id.nav_timer_fragment);
-                        }
-                    }
-                });
-    }
-
-    private void initializePreferences() {
-        sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void getUserForNavigationView(@NotNull List<UserModel> users) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (users.size() == 0) {
-            stringBuilder
-                    .append("Undefined");
-            ((TextView) findViewById(R.id.main_header_label)).setText(stringBuilder.toString());
-        } else if (users.size() > 0) {
-            if (sharedPreferences.contains(USER_ID)) {
-                for (int i = 0; i < users.size(); i++) {
-                    if (users.get(i).getUserId().equals(sharedPreferences.getString(USER_ID, ""))) {
-                        ((TextView) findViewById(R.id.main_header_label)).setText
-                                (users.get(i).getUserName() + " " + users.get(i).getUserSecondName());
-                    }
-                }
-            }
-        }
-    }
-
-    private void getUserPhotoForNavigationView() {
-        ImageView userRoundImage = findViewById(R.id.main_header_image);
-        try {
-            if (sharedPreferences.contains(USER_STORAGE_PHOTO_PATH)) {
-                Drawable drawable = Drawable.createFromPath
-                        (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, ""));
-                userRoundImage.setImageDrawable(drawable);
-                userRoundImage.setRotation(90);
-            } else {
-                userRoundImage.setImageResource(R.drawable.blank_profile_picture_80_80);
-            }
-        } catch (NullPointerException exception) {
-            showToastMessage("Empty  photo");
-        }
-    }
-
-    private void setClickListener() {
-        addUser = findViewById(R.id.add_header_user);
-        addUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent userIntent = new Intent(getApplicationContext(), UserAccountActivity.class);
-                startActivity(userIntent);
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
-    }
-
     private void setScreenElements() {
         toolbar = findViewById(R.id.main_screen_toolbar);
         setSupportActionBar(toolbar);
@@ -168,12 +78,8 @@ public class MainActivity extends AppCompatActivity
         actionBarDrawerToggle.syncState();
     }
 
-    private void replaceFragment(Fragment fragmentName) {
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction()
-                .add(R.id.navigation_content_frame, fragmentName);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+    private void initializePreferences() {
+        sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
     }
 
     @Override
@@ -206,11 +112,92 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void setFragmentBackStackListener() {
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                () -> {
+                    Fragment fragment = getSupportFragmentManager().
+                            findFragmentById(R.id.navigation_content_frame);
+                    if (fragment instanceof ArchiveFragment) {
+                        navigationView.setCheckedItem(R.id.nav_archive_fragment);
+                    } else if (fragment instanceof CommentFragment) {
+                        navigationView.setCheckedItem(R.id.nav_comments_fragment);
+                    } else if (fragment instanceof MainFragment) {
+                        navigationView.setCheckedItem(R.id.nav_home_fragment);
+                    } else if (fragment instanceof TimerFragment) {
+                        navigationView.setCheckedItem(R.id.nav_timer_fragment);
+                    }
+                });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UserCloudSource userCloudSource = new UserCloudSource();
+        userCloudSource.getUser(userModel.getUserName(), new UserActionResult() {
+            @Override
+            public void onSuccess(List<UserModel> users) {
+                getUserForNavigationView(users);
+                getUserPhotoForNavigationView();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                showToastMessage(message);
+            }
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void getUserForNavigationView(@NotNull List<UserModel> users) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (users.size() == 0) {
+            stringBuilder
+                    .append("Undefined");
+            ((TextView) findViewById(R.id.main_header_label)).setText(stringBuilder.toString());
+        } else if (users.size() > 0) {
+            if (sharedPreferences.contains(USER_ID)) {
+                for (int i = 0; i < users.size(); i++) {
+                    if (users.get(i).getUserId()
+                            .equals(sharedPreferences.getString(USER_ID, ""))) {
+                        ((TextView) findViewById(R.id.main_header_label)).setText
+                                (users.get(i)
+                                        .getUserName() + " " + users.get(i).getUserSecondName());
+                    }
+                }
+            }
+        }
+    }
+
+    private void getUserPhotoForNavigationView() {
+        ImageView userRoundImage = findViewById(R.id.main_header_image);
+        try {
+            if (sharedPreferences.contains(USER_STORAGE_PHOTO_PATH)) {
+                Drawable drawable = Drawable.createFromPath
+                        (sharedPreferences.getString(USER_STORAGE_PHOTO_PATH, ""));
+                userRoundImage.setImageDrawable(drawable);
+                userRoundImage.setRotation(90);
+            } else {
+                userRoundImage.setImageResource(R.drawable.blank_profile_picture_80_80);
+            }
+        } catch (NullPointerException exception) {
+            showToastMessage("Empty  photo");
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         setClickListener();
         getMenuInflater().inflate(R.menu.drawer_view, menu);
         return true;
+    }
+
+    private void setClickListener() {
+        addUser = findViewById(R.id.add_header_user);
+        addUser.setOnClickListener(v -> {
+            Intent userIntent = new Intent(getApplicationContext(), UserAccountActivity.class);
+            startActivity(userIntent);
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
     }
 
     @Override
@@ -230,6 +217,16 @@ public class MainActivity extends AppCompatActivity
         menu.getItem(3).setVisible(false);
         return true;
     }
+
+    private void replaceFragment(Fragment fragmentName) {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction()
+                .add(R.id.navigation_content_frame, fragmentName);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+    }
+
 
     public void showToastMessage(String text) {
         Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);

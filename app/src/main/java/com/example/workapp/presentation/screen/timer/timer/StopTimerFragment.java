@@ -55,12 +55,7 @@ public class StopTimerFragment extends Fragment {
 
             }
         });
-        binding.timerExitFinishFragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment(mainFragment);
-            }
-        });
+        binding.timerExitFinishFragment.setOnClickListener(v -> replaceFragment(mainFragment));
         return view;
     }
 
@@ -71,6 +66,7 @@ public class StopTimerFragment extends Fragment {
             fragmentTransaction = fragmentManager.beginTransaction()
                     .replace(R.id.navigation_content_frame, fragmentName);
             fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
             fragmentTransaction.commit();
         }
 
