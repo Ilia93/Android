@@ -47,6 +47,7 @@ import static com.example.workapp.presentation.screen.user.UserEditActivity.isUp
 public class UserAccountActivity extends AppCompatActivity {
 
     public static final String USER_STORAGE_PHOTO_PATH = "user_photo_path";
+    public static final String USER_STORAGE_PHOTO_URI = "userUri";
     private static final String USER_NAME = "userName";
     private static final String USER_SECOND_NAME = "userSecondName";
     private static final String USER_AGE = "userAge";
@@ -81,17 +82,18 @@ public class UserAccountActivity extends AppCompatActivity {
     private void loadUserPhoto() {
         ImageView imageView = findViewById(R.id.user_image);
         Handler handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (sharedPreferences.contains(USER_STORAGE_PHOTO_PATH)) {
-                        imageView.setImageBitmap(rotateImageOrientation(sharedPreferences
-                                .getString(USER_STORAGE_PHOTO_PATH, " ")));
-                    }
-                } catch (NullPointerException exception) {
-                    imageView.setImageResource(R.drawable.ic_baseline_account_circle_50);
+        handler.post(() -> {
+            try {
+                if (sharedPreferences.contains(USER_STORAGE_PHOTO_PATH)) {
+                    imageView.setImageBitmap(rotateImageOrientation(sharedPreferences
+                            .getString(USER_STORAGE_PHOTO_PATH, " ")));
+                } else if (sharedPreferences.contains(USER_STORAGE_PHOTO_URI)) {
+                    Uri uri = Uri.parse
+                            (sharedPreferences.getString(USER_STORAGE_PHOTO_URI, " "));
+                    imageView.setImageURI(uri);
                 }
+            } catch (NullPointerException exception) {
+                imageView.setImageResource(R.drawable.ic_baseline_account_circle_50);
             }
         });
     }
@@ -142,20 +144,14 @@ public class UserAccountActivity extends AppCompatActivity {
     }
 
     private void setClickListeners() {
-        binding.userAddPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                UserCameraDialog userCameraDialog = UserCameraDialog.getNewInstance();
-                userCameraDialog.show(fragmentManager, "user_fragment");
-            }
+        binding.userAddPhoto.setOnClickListener(v -> {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            UserCameraDialog userCameraDialog = UserCameraDialog.getNewInstance();
+            userCameraDialog.show(fragmentManager, "user_fragment");
         });
-        binding.userEditData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent editUserIntent = new Intent(getApplicationContext(), UserEditActivity.class);
-                putUserDataExtrasToTheEditActivity(editUserIntent);
-            }
+        binding.userEditData.setOnClickListener(v -> {
+            Intent editUserIntent = new Intent(getApplicationContext(), UserEditActivity.class);
+            putUserDataExtrasToTheEditActivity(editUserIntent);
         });
     }
 
@@ -196,15 +192,21 @@ public class UserAccountActivity extends AppCompatActivity {
 
     private void getDataFromStorage(@NotNull ImageView imageView, @NotNull Intent data) {
         Uri selectedImage = data.getData();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.putString(USER_STORAGE_PHOTO_URI, selectedImage.getEncodedPath());
+        editor.apply();
         Bitmap Image = loadFromUri(selectedImage);
         imageView.setImageBitmap(Image);
+
     }
 
     public Bitmap loadFromUri(Uri photoUri) {
         Bitmap image = null;
         try {
             if (Build.VERSION.SDK_INT > 27) {
-                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), photoUri);
+                ImageDecoder.Source source = ImageDecoder.createSource
+                        (getContentResolver(), photoUri);
                 image = ImageDecoder.decodeBitmap(source);
             } else {
                 image = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
@@ -239,8 +241,10 @@ public class UserAccountActivity extends AppCompatActivity {
         Bitmap bm = BitmapFactory.decodeFile(photoFilePath, opts);
         int rotationAngle = 90;
         Matrix matrix = new Matrix();
-        matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
-        Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
+        matrix.setRotate
+                (rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+        Bitmap rotatedBitmap = Bitmap.createBitmap
+                (bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
         return rotatedBitmap;
     }
 
@@ -265,9 +269,11 @@ public class UserAccountActivity extends AppCompatActivity {
         if (sharedPreferences.contains(USER_PREFERENCES_NAME)) {
             binding.userCollapsingToolbar.setTitleEnabled(true);
             binding.userCollapsingToolbar
-                    .setTitle(sharedPreferences.getString(USER_PREFERENCES_NAME, "")
+                    .setTitle(sharedPreferences.getString
+                            (USER_PREFERENCES_NAME, "")
                             + " "
-                            + sharedPreferences.getString(USER_PREFERENCES_SECOND_NAME, ""));
+                            + sharedPreferences.getString
+                            (USER_PREFERENCES_SECOND_NAME, ""));
         }
     }
 
@@ -307,7 +313,8 @@ public class UserAccountActivity extends AppCompatActivity {
 
     private void findUserObjectIdOnServer(@NotNull List<UserModel> users) {
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserId().equals(sharedPreferences.getString(USER_ID, " "))) {
+            if (users.get(i).getUserId().equals(sharedPreferences.getString
+                    (USER_ID, " "))) {
                 userModel.setUserObjectId(users.get(i).getUserObjectId());
                 USER_OBJECT_ID = userModel.getUserObjectId();
             }

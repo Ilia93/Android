@@ -37,7 +37,6 @@ public class NotificationService extends Service {
     NotificationCompat.Action replyAction, leaveNotificationAction;
     PendingIntent pendingIntent, leaveNotificationPending;
     Runnable runnable;
-    private String stopServiceLabel = "Service stopped";
     private long serviceTimerStartTime;
     private long milliseconds, minutes, seconds = 0L;
     private String resultString = null;
@@ -102,7 +101,8 @@ public class NotificationService extends Service {
     }
 
     private void createNotification(@NotNull Intent intent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat
+                .Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
                 .setContentTitle(intent.getStringExtra("workNameForService"))
                 .setContentText("0")
@@ -116,14 +116,19 @@ public class NotificationService extends Service {
 
     public void createStopServiceNotification() {
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        String stopServiceLabel = "Service stopped";
+        NotificationCompat.Builder builder = new NotificationCompat
+                .Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
                 .setContentText(stopServiceLabel)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.running))
                 .setAutoCancel(true);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_STOP_ID, builder.build());
+        NotificationManager notificationManager = (NotificationManager) getSystemService
+                (NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.notify(NOTIFICATION_STOP_ID, builder.build());
+        }
         stopForeground(true);
         handler.removeCallbacks(runnable);
         //TODO stopforeground and removecallbacks разница + fix notificationstop
@@ -151,7 +156,8 @@ public class NotificationService extends Service {
                         .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
                         .setContentTitle(intent.getStringExtra("workNameForService"))
                         .setContentText(resultString)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.running))
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                                R.drawable.running))
                         .addAction(replyAction)
                         .addAction(leaveNotificationAction)
                         .setAutoCancel(true);

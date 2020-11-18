@@ -19,7 +19,8 @@ import com.example.workapp.R;
 import com.example.workapp.data.network.model.work.WorkActionResult;
 import com.example.workapp.data.network.model.work.WorkCloudDataSource;
 import com.example.workapp.data.network.model.work.WorkModel;
-import com.google.android.material.navigation.NavigationView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -28,8 +29,6 @@ public class ArchiveFragment extends Fragment {
     private final String CLICKED_ID_ARG = "NOTE_CLICKED_ID_ARG";
 
     private RecyclerView recyclerView;
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
     private WorkModel workModel = new WorkModel();
 
     @Nullable
@@ -59,28 +58,38 @@ public class ArchiveFragment extends Fragment {
     }
 
     private void setDataAdapter(List<WorkModel> works) {
+        Fragment completedWorksFragment = new CompletedWorksFragment();
         ArchiveAdapter.OnUserClickListener onUserClickListener = workModel -> {
             FragmentActivity activity = getActivity();
             if (activity != null) {
-                Bundle bundle = new Bundle();
-                bundle.putString(CLICKED_ID_ARG, workModel.getId());
-                Fragment completedWorksFragment = new CompletedWorksFragment();
-                completedWorksFragment.setArguments(bundle);
-                fragmentManager = activity.getSupportFragmentManager();
-                fragmentTransaction = fragmentManager
-                        .beginTransaction()
-                        .replace(
-                                R.id.navigation_content_frame,
-                                completedWorksFragment
-                        );
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                setFragmentArgs(completedWorksFragment);
+                replaceFragment(activity, completedWorksFragment);
             }
         };
         ArchiveAdapter archiveAdapter = new ArchiveAdapter(works, onUserClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager
                 (getActivity(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(archiveAdapter);
+    }
+
+    private void setFragmentArgs(@NotNull Fragment completedWorksFragment) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CLICKED_ID_ARG, workModel.getId());
+        completedWorksFragment.setArguments(bundle);
+    }
+
+    private void replaceFragment(@NotNull FragmentActivity activity,
+                                 Fragment completedWorksFragment) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager
+                .beginTransaction()
+                .replace(
+                        R.id.navigation_content_frame,
+                        completedWorksFragment
+                );
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
     }
 
     public void showToastMessage(String text) {

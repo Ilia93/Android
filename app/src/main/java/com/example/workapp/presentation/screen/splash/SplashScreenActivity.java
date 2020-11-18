@@ -12,20 +12,17 @@ import com.example.workapp.presentation.screen.main.MainActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 4000;
     Handler handler = new Handler();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                SplashScreenActivity.this.startActivity(intent);
-            }
+        int SPLASH_DISPLAY_LENGTH = 4000;
+        handler.postDelayed(() -> {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            SplashScreenActivity.this.startActivity(intent);
         }, SPLASH_DISPLAY_LENGTH);
-        SplashScreenActivity.this.finish();
+        finish();
     }
 }

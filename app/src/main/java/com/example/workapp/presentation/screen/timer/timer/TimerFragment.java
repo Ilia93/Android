@@ -66,7 +66,9 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         binding = TimerFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         setClickListeners();
@@ -96,8 +98,10 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     @NotNull
     private List<TimerMenuModel> initializeMenuModel() {
         List<TimerMenuModel> menuModelList = new ArrayList<>();
-        menuModelList.add(new TimerMenuModel("Watch comments", R.drawable.ic_watch_comments_48dp));
-        menuModelList.add(new TimerMenuModel("Add comment", R.drawable.ic_add_commen_48dp));
+        menuModelList.add
+                (new TimerMenuModel("Watch comments", R.drawable.ic_watch_comments_48dp));
+        menuModelList.add
+                (new TimerMenuModel("Add comment", R.drawable.ic_add_commen_48dp));
         return menuModelList;
     }
 
@@ -107,7 +111,8 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                 FragmentActivity activity = getActivity();
                 if (activity != null) {
                     fragmentManager = activity.getSupportFragmentManager();
-                    fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.navigation_content_frame, commentFragment);
+                    fragmentTransaction = fragmentManager.beginTransaction()
+                            .replace(R.id.navigation_content_frame, commentFragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
@@ -121,8 +126,10 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                 }
             }
         };
-        TimerMenuAdapter timerMenuAdapter = new TimerMenuAdapter(getActivity(), initializeMenuModel(), onUserClickListener);
-        binding.timerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        TimerMenuAdapter timerMenuAdapter = new TimerMenuAdapter
+                (getActivity(), initializeMenuModel(), onUserClickListener);
+        binding.timerRecyclerView.setLayoutManager
+                (new GridLayoutManager(getContext(), 2));
         binding.timerRecyclerView.setAdapter(timerMenuAdapter);
     }
 
@@ -142,8 +149,6 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
             };
             timer.schedule(timerTask, 0);
             showToastMessage("Timer started");
-        } else {
-            showToastMessage("Wrong workId arguments");
         }
     }
 
@@ -198,7 +203,8 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     private void createTimer(@NotNull Call<TimerModel> call) {
         call.enqueue(new Callback<TimerModel>() {
             @Override
-            public void onResponse(@NonNull Call<TimerModel> call, @NonNull Response<TimerModel> response) {
+            public void onResponse(@NonNull Call<TimerModel> call,
+                                   @NonNull Response<TimerModel> response) {
                 if (response.isSuccessful()) {
                     try {
                         timer.cancel();

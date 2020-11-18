@@ -122,7 +122,8 @@ public class UserEditActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,
                 gender);
         userAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        binding.userGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.userGenderSpinner.setOnItemSelectedListener(new AdapterView
+                .OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (!isSelectedGender) {
@@ -141,7 +142,8 @@ public class UserEditActivity extends AppCompatActivity {
         binding.userGenderSpinner.setAdapter(userAdapter);
     }
 
-    private void setFieldSelection(@NotNull AdapterView<?> parent, String intentTag, Spinner spinner) {
+    private void setFieldSelection(@NotNull AdapterView<?> parent,
+                                   String intentTag, Spinner spinner) {
         ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
         if (intentTag != null) {
             ((TextView) parent.getChildAt(0)).setText(getIntent().getStringExtra(intentTag));
@@ -270,7 +272,8 @@ public class UserEditActivity extends AppCompatActivity {
         Call<UserModel> call = NetworkClient.getUserApi().createUser(userModel);
         call.enqueue(new Callback<UserModel>() {
             @Override
-            public void onResponse(@NotNull Call<UserModel> call, @NotNull Response<UserModel> response) {
+            public void onResponse(@NotNull Call<UserModel> call,
+                                   @NotNull Response<UserModel> response) {
                 if (response.isSuccessful()) {
                     showToastMessage("User created");
                     Intent userAccountIntent = new Intent(getApplicationContext(),
@@ -290,10 +293,12 @@ public class UserEditActivity extends AppCompatActivity {
 
     private void updateUser() {
         NetworkClient.getInstance();
-        Call<UserModel> userModelCall = NetworkClient.getUserApi().updateUser(USER_OBJECT_ID, userModel);
+        Call<UserModel> userModelCall = NetworkClient.getUserApi()
+                .updateUser(USER_OBJECT_ID, userModel);
         userModelCall.enqueue(new Callback<UserModel>() {
             @Override
-            public void onResponse(@NotNull Call<UserModel> call, @NotNull Response<UserModel> response) {
+            public void onResponse(@NotNull Call<UserModel> call,
+                                   @NotNull Response<UserModel> response) {
                 if (response.isSuccessful()) {
                     showToastMessage("User updated");
                 }

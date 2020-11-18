@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.workapp.R;
 import com.example.workapp.data.network.model.comments.CommentsActionResult;
@@ -64,21 +65,27 @@ public class CompletedWorksFragment extends Fragment {
     }
 
     private void setOnClickListener() {
-        binding.completedWorksExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentActivity activity = getActivity();
-                if (activity != null) {
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .add(R.id.navigation_content_frame, mainFragment)
-                            .addToBackStack(null).commit();
-                }
-            }
-        });
+        binding.completedWorksExit.setOnClickListener(v -> exit());
     }
 
     private void getCommonWorksInformation() {
+        getWorkData();
+        getTimerData();
+        getCommentsData();
+    }
+
+    private void exit() {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.navigation_content_frame, mainFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                    .addToBackStack(null).commit();
+        }
+    }
+
+    private void getWorkData() {
         WorkCloudDataSource workCloudDataSource = new WorkCloudDataSource();
         workCloudDataSource.getWork(workModel.getName(), new WorkActionResult() {
             @Override
@@ -90,6 +97,9 @@ public class CompletedWorksFragment extends Fragment {
             public void onFailure(String message) {
             }
         });
+    }
+
+    private void getTimerData() {
         TimerCloudDataSource timerCloudDataSource = new TimerCloudDataSource();
         timerCloudDataSource.getTimer(timerModel.getStartTime(), new TimerActionResult() {
             @Override
@@ -102,6 +112,9 @@ public class CompletedWorksFragment extends Fragment {
 
             }
         });
+    }
+
+    private void getCommentsData() {
         CommentsCloudDataSource commentsCloudDataSource = new CommentsCloudDataSource();
         commentsCloudDataSource.getComments(commentsModel.getText(), new CommentsActionResult() {
             @Override

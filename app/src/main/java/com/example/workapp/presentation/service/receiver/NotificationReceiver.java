@@ -15,20 +15,20 @@ import com.example.workapp.presentation.App;
 import com.example.workapp.presentation.screen.main.MainActivity;
 import com.example.workapp.presentation.screen.main.MainFragment;
 import com.example.workapp.presentation.screen.timer.operations.TimerOperations;
-import com.example.workapp.presentation.screen.timer.timer.TimerFragment;
 import com.example.workapp.presentation.service.notifications.NotificationService;
 
 import org.jetbrains.annotations.NotNull;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.example.workapp.presentation.service.notifications.NotificationService.NOTIFICATION_ID;
-import static com.example.workapp.presentation.service.notifications.NotificationService.STOP_NOTIFICATION;
+import static com.example.workapp.presentation.service.notifications.NotificationService
+        .NOTIFICATION_ID;
+import static com.example.workapp.presentation.service.notifications.NotificationService
+        .STOP_NOTIFICATION;
 
 public class NotificationReceiver extends BroadcastReceiver {
     CommentsModel commentsModel = new CommentsModel();
     NotificationService notificationService = new NotificationService();
     TimerOperations timerOperations = new TimerOperations();
-    TimerFragment timerFragment = new TimerFragment();
     NotificationCompat.Builder builder;
 
     @Override
@@ -73,7 +73,9 @@ public class NotificationReceiver extends BroadcastReceiver {
     private void showNotification(@NotNull Context context) {
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
+        if (notificationManager != null) {
+            notificationManager.notify(NOTIFICATION_ID, builder.build());
+        }
     }
 
     @NotNull
