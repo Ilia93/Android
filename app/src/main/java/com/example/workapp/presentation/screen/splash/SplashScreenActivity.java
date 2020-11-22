@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.workapp.R;
 import com.example.workapp.presentation.screen.main.MainActivity;
 
+// TODO: избыточное имя
 public class SplashScreenActivity extends AppCompatActivity {
 
+    // TODO: мод. доступа
     Handler handler = new Handler();
 
     @Override
@@ -23,6 +25,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             SplashScreenActivity.this.startActivity(intent);
         }, SPLASH_DISPLAY_LENGTH);
+        // TODO: утечка
         finish();
     }
 }

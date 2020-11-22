@@ -61,6 +61,7 @@
         <item name="android:background">@drawable/bg_blue_btn</item>
     </style>
 
+<!--    TODO: размеры лучше не выносить-->
     <style name="UserEditText">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
@@ -69,13 +70,16 @@
         <item name="android:textSize">@dimen/textSize_all_15sp</item>
     </style>
 
-    <style name="UserSpinner">
+    <style name="BaseSpinner" parent="Widget.AppCompat.Spinner"/>
+
+    <style name="BaseSpinner.User">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginStart">-13dp</item>
         <item name="android:spinnerMode">dialog</item>
     </style>
 
+<!--    TODO: читабельней разделять стили через точку с наследованием-->
     <style name="UserEditTextView">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>

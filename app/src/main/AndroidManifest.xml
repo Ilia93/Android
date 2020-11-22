@@ -28,11 +28,13 @@
                 android:resource="@xml/file_provider_paths" />
         </provider>
 
+<!--        //TODO: для чего exported =true?-->
         <service
             android:name=".presentation.service.notifications.NotificationService"
             android:enabled="true"
             android:exported="true" />
 
+        <!--        //TODO: для чего exported =true?-->
         <receiver
             android:name=".presentation.service.receiver.NotificationReceiver"
             android:enabled="true"

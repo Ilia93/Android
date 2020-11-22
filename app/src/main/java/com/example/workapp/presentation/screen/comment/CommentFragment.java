@@ -21,6 +21,7 @@ import java.util.List;
 
 public class CommentFragment extends Fragment {
     private RecyclerView commentsRecyclerView;
+    // TODO: не надо так делать
     private CommentsModel commentsModel = new CommentsModel();
 
     @Override

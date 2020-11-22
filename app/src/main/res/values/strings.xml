@@ -30,6 +30,7 @@
     <string name="main_physical_work_template">Ph.work</string>
     <string name="main_run_template">Run</string>
     <string name="main_editText_autofill">Input work name</string>
+<!--    TODO: комменты излишки, так как название уже содержит название экрана. Лучше вынести в отдельные файлы-->
     <!--timer screen-->
     <string name="timer_watch_comments">Watch comments</string>
     <string name="timer_exit_activity">Exit</string>

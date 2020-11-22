@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+<!--TODO: ConstraintLaoyut-->
+<!--    TODO: можно пересметить в глубь и убрать рутовый лайаут-->
     <Button
         android:id="@+id/completedWorksExit"
         android:layout_width="match_parent"
@@ -28,7 +29,7 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="wrap_content">
-
+<!--TODO:лучше использовать AppCompat  -->
             <TextView
                 android:id="@+id/firstInformationNote"
                 style="@style/ArchiveTextRecyclerView"

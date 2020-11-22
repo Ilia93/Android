@@ -24,7 +24,7 @@
             android:textSize="@dimen/textSize_all_18sp" />
 
     </LinearLayout>
-
+<!--TODO: зачем layout? -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

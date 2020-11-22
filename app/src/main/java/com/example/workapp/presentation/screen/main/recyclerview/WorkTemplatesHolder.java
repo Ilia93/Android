@@ -23,6 +23,7 @@ public class WorkTemplatesHolder extends RecyclerView.ViewHolder {
                                List<Object> listOfWorks,
                                MainWorkAdapter.OnUserCardClickListener onUserCardClickListener) {
         super(itemView);
+        // TODO: с помощью View Binding
         activityDescription = itemView.findViewById(R.id.activityDescription);
         workImage = itemView.findViewById(R.id.activityTemplateImage);
         cardView = itemView.findViewById(R.id.mainCardView);

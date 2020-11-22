@@ -10,6 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class NetworkClient {
 
+    // TODO: вынести в build.gradle
     private static final String BASE_URL = "https://api.backendless.com/BDFBA7B2-0396-E510-FF7F-4B5685F7A600/B2EBB787-A086-4E1E-B1EB-B1EFC125A8F8/";
 
     private static volatile NetworkClient instance;
@@ -44,6 +45,7 @@ public final class NetworkClient {
         return instance;
     }
 
+    // TODO статик не надо
     public static WorkApi getWorkApi() {
         if (workApi == null) {
             workApi = retrofit.create(WorkApi.class);

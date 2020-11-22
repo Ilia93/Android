@@ -12,6 +12,7 @@ android {
     }
     defaultConfig {
         applicationId "com.example.workapp"
+        // TODO: слишком высокое API
         minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
@@ -20,6 +21,7 @@ android {
     }
     buildTypes {
         release {
+            // TODO: почитать про Proguard & R8
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -28,6 +30,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // TODO: переделать нативно
     //Runtime Permissions
     implementation 'com.github.hotchemi:permissionsdispatcher:3.1.0'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
@@ -38,19 +41,16 @@ dependencies {
     // UI
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    //TODO: можно сделать нативно через MaterialLibrary
     implementation 'de.hdodenhof:circleimageview:1.1.0'
 
+    // TODO: удалить старые комменты
     //noinspection GradleCompatible
     implementation 'com.android.support:cardview-v7:28.0.0'
 
     // Database ORM
     implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
-    
-    // Testing tools
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    testImplementation 'junit:junit:4.13'
 
     // Network
     implementation 'com.squareup.okhttp3:logging-interceptor:4.8.1'

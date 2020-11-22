@@ -145,6 +145,7 @@ public class NotificationService extends Service {
         runnable = new Runnable() {
             @Override
             public void run() {
+                // TODO: можно разбить на два метода
                 milliseconds = System.currentTimeMillis() - timerStart;
                 seconds = (int) (milliseconds / 1000);
                 minutes = seconds / 60;
@@ -168,6 +169,7 @@ public class NotificationService extends Service {
         handler.post(runnable);
     }
 
+    //TODO: напрямую не используешь
     @Override
     public void onDestroy() {
         super.onDestroy();

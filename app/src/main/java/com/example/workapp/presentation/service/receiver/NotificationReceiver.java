@@ -26,6 +26,7 @@ import static com.example.workapp.presentation.service.notifications.Notificatio
         .STOP_NOTIFICATION;
 
 public class NotificationReceiver extends BroadcastReceiver {
+    // TODO: всегда модификаторы доступа
     CommentsModel commentsModel = new CommentsModel();
     NotificationService notificationService = new NotificationService();
     TimerOperations timerOperations = new TimerOperations();
@@ -47,6 +48,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         }
     }
 
+    // TODO: метод называется Get, а ничего не возвращает
     private void getBroadcastMessage(@NotNull Bundle remoteInput, @NotNull Intent intent,
                                      Context context) {
         setCommentsModelData(getReplyText(remoteInput), intent);

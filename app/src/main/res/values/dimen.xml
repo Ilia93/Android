@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources><!--    TODO: в dimens и других файлах правило именования такое же как и для String.xml -->
     <dimen name="major_size">17sp</dimen>
     <dimen name="archive_text_major_size">22sp</dimen>
     <dimen name="archive_additional_text_size">9sp</dimen>

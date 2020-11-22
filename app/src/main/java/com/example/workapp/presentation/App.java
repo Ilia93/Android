@@ -25,6 +25,7 @@ public class App extends Application {
             @Override
             public void onResponse(@NonNull Call<CommentsModel> call,
                                    @NonNull Response<CommentsModel> response) {
+                // TODO: пустой код не нужен
                 if (response.isSuccessful()) {
 
                 } else {
@@ -36,6 +37,7 @@ public class App extends Application {
 
             @Override
             public void onFailure(@NonNull Call<CommentsModel> call, @NonNull Throwable t) {
+                // TODO: добавить нормальный лог
                 t.printStackTrace();
             }
         });

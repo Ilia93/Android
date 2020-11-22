@@ -59,6 +59,7 @@ public class UserEditActivity extends AppCompatActivity {
         setClickListener();
     }
 
+    // TODO: недостаточно информативное имя
     private void setSpinnerAdapter() {
         List<Integer> age = new ArrayList<>();
         List<Integer> weight = new ArrayList<>();

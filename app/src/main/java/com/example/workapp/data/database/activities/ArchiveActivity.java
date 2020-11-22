@@ -1,3 +1,5 @@
+// TODO: удалить код
+
 /*package com.example.workapp.data.room_app.activities;
 
 import android.content.Intent;

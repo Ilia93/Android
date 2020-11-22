@@ -12,6 +12,7 @@ import retrofit2.Response;
 
 public final class CommentsCloudDataSource {
     public void getComments(String comment, final CommentsActionResult actionResult) {
+        // TODO: для чего эта строчка?
         NetworkClient.getInstance();
         Call<List<CommentsModel>> call = NetworkClient.getCommentAPI().getComment(comment);
         serverCall(call, actionResult);
@@ -27,6 +28,7 @@ public final class CommentsCloudDataSource {
                     }
                 } else {
                     if (actionResult != null) {
+                        // TODO: более информативные ошибки
                         actionResult.onFailure("Error occurred");
                     }
                 }
