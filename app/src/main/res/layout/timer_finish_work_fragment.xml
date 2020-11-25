@@ -8,9 +8,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_margin"
-        android:layout_marginTop="@dimen/common_margin"
-        android:layout_marginEnd="@dimen/common_margin"
+        android:layout_marginStart="@dimen/common_margin_10dp"
+        android:layout_marginTop="@dimen/common_margin_10dp"
+        android:layout_marginEnd="@dimen/common_margin_10dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -25,19 +25,27 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/CompletedWorksHeaders"
+                    style="@style/BaseTextView.CompletedWorksHeaders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="@string/timer_time_of_start" />
 
                 <TextView
-                    style="@style/CompletedWorksHeaders"
+                    style="@style/BaseTextView.CompletedWorksHeaders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="@string/timer_time_of_finish" />
 
                 <TextView
-                    style="@style/CompletedWorksHeaders"
+                    style="@style/BaseTextView.CompletedWorksHeaders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="@string/timer_time_in_pause" />
 
                 <TextView
-                    style="@style/CompletedWorksHeaders"
+                    style="@style/BaseTextView.CompletedWorksHeaders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="@string/timer_elapsed_time" />
 
             </LinearLayout>
@@ -49,19 +57,31 @@
 
                 <TextView
                     android:id="@+id/timerStartResultView"
-                    style="@style/CompletedWorks" />
+                    style="@style/BaseTextView.CompletedWorks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_all_5dp" />
 
                 <TextView
                     android:id="@+id/timerFinishResultView"
-                    style="@style/CompletedWorks" />
+                    style="@style/BaseTextView.CompletedWorks"
+                    android:layout_marginStart="@dimen/margin_all_5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/timeInPauseView"
-                    style="@style/CompletedWorks" />
+                    style="@style/BaseTextView.CompletedWorks"
+                    android:layout_marginStart="@dimen/margin_all_5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/elapsedTimeView"
-                    style="@style/CompletedWorks" />
+                    style="@style/BaseTextView.CompletedWorks"
+                    android:layout_marginStart="@dimen/margin_all_5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -72,7 +92,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_margin"
+        android:layout_marginStart="@dimen/common_margin_10dp"
         android:layout_marginTop="@dimen/layoutTop_margin"
         android:orientation="vertical">
 

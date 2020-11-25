@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressLint("SetTextI18n")
     private void getUserForNavigationView(@NotNull List<UserModel> users) {
         StringBuilder stringBuilder = new StringBuilder();
-        if (users.size() == 0) {
+        if (users.isEmpty()) {
             stringBuilder
                     .append("Undefined");
             ((TextView) findViewById(R.id.main_header_label)).setText(stringBuilder.toString());

@@ -4,7 +4,9 @@
     <dimen name="archive_text_major_size">22sp</dimen>
     <dimen name="archive_additional_text_size">9sp</dimen>
     <dimen name="layoutTop_margin">15dp</dimen>
-    <dimen name="common_margin">10dp</dimen>
+    <dimen name="common_margin_10dp">10dp</dimen>
+    <dimen name="margin_all_20dp">20dp</dimen>
+    <dimen name="margin_user_edit_screen_13dp">-13dp</dimen>
     <dimen name="padding_user_screen_user_data_10dp">10dp</dimen>
     <dimen name="margin_edit_user_30dp">30dp</dimen>
     <dimen name="margin_all_5dp">5dp</dimen>

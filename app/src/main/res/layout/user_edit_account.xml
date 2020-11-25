@@ -5,60 +5,82 @@
     android:layout_height="match_parent"
     android:background="@drawable/abstract_mountains">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/user_edit_data_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/common_margin"
+        android:layout_marginStart="@dimen/common_margin_10dp"
         android:layout_marginTop="@dimen/margin_edit_user_30dp"
-        android:layout_marginEnd="@dimen/common_margin"
+        android:layout_marginEnd="@dimen/common_margin_10dp"
         android:orientation="vertical">
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/user_edit_name"
-            style="@style/UserEditText"
+            style="@style/BaseEditText.User"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="@string/user_edit_name"
             android:inputType="text" />
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/user_edit_second_name"
-            style="@style/UserEditText"
+            style="@style/BaseEditText.User"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:autofillHints=""
             android:hint="@string/user_edit_second_name"
             android:inputType="text" />
 
-        <TextView
-            style="@style/UserEditTextView"
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/BaseTextView.UserEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
             android:text="@string/user_edit_text_view_user_age" />
 
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/user_age_spinner"
-            style="@style/UserSpinner" />
+            style="@style/BaseSpinner.User"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_user_edit_screen_13dp" />
 
-        <TextView
-            style="@style/UserEditTextView"
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/BaseTextView.UserEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
             android:text="@string/user_edit_text_view_user_gender" />
 
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/user_gender_spinner"
-            style="@style/UserSpinner"
+            style="@style/BaseSpinner.User"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_user_edit_screen_13dp"
             android:entries="@array/gender" />
 
-        <TextView
-            style="@style/UserEditTextView"
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/BaseTextView.UserEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
             android:text="@string/user_edit_text_view_user_weight" />
 
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/user_weight_spinner"
-            style="@style/UserSpinner" />
+            style="@style/BaseSpinner.User"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_user_edit_screen_13dp" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/user_save_edit_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
+        android:layout_margin="@dimen/common_margin_10dp"
         android:src="@drawable/ic_round_done_outline_24"
         app:layout_anchor="@id/user_edit_data_layout"
         app:layout_anchorGravity="bottom|right|end" />

@@ -5,21 +5,21 @@
     android:background="@drawable/abstract_mountains"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/create_work_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginLeft="@dimen/common_margin_10dp"
             android:layout_marginTop="70dp"
-            android:layout_marginRight="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin_10dp"
             android:orientation="horizontal">
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/inputWork"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -36,21 +36,21 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_create_work_white_48dp"
                 android:src="@drawable/ic_create_work_white_48dp" />
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_margin"
-            android:layout_marginEnd="@dimen/common_margin">
+            android:layout_marginStart="@dimen/common_margin_10dp"
+            android:layout_marginEnd="@dimen/common_margin_10dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mainWorksRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

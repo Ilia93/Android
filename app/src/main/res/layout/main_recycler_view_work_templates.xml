@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/common_margin"
+    android:layout_marginTop="@dimen/common_margin_10dp"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -23,7 +23,7 @@
 
             <TextView
                 android:id="@+id/activityDescription"
-                android:layout_marginStart="@dimen/common_margin"
+                android:layout_marginStart="@dimen/common_margin_10dp"
                 android:layout_marginTop="50dp"
                 android:textStyle="bold"
                 android:textSize="@dimen/textSize_all_15sp"

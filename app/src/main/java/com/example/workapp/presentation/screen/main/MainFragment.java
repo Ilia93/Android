@@ -120,9 +120,12 @@ public class MainFragment extends Fragment {
     private void setActivityTemplatesAdapter(List<WorkModel> works) {
         activities.addAll(works);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        MainWorkAdapter.OnUserCardClickListener onUserCardClickListener = mainTemplatesModel -> {
-            binding.inputWork.setText(mainTemplatesModel.getActivityDescription());
-            createWork();
+        MainWorkAdapter.OnUserCardClickListener onUserCardClickListener = new MainWorkAdapter.OnUserCardClickListener() {
+            @Override
+            public void onUserClick(WorkTemplatesModel mainTemplatesModel) {
+                binding.inputWork.setText(mainTemplatesModel.getActivityDescription());
+                MainFragment.this.createWork();
+            }
         };
         MainWorkAdapter workAdapter = new MainWorkAdapter(activities, onUserCardClickListener);
         mainRecyclerView.setAdapter(workAdapter);

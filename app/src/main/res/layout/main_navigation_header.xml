@@ -10,7 +10,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_gravity="start"
-        android:paddingTop="@dimen/common_margin"
+        android:paddingTop="@dimen/common_margin_10dp"
         android:layout_marginStart="@dimen/major_size"
         android:layout_marginTop="@dimen/major_size"
         android:src="@drawable/blank_profile_picture_80_80" />
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/header_margin_text_start_17dp"
-        android:layout_marginTop="@dimen/common_margin"
+        android:layout_marginTop="@dimen/common_margin_10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginEnd="@dimen/common_margin"
+            android:layout_marginEnd="@dimen/common_margin_10dp"
             android:textColor="@color/white_1"
             android:textSize="@dimen/textSize_all_15sp"
             android:textStyle="bold" />
@@ -37,7 +37,7 @@
             android:id="@+id/add_header_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/common_margin"
+            android:layout_marginEnd="@dimen/common_margin_10dp"
             android:background="@drawable/ic_header_add_user"/>
     </LinearLayout>
 
