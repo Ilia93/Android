@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/timer_deny_comment" />
+            android:text="@string/timer_dialog_deny_comment" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/dialog_create"

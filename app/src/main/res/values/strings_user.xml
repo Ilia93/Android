@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="user_name">Name:</string>
+    <string name="user_second_name">Surname:</string>
+    <string name="user_age">Age:</string>
+    <string name="user_gender">Gender:</string>
+    <string name="user_weight">Weight:</string>
+    <string name="user_empty_field">Undefined</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_timer_activity">Next</string>
+    <string name="main_work_name">Work name: %1$s</string>
+    <string name="main_run_activity">Run Activity</string>
+    <string name="main_sleep_activity">Sleep Activity</string>
+    <string name="main_walk_activity">Walk activity</string>
+    <string name="main_physical_activity">Physical activity</string>
+    <string name="main_empty_works">Works are empty</string>
+    <string name="main_archive_activity">Archive</string>
+    <string name="main_enter_work">Enter work name:</string>
+    <string name="main_create_work">CREATE</string>
+    <string name="main_work_templates">Activity templates</string>
+    <string name="main_walk_template">Walk</string>
+    <string name="main_sleep_template">Sleep</string>
+    <string name="main_physical_work_template">Ph.work</string>
+    <string name="main_run_template">Run</string>
+    <string name="main_editText_autofill">Input work name</string>
+    <string name="main_screen_home">Home</string>
+    <string name="main_screen_archive_activity_toolbar">Archive activity</string>
+    <string name="toolbar_menu_archive">Archive</string>
+    <string name="toolbar_menu_home">Home</string>
+    <string name="toolbar_menu_timer">Timer</string>
+    <string name="toolbar_menu_commen">Comments</string>
+</resources>

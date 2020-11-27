@@ -27,13 +27,25 @@
     <style name="BaseTextView.User">
         <item name="android:textColor">@color/white_1</item>
         <item name="android:textSize">@dimen/textSize_all_15sp</item>
+        <item name="android:padding">@dimen/padding_user_screen_user_data_5dp</item>
+    </style>
+
+    <style name="BaseTextView.Timer">
+        <item name="android:textColor">@color/white_1</item>
+        <item name="android:textSize">@dimen/textSize_all_11sp</item>
+    </style>
+
+    <style name="BaseTextView.TimerData">
+        <item name="android:textColor">@color/white_1</item>
+        <item name="android:textSize">@dimen/textSize_all_11sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="BaseTextView.UserData">
         <item name="android:textColor">@color/white_1</item>
         <item name="android:textSize">@dimen/textSize_all_15sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:padding">@dimen/padding_user_screen_user_data_10dp</item>
+        <item name="android:padding">@dimen/padding_user_screen_user_data_5dp</item>
     </style>
 
     <style name="BaseTextView.UserEdit">

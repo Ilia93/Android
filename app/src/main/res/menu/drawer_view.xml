@@ -4,18 +4,18 @@
     <item
         android:id="@+id/nav_archive_fragment"
         android:icon="@drawable/ic_navigation_archive"
-        android:title="Archive" />
+        android:title="@string/toolbar_menu_archive" />
     <item
         android:id="@+id/nav_home_fragment"
         android:icon="@drawable/ic_navigation_home"
-        android:title="Home" />
+        android:title="@string/toolbar_menu_home" />
     <item
         android:id="@+id/nav_timer_fragment"
         android:icon="@drawable/ic_navigation_timer"
-        android:title="Timer" />
+        android:title="@string/toolbar_menu_timer" />
     <item
         android:id="@+id/nav_comments_fragment"
         android:icon="@drawable/ic_navigation_comments"
-        android:title="Comments" />
+        android:title="@string/toolbar_menu_commen" />
     <group />
 </menu>
