@@ -11,7 +11,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public final class NetworkClient {
 
     private static final String BASE_URL = "https://api.backendless.com/BDFBA7B2-0396-E510-FF7F-4B5685F7A600/B2EBB787-A086-4E1E-B1EB-B1EFC125A8F8/";
-
     private static volatile NetworkClient instance;
 
     private static Retrofit retrofit;
@@ -23,13 +22,6 @@ public final class NetworkClient {
 
     private NetworkClient() {
         setupRetrofit();
-    }
-
-    private void setupRetrofit() {
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
     }
 
     public static NetworkClient getInstance() {
@@ -44,28 +36,35 @@ public final class NetworkClient {
         return instance;
     }
 
-    public static WorkApi getWorkApi() {
+    private void setupRetrofit() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+    public WorkApi getWorkApi() {
         if (workApi == null) {
             workApi = retrofit.create(WorkApi.class);
         }
         return workApi;
     }
 
-    public static TimerApi getTimerAPI() {
+    public TimerApi getTimerAPI() {
         if (timerApi == null) {
             timerApi = retrofit.create(TimerApi.class);
         }
         return timerApi;
     }
 
-    public static CommentsApi getCommentAPI() {
+    public CommentsApi getCommentAPI() {
         if (commentsApi == null) {
             commentsApi = retrofit.create(CommentsApi.class);
         }
         return commentsApi;
     }
 
-    public static UserApi getUserApi() {
+    public UserApi getUserApi() {
         if (userApi == null) {
             userApi = retrofit.create(UserApi.class);
         }

@@ -20,22 +20,20 @@ import com.example.workapp.presentation.service.notifications.NotificationServic
 import org.jetbrains.annotations.NotNull;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.example.workapp.presentation.service.notifications.NotificationService
-        .NOTIFICATION_ID;
-import static com.example.workapp.presentation.service.notifications.NotificationService
-        .STOP_NOTIFICATION;
+import static com.example.workapp.presentation.service.notifications.NotificationService.NOTIFICATION_ID;
+import static com.example.workapp.presentation.service.notifications.NotificationService.STOP_NOTIFICATION;
 
 public class NotificationReceiver extends BroadcastReceiver {
-    CommentsModel commentsModel = new CommentsModel();
-    NotificationService notificationService = new NotificationService();
-    TimerOperations timerOperations = new TimerOperations();
-    NotificationCompat.Builder builder;
+    public NotificationService notificationService = new NotificationService();
+    private CommentsModel commentsModel = new CommentsModel();
+    private TimerOperations timerOperations = new TimerOperations();
+    private NotificationCompat.Builder builder;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
         if (remoteInput != null) {
-            getBroadcastMessage(remoteInput, intent, context);
+            showBroadcastMessage(remoteInput, intent, context);
         } else {
             if (intent.getAction() != null) {
                 if (intent.getAction().equals(STOP_NOTIFICATION)) {
@@ -47,11 +45,11 @@ public class NotificationReceiver extends BroadcastReceiver {
         }
     }
 
-    private void getBroadcastMessage(@NotNull Bundle remoteInput, @NotNull Intent intent,
-                                     Context context) {
+    private void showBroadcastMessage(@NotNull Bundle remoteInput, @NotNull Intent intent,
+                                      Context context) {
         setCommentsModelData(getReplyText(remoteInput), intent);
         buildNotification(context);
-        App.putCommentOnServer(commentsModel);
+        App.putCommentOnServer(commentsModel, context);
         showNotification(context);
     }
 

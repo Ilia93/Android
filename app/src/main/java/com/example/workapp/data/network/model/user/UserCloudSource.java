@@ -12,14 +12,12 @@ import retrofit2.Response;
 
 public final class UserCloudSource {
     public void getUser(String userName, UserActionResult actionResult) {
-        NetworkClient.getInstance();
-        Call<List<UserModel>> call = NetworkClient.getUserApi().getUser(userName);
+        Call<List<UserModel>> call = NetworkClient.getInstance().getUserApi().getUser(userName);
         serverCall(call, actionResult);
     }
 
     public void getUserId(String userName, final UserActionResult userActionResult) {
-        NetworkClient.getInstance();
-        Call<List<UserModel>> call = NetworkClient.getUserApi().getUserObjectId(userName);
+        Call<List<UserModel>> call = NetworkClient.getInstance().getUserApi().getUserObjectId(userName);
         serverCall(call, userActionResult);
     }
 
@@ -34,7 +32,7 @@ public final class UserCloudSource {
                     }
                 } else {
                     if (action != null) {
-                        action.onFailure("Something went wrong.");
+                        action.onFailure("Failed to load server data");
                     }
                 }
             }

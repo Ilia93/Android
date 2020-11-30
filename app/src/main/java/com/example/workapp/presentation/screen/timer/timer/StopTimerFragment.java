@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,7 +53,7 @@ public class StopTimerFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-
+                showToastMessage("Failed to complete the work");
             }
         });
         binding.timerExitFinishFragment.setOnClickListener(v -> replaceFragment(mainFragment));
@@ -70,6 +71,11 @@ public class StopTimerFragment extends Fragment {
             fragmentTransaction.commit();
         }
 
+    }
+
+    public void showToastMessage(String text) {
+        Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override

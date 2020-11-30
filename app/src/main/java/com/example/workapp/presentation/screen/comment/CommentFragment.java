@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +22,6 @@ import java.util.List;
 
 public class CommentFragment extends Fragment {
     private RecyclerView commentsRecyclerView;
-    private CommentsModel commentsModel = new CommentsModel();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -41,7 +41,7 @@ public class CommentFragment extends Fragment {
 
     private void showComments() {
         CommentsCloudDataSource commentsCloudDataSource = new CommentsCloudDataSource();
-        commentsCloudDataSource.getComments(commentsModel.getText(), new CommentsActionResult() {
+        commentsCloudDataSource.getComments("", new CommentsActionResult() {
 
             @Override
             public void onSuccess(List<CommentsModel> comments) {
@@ -52,8 +52,13 @@ public class CommentFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-
+                showToastMessage("Failed to load comments server data");
             }
         });
+    }
+
+    private void showToastMessage(String text) {
+        Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

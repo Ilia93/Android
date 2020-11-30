@@ -32,11 +32,11 @@ public class NotificationService extends Service {
     public final String CHANNEL_NAME = "MyChannel";
     private final String NOTIFICATION_REPLY_ID = "Enter your text";
     private final IBinder iBinder = new LocalBinder();
-    Handler handler = new Handler();
-    Intent leaveNotification, replyIntent;
-    NotificationCompat.Action replyAction, leaveNotificationAction;
-    PendingIntent pendingIntent, leaveNotificationPending;
-    Runnable runnable;
+    public Intent leaveNotification, replyIntent;
+    public NotificationCompat.Action replyAction, leaveNotificationAction;
+    private Handler handler = new Handler();
+    private PendingIntent pendingIntent, leaveNotificationPending;
+    private Runnable runnable;
     private long serviceTimerStartTime;
     private long milliseconds, minutes, seconds = 0L;
     private String resultString = null;
@@ -115,7 +115,6 @@ public class NotificationService extends Service {
     }
 
     public void createStopServiceNotification() {
-
         String stopServiceLabel = "Service stopped";
         NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(this, CHANNEL_ID)
@@ -131,7 +130,6 @@ public class NotificationService extends Service {
         }
         stopForeground(true);
         handler.removeCallbacks(runnable);
-        //TODO stopforeground and removecallbacks разница + fix notificationstop
     }
 
     @NotNull
@@ -145,32 +143,35 @@ public class NotificationService extends Service {
         runnable = new Runnable() {
             @Override
             public void run() {
-                milliseconds = System.currentTimeMillis() - timerStart;
-                seconds = (int) (milliseconds / 1000);
-                minutes = seconds / 60;
-                seconds = seconds % 60;
-                resultString = minutes + " " + "min" + ":";
-                resultString = resultString.concat(String.valueOf(seconds)) + " " + "sec";
-                NotificationCompat.Builder builder = new NotificationCompat
-                        .Builder(getApplicationContext(), CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
-                        .setContentTitle(intent.getStringExtra("workNameForService"))
-                        .setContentText(resultString)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                                R.drawable.running))
-                        .addAction(replyAction)
-                        .addAction(leaveNotificationAction)
-                        .setAutoCancel(true);
-                startForeground(NOTIFICATION_ID, builder.build());
+                buildTimerNotification(intent, timerStart);
                 handler.postDelayed(this, 1000);
             }
         };
         handler.post(runnable);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    private void buildTimerNotification(@NotNull Intent intent, long timerStart) {
+        NotificationCompat.Builder builder = new NotificationCompat
+                .Builder(getApplicationContext(), CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
+                .setContentTitle(intent.getStringExtra("workNameForService"))
+                .setContentText(initStartTimerField(timerStart))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                        R.drawable.running))
+                .addAction(replyAction)
+                .addAction(leaveNotificationAction)
+                .setAutoCancel(true);
+        startForeground(NOTIFICATION_ID, builder.build());
+    }
+
+    private String initStartTimerField(long timerStart) {
+        milliseconds = System.currentTimeMillis() - timerStart;
+        seconds = (int) (milliseconds / 1000);
+        minutes = seconds / 60;
+        seconds = seconds % 60;
+        resultString = minutes + " " + "min" + ":";
+        resultString = resultString.concat(String.valueOf(seconds)) + " " + "sec";
+        return resultString;
     }
 
     public class LocalBinder extends Binder {

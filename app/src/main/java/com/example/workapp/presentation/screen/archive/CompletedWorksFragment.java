@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,13 +35,9 @@ import java.util.List;
 
 public class CompletedWorksFragment extends Fragment {
 
-    ArchiveCompletedWorksFragmentBinding binding;
-    MainFragment mainFragment = new MainFragment();
-    FragmentActivity fragmentActivity;
-
-    private WorkModel workModel = new WorkModel();
-    private TimerModel timerModel = new TimerModel();
-    private CommentsModel commentsModel = new CommentsModel();
+    public FragmentActivity fragmentActivity;
+    private ArchiveCompletedWorksFragmentBinding binding;
+    private MainFragment mainFragment = new MainFragment();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -87,7 +84,7 @@ public class CompletedWorksFragment extends Fragment {
 
     private void getWorkData() {
         WorkCloudDataSource workCloudDataSource = new WorkCloudDataSource();
-        workCloudDataSource.getWork(workModel.getName(), new WorkActionResult() {
+        workCloudDataSource.getWork("", new WorkActionResult() {
             @Override
             public void onSuccess(List<WorkModel> works) {
                 displayCommonWorkInformation(works);
@@ -95,13 +92,14 @@ public class CompletedWorksFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
+                showToastMessage("Failed to load work server data");
             }
         });
     }
 
     private void getTimerData() {
         TimerCloudDataSource timerCloudDataSource = new TimerCloudDataSource();
-        timerCloudDataSource.getTimer(timerModel.getStartTime(), new TimerActionResult() {
+        timerCloudDataSource.getTimer("", new TimerActionResult() {
             @Override
             public void onSuccess(List<TimerModel> timerModel) {
                 displayCommonTimerInformation(timerModel);
@@ -109,14 +107,14 @@ public class CompletedWorksFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-
+                showToastMessage("Failed to load timer server data");
             }
         });
     }
 
     private void getCommentsData() {
         CommentsCloudDataSource commentsCloudDataSource = new CommentsCloudDataSource();
-        commentsCloudDataSource.getComments(commentsModel.getText(), new CommentsActionResult() {
+        commentsCloudDataSource.getComments("", new CommentsActionResult() {
             @Override
             public void onSuccess(List<CommentsModel> comments) {
                 displayCommonCommentInformation(comments);
@@ -124,7 +122,7 @@ public class CompletedWorksFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-
+                showToastMessage("Failed to load comments server data");
             }
         });
     }
@@ -215,5 +213,10 @@ public class CompletedWorksFragment extends Fragment {
             }
             textView.setText(stringBuilder);
         }
+    }
+
+    private void showToastMessage(String text) {
+        Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

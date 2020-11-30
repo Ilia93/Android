@@ -47,6 +47,8 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     public static boolean isStarted = false;
     public static boolean isPaused = false;
     public static boolean isResumed = false;
+    @SuppressLint("SimpleDateFormat")
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     public Date timeOfFinish;
     TimerModel timerModel = new TimerModel();
     WorkModel workModel = new WorkModel();
@@ -61,8 +63,6 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     TimerFragmentBinding binding;
     Handler uiHandler = new Handler();
     Runnable runnable;
-    @SuppressLint("SimpleDateFormat")
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
     @Nullable
     @Override
@@ -161,7 +161,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
             workModel.setName(getArguments().getString("workName"));
             workModel.setCompleted(true);
             workModel.setObjectId(getArguments().getString("workObjectId"));
-            Call<WorkModel> call = NetworkClient.getWorkApi().updateWork(workModel
+            Call<WorkModel> call = NetworkClient.getInstance().getWorkApi().updateWork(workModel
                     .getObjectId(), workModel);
             call.enqueue(new Callback<WorkModel>() {
                 @Override
@@ -173,7 +173,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                             timeOfFinish = timerOperations.getCalendarInstance();
                             timerModel.setElapsedTime(timerOperations.calculateDifference
                                     (timeOfTimerStart, timeOfFinish));
-                            Call<TimerModel> elapsedTimeCall = NetworkClient.getTimerAPI()
+                            Call<TimerModel> elapsedTimeCall = NetworkClient.getInstance().getTimerAPI()
                                     .createTimer(timerModel);
                             createTimer(elapsedTimeCall);
                             stopService();
@@ -194,7 +194,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
 
                 @Override
                 public void onFailure(@NonNull Call<WorkModel> call, @NonNull Throwable t) {
-                    showToastMessage(t.getMessage());
+                    showToastMessage("Failed to update work" );
                 }
             });
         }
@@ -219,14 +219,14 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                             showToastMessage(response.errorBody().string());
                         }
                     } catch (IOException e) {
-                        showToastMessage("Error happened");
+                        showToastMessage("Failed to cancel timer");
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<TimerModel> call, @NonNull Throwable t) {
-                showToastMessage(t.getMessage());
+                showToastMessage("Failed to create timer");
             }
         });
     }
@@ -262,7 +262,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     }
 
     private void createCommentOnServer() {
-        Call<CommentsModel> call = NetworkClient.getCommentAPI().createComment(commentsModel);
+        Call<CommentsModel> call = NetworkClient.getInstance().getCommentAPI().createComment(commentsModel);
         call.enqueue(new Callback<CommentsModel>() {
             @Override
             public void onResponse(@NonNull Call<CommentsModel> call,
@@ -275,14 +275,14 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                             showToastMessage(response.errorBody().string());
                         }
                     } catch (IOException e) {
-                        showToastMessage("Shit happened");
+                        showToastMessage("Failed to create comment");
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<CommentsModel> call, @NonNull Throwable t) {
-                showToastMessage(t.getMessage());
+                showToastMessage("Failed to create comment");
             }
         });
     }

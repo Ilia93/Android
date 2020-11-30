@@ -1,5 +1,8 @@
 package com.example.workapp.data.network.model.comments;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.example.workapp.data.network.NetworkClient;
@@ -12,9 +15,32 @@ import retrofit2.Response;
 
 public final class CommentsCloudDataSource {
     public void getComments(String comment, final CommentsActionResult actionResult) {
-        NetworkClient.getInstance();
-        Call<List<CommentsModel>> call = NetworkClient.getCommentAPI().getComment(comment);
+        Call<List<CommentsModel>> call = NetworkClient.getInstance().getCommentAPI().getComment(comment);
         serverCall(call, actionResult);
+    }
+
+    public void putCommentsToTheServer(CommentsModel commentsModel, Context context) {
+        Call<CommentsModel> call = NetworkClient.getInstance().getCommentAPI().createComment(commentsModel);
+        call.enqueue(new Callback<CommentsModel>() {
+            @Override
+            public void onResponse(@NonNull Call<CommentsModel> call,
+                                   @NonNull Response<CommentsModel> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        showToastMessage("Comment created", context);
+                    }
+                } else {
+                    if (response.errorBody() != null) {
+                        showToastMessage("Failed to create comment", context);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CommentsModel> call, @NonNull Throwable t) {
+                showToastMessage("Failed to put comment to the server", context);
+            }
+        });
     }
 
     private void serverCall(@NonNull Call<List<CommentsModel>> call, final CommentsActionResult actionResult) {
@@ -27,7 +53,7 @@ public final class CommentsCloudDataSource {
                     }
                 } else {
                     if (actionResult != null) {
-                        actionResult.onFailure("Error occurred");
+                        actionResult.onFailure("Failed to load server data");
                     }
                 }
             }
@@ -35,9 +61,14 @@ public final class CommentsCloudDataSource {
             @Override
             public void onFailure(@NonNull Call<List<CommentsModel>> call, @NonNull Throwable t) {
                 if (actionResult != null) {
-                    actionResult.onFailure("Error");
+                    actionResult.onFailure("Failed to load comments server data");
                 }
             }
         });
+    }
+
+    private void showToastMessage(String text, Context context) {
+        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

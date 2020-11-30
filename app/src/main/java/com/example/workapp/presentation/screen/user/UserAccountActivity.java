@@ -119,7 +119,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                showToastMessage();
+                showToastMessage("Failed to load user server data");
             }
         });
     }
@@ -279,7 +279,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
     private void setUserObjectId() {
         NetworkClient.getInstance();
-        Call<List<UserModel>> userModelCall = NetworkClient
+        Call<List<UserModel>> userModelCall = NetworkClient.getInstance()
                 .getUserApi()
                 .getUser(userModel.getUserName());
         userModelCall.enqueue(new Callback<List<UserModel>>() {
@@ -291,7 +291,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NotNull Call<List<UserModel>> call, @NotNull Throwable t) {
-
+                showToastMessage("Failed to set user's ID");
             }
         });
     }
@@ -306,7 +306,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-
+                showToastMessage("Failed to get user's ID from server");
             }
         });
     }
@@ -321,8 +321,8 @@ public class UserAccountActivity extends AppCompatActivity {
         }
     }
 
-    private void showToastMessage() {
-        Toast toast = Toast.makeText(getApplication(), "Failed to load user", Toast.LENGTH_SHORT);
+    private void showToastMessage(String text) {
+        Toast toast = Toast.makeText(getApplication(), text, Toast.LENGTH_SHORT);
         toast.show();
     }
 }

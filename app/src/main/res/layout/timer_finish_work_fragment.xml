@@ -10,8 +10,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_margin_10dp"
         android:layout_marginTop="@dimen/common_margin_10dp"
-        android:layout_marginEnd="@dimen/common_margin_10dp"
-        android:orientation="horizontal">
+        android:layout_marginEnd="@dimen/common_margin_10dp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
@@ -80,16 +84,18 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </androidx.cardview.widget.CardView>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/timerExitFinishFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_margin_10dp"
-            android:layout_marginTop="@dimen/margin_all_20dp"
-            android:background="@drawable/white_buttons"
-            android:text="@string/timer_close_common_info"
-            android:textSize="@dimen/major_size" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/timerExitFinishFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin_10dp"
+        android:layout_marginTop="@dimen/margin_all_20dp"
+        android:background="@drawable/white_buttons"
+        android:text="@string/timer_close_common_info"
+        android:textSize="@dimen/major_size" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -262,14 +262,14 @@ public class UserEditActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                showToastMessage("User undefined");
+                showToastMessage("Failed to get user's name from server");
             }
         });
     }
 
     private void putUserDataToServer() {
         NetworkClient.getInstance();
-        Call<UserModel> call = NetworkClient.getUserApi().createUser(userModel);
+        Call<UserModel> call = NetworkClient.getInstance().getUserApi().createUser(userModel);
         call.enqueue(new Callback<UserModel>() {
             @Override
             public void onResponse(@NotNull Call<UserModel> call,
@@ -293,7 +293,7 @@ public class UserEditActivity extends AppCompatActivity {
 
     private void updateUser() {
         NetworkClient.getInstance();
-        Call<UserModel> userModelCall = NetworkClient.getUserApi()
+        Call<UserModel> userModelCall = NetworkClient.getInstance().getUserApi()
                 .updateUser(USER_OBJECT_ID, userModel);
         userModelCall.enqueue(new Callback<UserModel>() {
             @Override

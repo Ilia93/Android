@@ -137,7 +137,7 @@ public class MainFragment extends Fragment {
             if (workModel.getName().equals("")) {
                 throw new NullPointerException();
             } else {
-                Call<WorkModel> work = NetworkClient.getWorkApi().createWork(workModel);
+                Call<WorkModel> work = NetworkClient.getInstance().getWorkApi().createWork(workModel);
                 work.enqueue(new Callback<WorkModel>() {
                     @Override
                     public void onResponse(@NonNull Call<WorkModel> call,
@@ -152,7 +152,7 @@ public class MainFragment extends Fragment {
                                     showToastMessage(response.errorBody().string());
                                 }
                             } catch (IOException e) {
-                                showToastMessage("Error occurred");
+                                showToastMessage("Failed to create work");
                             }
                         }
                     }
@@ -187,7 +187,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-
+                showToastMessage("Failed to ger work object ID");
             }
         });
     }

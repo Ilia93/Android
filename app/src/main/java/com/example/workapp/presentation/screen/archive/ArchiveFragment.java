@@ -52,7 +52,7 @@ public class ArchiveFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-                showToastMessage("Error");
+                showToastMessage("Failed to load server data");
             }
         });
     }

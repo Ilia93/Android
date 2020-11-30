@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     Fragment mainFragment = new MainFragment();
-    UserModel userModel = new UserModel();
     SharedPreferences sharedPreferences;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         UserCloudSource userCloudSource = new UserCloudSource();
-        userCloudSource.getUser(userModel.getUserName(), new UserActionResult() {
+        userCloudSource.getUser("", new UserActionResult() {
             @Override
             public void onSuccess(List<UserModel> users) {
                 getUserForNavigationView(users);
@@ -142,7 +141,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(String message) {
-                showToastMessage(message);
+                showToastMessage("Failed to load user data");
             }
         });
     }
