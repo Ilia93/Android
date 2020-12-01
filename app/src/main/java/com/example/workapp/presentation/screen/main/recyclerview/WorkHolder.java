@@ -16,10 +16,6 @@ public class WorkHolder extends RecyclerView.ViewHolder {
         activityDescription = itemView.findViewById(R.id.main_screen_work_name);
     }
 
-    public void setActivityDescription(TextView activityDescription) {
-        this.activityDescription = activityDescription;
-    }
-
     public TextView getActivityDescription() {
         return activityDescription;
     }

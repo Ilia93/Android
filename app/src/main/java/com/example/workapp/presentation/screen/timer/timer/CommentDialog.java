@@ -13,8 +13,7 @@ import com.example.workapp.databinding.TimerDialogAddCommentBinding;
 
 public class CommentDialog extends DialogFragment {
 
-    TimerDialogAddCommentBinding binding;
-    DialogListener dialogListener;
+    private TimerDialogAddCommentBinding binding;
 
     @Nullable
     @Override
@@ -44,7 +43,7 @@ public class CommentDialog extends DialogFragment {
     }
 
     public void sendBackResult() {
-        dialogListener = (DialogListener) getTargetFragment();
+        DialogListener dialogListener = (DialogListener) getTargetFragment();
         dialogListener.onPositiveClicked(binding.inputDialogComment.getText().toString());
         dismiss();
     }

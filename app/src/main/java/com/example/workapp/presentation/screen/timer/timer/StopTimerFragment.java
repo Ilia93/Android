@@ -24,10 +24,13 @@ import java.util.List;
 
 public class StopTimerFragment extends Fragment {
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    Fragment mainFragment = new MainFragment();
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
     private TimerFinishWorkFragmentBinding binding;
+
+    public static StopTimerFragment newInstance() {
+        return new StopTimerFragment();
+    }
 
     @Nullable
     @Override
@@ -55,7 +58,8 @@ public class StopTimerFragment extends Fragment {
                 showToastMessage("Failed to complete the work");
             }
         });
-        binding.timerExitFinishFragment.setOnClickListener(v -> replaceFragment(mainFragment));
+        binding.timerExitFinishFragment.setOnClickListener
+                (v -> replaceFragment(MainFragment.newInstance()));
         return view;
     }
 

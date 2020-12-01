@@ -20,11 +20,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-
         debug {
-            buildConfigField "String", "BASE_URL", "https://api.backendless.com/BDFBA7B2-0396-E510-FF7F-4B5685F7A600/B2EBB787-A086-4E1E-B1EB-B1EFC125A8F8/""
+           // buildConfigField "String", "BASE_URL", "\"https://api.backendless.com/BDFBA7B2-0396-E510-FF7F-4B5685F7A600/B2EBB787-A086-4E1E-B1EB-B1EFC125A8F8/\""
         }
-
         release {
             buildConfigField "String", "BASE_URL", "https://api.backendless.com/BDFBA7B2-0396-E510-FF7F-4B5685F7A600/B2EBB787-A086-4E1E-B1EB-B1EFC125A8F8/"
             minifyEnabled false

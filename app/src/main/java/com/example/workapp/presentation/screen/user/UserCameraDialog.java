@@ -31,7 +31,7 @@ public class UserCameraDialog extends DialogFragment {
 
     private final int REQUEST_CODE_PHOTO = 1;
     private final int REQUEST_CODE_FILE_STORAGE = 2;
-    UserGetPhotoDialogBinding binding;
+    private UserGetPhotoDialogBinding binding;
 
     public static UserCameraDialog getNewInstance() {
         return new UserCameraDialog();

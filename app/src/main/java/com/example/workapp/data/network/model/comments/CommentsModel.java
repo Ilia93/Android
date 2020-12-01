@@ -6,12 +6,11 @@ public final class CommentsModel {
 
     @SerializedName("commentId")
     private long id;
-
     @SerializedName("commentDate")
     private String time;
-
     @SerializedName("text")
     private String text;
+    private String workId;
 
     public long getId() {
         return id;
@@ -44,6 +43,4 @@ public final class CommentsModel {
     public void setWorkId(String workId) {
         this.workId = workId;
     }
-
-    private String workId;
 }

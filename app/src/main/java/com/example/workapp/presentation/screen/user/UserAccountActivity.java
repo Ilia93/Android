@@ -58,7 +58,7 @@ public class UserAccountActivity extends AppCompatActivity {
     public final int REQUEST_CODE_EDIT_DATA = 0;
     public final int REQUEST_CODE_PHOTO = 1;
     public final int REQUEST_CODE_FILE_STORAGE = 2;
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
     private UserAccountBinding binding;
     private UserModel userModel = new UserModel();
 

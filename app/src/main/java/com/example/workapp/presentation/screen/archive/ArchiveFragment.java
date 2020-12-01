@@ -27,17 +27,20 @@ import java.util.List;
 
 public class ArchiveFragment extends Fragment {
 
-    private final String CLICKED_ID_ARG = "NOTE_CLICKED_ID_ARG";
-
+    public static final String CLICKED_ID_ARG = "NOTE_CLICKED_ID_ARG";
+    private ArchiveFragmentBinding binding;
     private WorkModel workModel = new WorkModel();
-    ArchiveFragmentBinding binding;
+
+    public static ArchiveFragment newInstance() {
+        return new ArchiveFragment();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = ArchiveFragmentBinding.inflate(inflater, container, false );
+        binding = ArchiveFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         displayCompletedWorks();
         return view;
@@ -59,34 +62,31 @@ public class ArchiveFragment extends Fragment {
     }
 
     private void setDataAdapter(List<WorkModel> works) {
-        Fragment completedWorksFragment = new CompletedWorksFragment();
-        ArchiveAdapter.OnUserClickListener onUserClickListener = workModel -> {
+        RecyclerViewAdapter.OnUserClickListener onUserClickListener = workModel -> {
             FragmentActivity activity = getActivity();
             if (activity != null) {
-                setFragmentArgs(completedWorksFragment);
-                replaceFragment(activity, completedWorksFragment);
+                replaceFragment(activity);
             }
         };
-        ArchiveAdapter archiveAdapter = new ArchiveAdapter(works, onUserClickListener);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(works, onUserClickListener);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager
                 (getActivity(), RecyclerView.VERTICAL, false));
-        binding.recyclerView.setAdapter(archiveAdapter);
+        binding.recyclerView.setAdapter(recyclerViewAdapter);
     }
 
-    private void setFragmentArgs(@NotNull Fragment completedWorksFragment) {
+    private Bundle setFragmentArgs() {
         Bundle bundle = new Bundle();
         bundle.putString(CLICKED_ID_ARG, workModel.getId());
-        completedWorksFragment.setArguments(bundle);
+        return bundle;
     }
 
-    private void replaceFragment(@NotNull FragmentActivity activity,
-                                 Fragment completedWorksFragment) {
+    private void replaceFragment(@NotNull FragmentActivity activity) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager
                 .beginTransaction()
                 .replace(
                         R.id.navigation_content_frame,
-                        completedWorksFragment
+                        CompletedWorksFragment.newInstance(setFragmentArgs())
                 );
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

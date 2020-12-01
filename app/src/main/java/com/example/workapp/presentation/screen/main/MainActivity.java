@@ -16,9 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -44,12 +42,11 @@ import static com.example.workapp.presentation.screen.user.UserEditActivity.USER
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ImageButton addUser;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    Fragment mainFragment = new MainFragment();
-    SharedPreferences sharedPreferences;
-    MainActivityBinding binding;
+    private ImageButton addUser;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private SharedPreferences sharedPreferences;
+    private MainActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         setScreenElements();
         initializePreferences();
         if (savedInstanceState == null) {
-            replaceFragment(mainFragment);
+            replaceFragment(MainFragment.newInstance());
         }
         setFragmentBackStackListener();
     }
@@ -85,17 +82,13 @@ public class MainActivity extends AppCompatActivity
         item.setCheckable(true);
         int id = item.getItemId();
         if (id == R.id.nav_archive_fragment) {
-            Fragment archiveFragment = new ArchiveFragment();
-            replaceFragment(archiveFragment);
+            replaceFragment(ArchiveFragment.newInstance());
         } else if (id == R.id.nav_home_fragment) {
-            Fragment mainFragment = new MainFragment();
-            replaceFragment(mainFragment);
+            replaceFragment(MainFragment.newInstance());
         } else if (id == R.id.nav_timer_fragment) {
-            Fragment timerFragment = new TimerFragment();
-            replaceFragment(timerFragment);
+            replaceFragment(TimerFragment.newInstance());
         } else if (id == R.id.nav_comments_fragment) {
-            Fragment commentFragment = new CommentFragment();
-            replaceFragment(commentFragment);
+            replaceFragment(CommentFragment.newInstance());
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;

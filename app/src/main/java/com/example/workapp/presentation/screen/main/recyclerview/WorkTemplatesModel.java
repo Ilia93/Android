@@ -13,15 +13,7 @@ public class WorkTemplatesModel {
         return activityDescription;
     }
 
-    public void setActivityDescription(String activityDescription) {
-        this.activityDescription = activityDescription;
-    }
-
     public int getWorkImage() {
         return workImage;
-    }
-
-    public void setWorkImage(int workImage) {
-        this.workImage = workImage;
     }
 }

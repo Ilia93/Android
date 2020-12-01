@@ -11,20 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.workapp.R;
 import com.example.workapp.data.network.model.comments.CommentsActionResult;
 import com.example.workapp.data.network.model.comments.CommentsCloudDataSource;
 import com.example.workapp.data.network.model.comments.CommentsModel;
 import com.example.workapp.databinding.CommentsFragmentBinding;
-import com.example.workapp.databinding.CommentsRecyclerViewBinding;
 
 import java.util.List;
 
 public class CommentFragment extends Fragment {
 
-    CommentsFragmentBinding binding;
+    private CommentsFragmentBinding binding;
+
+    public static CommentFragment newInstance() {
+        return new CommentFragment();
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -55,13 +56,13 @@ public class CommentFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-                showToastMessage("Failed to load comments server data");
+                showToastMessage();
             }
         });
     }
 
-    private void showToastMessage(String text) {
-        Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
+    private void showToastMessage() {
+        Toast toast = Toast.makeText(getContext(), "Failed to load comments server data", Toast.LENGTH_SHORT);
         toast.show();
     }
 }

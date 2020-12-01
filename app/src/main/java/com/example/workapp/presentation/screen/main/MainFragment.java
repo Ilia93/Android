@@ -63,11 +63,15 @@ public class MainFragment extends Fragment {
     public final String WORK_ID = "workId";
     public final String WORK_NAME = "workName";
     public final String WORK_OBJECT_ID = "workObjectId";
-    public WorkModel workModel = new WorkModel();
-    MainFragmentBinding binding;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    List<Object> activities = new ArrayList<>();
+    private WorkModel workModel = new WorkModel();
+    private MainFragmentBinding binding;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private List<Object> activities = new ArrayList<>();
+
+    public static MainFragment newInstance(){
+        return new MainFragment();
+    }
 
     @Nullable
     @Override
@@ -141,7 +145,7 @@ public class MainFragment extends Fragment {
                                            @NonNull Response<WorkModel> response) {
                         if (response.isSuccessful()) {
                             showToastMessage("Work created");
-                            getWorkObjectIdByName();
+                            setWorkObjectIdByName();
                             startWorkService();
                         } else {
                             try {
@@ -173,7 +177,7 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void getWorkObjectIdByName() {
+    private void setWorkObjectIdByName() {
         WorkCloudDataSource workCloudDataSource = new WorkCloudDataSource();
         workCloudDataSource.getWorkObjectId(workModel.getName(), new WorkActionResult() {
             @Override
@@ -222,7 +226,7 @@ public class MainFragment extends Fragment {
             serviceIntent.putExtra(SERVICE_WORK_NAME, workModel.getName());
             serviceIntent.putExtra(SERVICE_NOTIFICATION_ID, "1");
             serviceIntent.putExtra(SERVICE_WORK_ID, workModel.getId());
-            getActivity().getApplicationContext().bindService(
+            getContext().bindService(
                     serviceIntent,
                     serviceConnection,
                     Context.BIND_AUTO_CREATE);

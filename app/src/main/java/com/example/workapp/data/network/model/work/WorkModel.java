@@ -1,5 +1,7 @@
 package com.example.workapp.data.network.model.work;
 
+import android.content.Context;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.UUID;
@@ -8,17 +10,10 @@ public final class WorkModel {
 
     @SerializedName("workId")
     private String id;
-
     @SerializedName("workName")
     private String name;
-
     @SerializedName("isArchived")
     private boolean isArchived;
-
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
-
     @SerializedName("objectId")
     private String objectId;
 
@@ -36,6 +31,10 @@ public final class WorkModel {
 
     public String getObjectId() {
         return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     public String getName() {

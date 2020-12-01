@@ -37,7 +37,12 @@ public class CompletedWorksFragment extends Fragment {
 
     public FragmentActivity fragmentActivity;
     private ArchiveCompletedWorksFragmentBinding binding;
-    private MainFragment mainFragment = new MainFragment();
+
+    public static CompletedWorksFragment newInstance(Bundle bundle) {
+        CompletedWorksFragment fragment = new CompletedWorksFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -76,7 +81,7 @@ public class CompletedWorksFragment extends Fragment {
         if (activity != null) {
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.navigation_content_frame, mainFragment)
+                    .add(R.id.navigation_content_frame, MainFragment.newInstance())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                     .addToBackStack(null).commit();
         }

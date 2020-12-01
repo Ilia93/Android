@@ -43,11 +43,11 @@ public class UserEditActivity extends AppCompatActivity {
     public final String USER_AGE = "userAge";
     public final String USER_GENDER = "userGender";
     public final String USER_WEIGHT = "userWeight";
-    UserEditAccountBinding binding;
-    UserModel userModel = new UserModel();
-    SharedPreferences sharedPreferences;
-    String selectedAge, selectedGender, selectedWeight;
     boolean isSelectedAge, isSelectedWeight, isSelectedGender = false;
+    private UserEditAccountBinding binding;
+    private UserModel userModel = new UserModel();
+    private SharedPreferences sharedPreferences;
+    private String selectedAge, selectedGender, selectedWeight;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,25 +55,25 @@ public class UserEditActivity extends AppCompatActivity {
         binding = UserEditAccountBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        setSpinnerAdapter();
+        setAgeAndWeightSpinnerAdapter();
         setClickListener();
     }
 
-    private void setSpinnerAdapter() {
+    private void setAgeAndWeightSpinnerAdapter() {
         List<Integer> age = new ArrayList<>();
         List<Integer> weight = new ArrayList<>();
-        initializeGenderSpinner();
-        initializeSpinnerArrayAdapter(
+        setGenderSpinner();
+        initializeAgeAndWeightSpinner(
                 age,
                 binding.userAgeSpinner,
                 90, 10);
-        initializeSpinnerArrayAdapter(
+        initializeAgeAndWeightSpinner(
                 weight,
                 binding.userWeightSpinner,
                 150, 15);
     }
 
-    private void initializeSpinnerArrayAdapter(List<Integer> arrayList,
+    private void initializeAgeAndWeightSpinner(List<Integer> arrayList,
                                                Spinner spinner,
                                                int maxValue,
                                                int minValue) {
@@ -113,7 +113,7 @@ public class UserEditActivity extends AppCompatActivity {
         spinner.setAdapter(userAdapter);
     }
 
-    private void initializeGenderSpinner() {
+    private void setGenderSpinner() {
         List<String> gender = new ArrayList<>();
         gender.add("Male");
         gender.add("Female");
@@ -155,11 +155,11 @@ public class UserEditActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initializeSharedPreferences();
+        setSharedPreferences();
         getUserAccountData();
     }
 
-    private void initializeSharedPreferences() {
+    private void setSharedPreferences() {
         sharedPreferences = getSharedPreferences(USER_ID, Context.MODE_PRIVATE);
     }
 
