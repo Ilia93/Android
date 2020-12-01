@@ -19,6 +19,7 @@ import com.example.workapp.R;
 import com.example.workapp.data.network.model.work.WorkActionResult;
 import com.example.workapp.data.network.model.work.WorkCloudDataSource;
 import com.example.workapp.data.network.model.work.WorkModel;
+import com.example.workapp.databinding.ArchiveFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,16 +29,16 @@ public class ArchiveFragment extends Fragment {
 
     private final String CLICKED_ID_ARG = "NOTE_CLICKED_ID_ARG";
 
-    private RecyclerView recyclerView;
     private WorkModel workModel = new WorkModel();
+    ArchiveFragmentBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.archive_fragment, container, false);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        binding = ArchiveFragmentBinding.inflate(inflater, container, false );
+        View view = binding.getRoot();
         displayCompletedWorks();
         return view;
     }
@@ -67,9 +68,9 @@ public class ArchiveFragment extends Fragment {
             }
         };
         ArchiveAdapter archiveAdapter = new ArchiveAdapter(works, onUserClickListener);
-        recyclerView.setLayoutManager(new LinearLayoutManager
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager
                 (getActivity(), RecyclerView.VERTICAL, false));
-        recyclerView.setAdapter(archiveAdapter);
+        binding.recyclerView.setAdapter(archiveAdapter);
     }
 
     private void setFragmentArgs(@NotNull Fragment completedWorksFragment) {

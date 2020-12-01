@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workapp.R;
+import com.example.workapp.databinding.MainRecyclerViewWorkTemplatesBinding;
 import com.example.workapp.presentation.screen.main.MainWorkAdapter;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class WorkTemplatesHolder extends RecyclerView.ViewHolder {
     private TextView activityDescription;
     private ImageView workImage;
     private CardView cardView;
+    MainRecyclerViewWorkTemplatesBinding binding;
 
     public WorkTemplatesHolder(@NonNull View itemView,
                                List<Object> listOfWorks,

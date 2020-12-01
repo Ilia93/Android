@@ -17,11 +17,14 @@ import com.example.workapp.R;
 import com.example.workapp.data.network.model.comments.CommentsActionResult;
 import com.example.workapp.data.network.model.comments.CommentsCloudDataSource;
 import com.example.workapp.data.network.model.comments.CommentsModel;
+import com.example.workapp.databinding.CommentsFragmentBinding;
+import com.example.workapp.databinding.CommentsRecyclerViewBinding;
 
 import java.util.List;
 
 public class CommentFragment extends Fragment {
-    private RecyclerView commentsRecyclerView;
+
+    CommentsFragmentBinding binding;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -33,8 +36,8 @@ public class CommentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.comments_fragment, container, false);
-        commentsRecyclerView = view.findViewById(R.id.commentsRecyclerView);
+        binding = CommentsFragmentBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         showComments();
         return view;
     }
@@ -46,8 +49,8 @@ public class CommentFragment extends Fragment {
             @Override
             public void onSuccess(List<CommentsModel> comments) {
                 CommentsAdapter commentsAdapter = new CommentsAdapter(comments);
-                commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                commentsRecyclerView.setAdapter(commentsAdapter);
+                binding.commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                binding.commentsRecyclerView.setAdapter(commentsAdapter);
             }
 
             @Override

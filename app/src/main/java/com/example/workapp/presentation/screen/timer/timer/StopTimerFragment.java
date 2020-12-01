@@ -28,7 +28,6 @@ public class StopTimerFragment extends Fragment {
     FragmentTransaction fragmentTransaction;
     Fragment mainFragment = new MainFragment();
     private TimerFinishWorkFragmentBinding binding;
-    private TimerModel timerModel = new TimerModel();
 
     @Nullable
     @Override
@@ -38,7 +37,7 @@ public class StopTimerFragment extends Fragment {
         binding = TimerFinishWorkFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         TimerCloudDataSource timerCloudDataSource = new TimerCloudDataSource();
-        timerCloudDataSource.getTimer(timerModel.getStartTime(), new TimerActionResult() {
+        timerCloudDataSource.getTimer("", new TimerActionResult() {
             @Override
             public void onSuccess(List<TimerModel> timerModel) {
                 binding.timerStartResultView.setText

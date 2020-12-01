@@ -100,7 +100,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
     private void loadUserDataFromServer() {
         UserCloudSource userCloudSource = new UserCloudSource();
-        userCloudSource.getUser(userModel.getUserName(), new UserActionResult() {
+        userCloudSource.getUser("", new UserActionResult() {
             @Override
             public void onSuccess(List<UserModel> users) {
                 if (users.isEmpty()) {
@@ -281,7 +281,7 @@ public class UserAccountActivity extends AppCompatActivity {
         NetworkClient.getInstance();
         Call<List<UserModel>> userModelCall = NetworkClient.getInstance()
                 .getUserApi()
-                .getUser(userModel.getUserName());
+                .getUser("");
         userModelCall.enqueue(new Callback<List<UserModel>>() {
             @Override
             public void onResponse(@NotNull Call<List<UserModel>> call,
@@ -298,7 +298,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
     private void getUserObjectId() {
         UserCloudSource userCloudSource = new UserCloudSource();
-        userCloudSource.getUserId(userModel.getUserName(), new UserActionResult() {
+        userCloudSource.getUserId("", new UserActionResult() {
             @Override
             public void onSuccess(List<UserModel> users) {
                 findUserObjectIdOnServer(users);

@@ -11,12 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.workapp.R;
+import com.example.workapp.databinding.TimerRecyclerViewMenuBinding;
 
 import java.util.List;
 
 public class TimerMenuAdapter extends RecyclerView
         .Adapter<TimerMenuAdapter.ViewHolder> {
+    TimerRecyclerViewMenuBinding binding;
     private LayoutInflater layoutInflater;
     private List<TimerMenuModel> timerMenuModelList;
     private OnUserClickListener onUserClickListener;
@@ -32,8 +33,8 @@ public class TimerMenuAdapter extends RecyclerView
     @NonNull
     @Override
     public TimerMenuAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate
-                (R.layout.timer_recycler_view_menu, parent, false);
+        binding = TimerRecyclerViewMenuBinding.inflate(layoutInflater, parent, false);
+        View view = binding.getRoot();
         return new ViewHolder(view);
     }
 
@@ -60,9 +61,9 @@ public class TimerMenuAdapter extends RecyclerView
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            menuImage = itemView.findViewById(R.id.timerCommentSampleImage);
-            timerMenuText = itemView.findViewById(R.id.timerCommentSampleText);
-            cardView = itemView.findViewById(R.id.timerCardView);
+            menuImage = binding.timerCommentSampleImage;
+            timerMenuText = binding.timerCommentSampleText;
+            cardView = binding.timerCardView;
 
             cardView.setOnClickListener(v -> {
                 TimerMenuModel timerMenuModel = timerMenuModelList.get(getLayoutPosition());

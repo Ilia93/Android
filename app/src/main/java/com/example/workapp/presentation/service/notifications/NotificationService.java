@@ -27,6 +27,9 @@ public class NotificationService extends Service {
     public static final String STOP_NOTIFICATION = "com.example.service.LEAVE_NOTIFICATION";
     public static String KEY_TEXT_REPLY = "key_text_reply";
     public final String CHANNEL_ID = "1";
+    public final String STOP_SERVICE = "Service stopped";
+    public final String EMPTY_TIMER = "0";
+    public final String START_TIMER_KEY = "1";
     public final String REPLY_TITLE = "Add comment";
     public final String NOTIFICATION_WORK_ID = "work_id";
     public final String CHANNEL_NAME = "MyChannel";
@@ -48,6 +51,15 @@ public class NotificationService extends Service {
         serviceTimerStartTime = System.currentTimeMillis();
     }
 
+    public void createNotificationChannel() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService
+                (Context.NOTIFICATION_SERVICE);
+        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
+                CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+        assert notificationManager != null;
+        notificationManager.createNotificationChannel(notificationChannel);
+    }
+
     @Override
     public IBinder onBind(@NotNull Intent intent) {
         createStartServiceNotification(intent);
@@ -60,19 +72,11 @@ public class NotificationService extends Service {
         return false;
     }
 
-    public void createNotificationChannel() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService
-                (Context.NOTIFICATION_SERVICE);
-        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
-                CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-        assert notificationManager != null;
-        notificationManager.createNotificationChannel(notificationChannel);
-    }
 
     public void createStartServiceNotification(@NotNull Intent intent) {
         createReplyAction(intent, createRemoteInput());
         createLeaveNotificationIntent();
-        createNotification(intent);
+        createNotification(intent, 0, EMPTY_TIMER);
     }
 
     private void createReplyAction(@NotNull Intent intent, RemoteInput remoteInput) {
@@ -100,26 +104,29 @@ public class NotificationService extends Service {
                 .build();
     }
 
-    private void createNotification(@NotNull Intent intent) {
+    private void createNotification(@NotNull Intent intent, long timerStart, String contentText) {
         NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
                 .setContentTitle(intent.getStringExtra("workNameForService"))
-                .setContentText("0")
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.running))
                 .addAction(replyAction)
                 .addAction(leaveNotificationAction)
                 .setAutoCancel(true);
+        if (contentText.equals(EMPTY_TIMER)) {
+            builder.setContentText(contentText);
+            startTimer(serviceTimerStartTime, intent);
+        } else if (contentText.equals(START_TIMER_KEY)) {
+            builder.setContentText(initStartTimerField(timerStart));
+        }
         startForeground(NOTIFICATION_ID, builder.build());
-        startTimer(serviceTimerStartTime, intent);
     }
 
     public void createStopServiceNotification() {
-        String stopServiceLabel = "Service stopped";
         NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
-                .setContentText(stopServiceLabel)
+                .setContentText(STOP_SERVICE)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.running))
                 .setAutoCancel(true);
 
@@ -143,25 +150,11 @@ public class NotificationService extends Service {
         runnable = new Runnable() {
             @Override
             public void run() {
-                buildTimerNotification(intent, timerStart);
+                createNotification(intent, timerStart, START_TIMER_KEY);
                 handler.postDelayed(this, 1000);
             }
         };
         handler.post(runnable);
-    }
-
-    private void buildTimerNotification(@NotNull Intent intent, long timerStart) {
-        NotificationCompat.Builder builder = new NotificationCompat
-                .Builder(getApplicationContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
-                .setContentTitle(intent.getStringExtra("workNameForService"))
-                .setContentText(initStartTimerField(timerStart))
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.drawable.running))
-                .addAction(replyAction)
-                .addAction(leaveNotificationAction)
-                .setAutoCancel(true);
-        startForeground(NOTIFICATION_ID, builder.build());
     }
 
     private String initStartTimerField(long timerStart) {

@@ -18,7 +18,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workapp.R;
 import com.example.workapp.data.network.NetworkClient;
@@ -69,7 +68,6 @@ public class MainFragment extends Fragment {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     List<Object> activities = new ArrayList<>();
-    RecyclerView mainRecyclerView;
 
     @Nullable
     @Override
@@ -78,7 +76,6 @@ public class MainFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = MainFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        mainRecyclerView = view.findViewById(R.id.mainWorksRecyclerView);
         createClickListener();
         showWorks();
         return view;
@@ -119,7 +116,7 @@ public class MainFragment extends Fragment {
 
     private void setActivityTemplatesAdapter(List<WorkModel> works) {
         activities.addAll(works);
-        mainRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.mainWorksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         MainWorkAdapter.OnUserCardClickListener onUserCardClickListener = new MainWorkAdapter.OnUserCardClickListener() {
             @Override
             public void onUserClick(WorkTemplatesModel mainTemplatesModel) {
@@ -128,7 +125,7 @@ public class MainFragment extends Fragment {
             }
         };
         MainWorkAdapter workAdapter = new MainWorkAdapter(activities, onUserCardClickListener);
-        mainRecyclerView.setAdapter(workAdapter);
+        binding.mainWorksRecyclerView.setAdapter(workAdapter);
     }
 
     private void createWork() {

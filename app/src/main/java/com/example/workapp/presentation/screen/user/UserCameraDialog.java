@@ -16,7 +16,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.workapp.R;
+import com.example.workapp.databinding.UserGetPhotoDialogBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +31,7 @@ public class UserCameraDialog extends DialogFragment {
 
     private final int REQUEST_CODE_PHOTO = 1;
     private final int REQUEST_CODE_FILE_STORAGE = 2;
+    UserGetPhotoDialogBinding binding;
 
     public static UserCameraDialog getNewInstance() {
         return new UserCameraDialog();
@@ -41,38 +42,37 @@ public class UserCameraDialog extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.user_get_photo_dialog, container, false);
-        setListeners(view);
+        binding = UserGetPhotoDialogBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        setOnDialogListeners();
         return view;
     }
 
-
-    private void setListeners(View view) {
-        setOnDialogListeners(view, R.id.user_dialog_camera);
-        setOnDialogListeners(view, R.id.user_dialog_storage);
-        setOnDialogListeners(view, R.id.user_dialog_cancel);
-    }
-
-    private void setOnDialogListeners(@NonNull View view, Integer id) {
-        view.findViewById(id).setOnClickListener(v -> {
-            switch (v.getId()) {
-                case R.id.user_dialog_camera:
-                    createStoragePhoto();
-                    dismiss();
-                    break;
-                case R.id.user_dialog_storage:
-                    Intent pickPhotoIntent = new Intent
-                            (Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    pickPhotoIntent.setType("image/*");
-                    if (getActivity() != null) {
-                        getActivity().startActivityForResult
-                                (pickPhotoIntent, REQUEST_CODE_FILE_STORAGE);
-                    }
-                    dismiss();
-                    break;
-                case R.id.user_dialog_cancel:
-                    dismiss();
-                    break;
+    private void setOnDialogListeners() {
+        binding.userDialogCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createStoragePhoto();
+                dismiss();
+            }
+        });
+        binding.userDialogStorage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pickPhotoIntent = new Intent
+                        (Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickPhotoIntent.setType("image/*");
+                if (getActivity() != null) {
+                    getActivity().startActivityForResult
+                            (pickPhotoIntent, REQUEST_CODE_FILE_STORAGE);
+                }
+                dismiss();
+            }
+        });
+        binding.userDialogCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
     }
