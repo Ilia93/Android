@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_user_photo">19dp</dimen>
+    <dimen name="width_of_user_photo">64dp</dimen>
+    <dimen name="height_of_user_photo">64dp</dimen>
+    <dimen name="card_view_corners_radius">50dp</dimen>
+</resources>

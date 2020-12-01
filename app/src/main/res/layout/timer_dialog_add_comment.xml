@@ -1,51 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/pink"
+        android:contentDescription="@string/timer_dialog_header"
+        android:scaleType="center" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/inputDialogComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:autofillHints="none"
+        android:hint="@string/comments_editText_hint"
+        android:inputType="text"
+        android:textColorHint="@color/blue_1" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/pink"
-            android:contentDescription="@string/timer_dialog_header"
-            android:scaleType="center" />
-
-        <EditText
-            android:id="@+id/inputDialogComment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="none"
-            android:hint="@string/comments_editText_hint"
-            android:inputType="text"
-            android:textColorHint="@color/blue_1" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/dialog_cancel"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Cancel" />
+            android:text="@string/timer_dialog_deny_comment" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/dialog_create"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Create" />
+            android:text="@string/timer_dialog_add_comment" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-</LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

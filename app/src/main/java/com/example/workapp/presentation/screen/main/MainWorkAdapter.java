@@ -22,8 +22,8 @@ public class MainWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int WORK_TYPE = 1;
     private final int HEADER_TYPE = 2;
 
-    private List<Object> listOfWorks;
-    private OnUserCardClickListener onUserCardClickListener;
+    private final List<Object> listOfWorks;
+    private final OnUserCardClickListener onUserCardClickListener;
 
     public MainWorkAdapter(List<Object> listOfWorks,
                            OnUserCardClickListener onUserCardClickListener) {

@@ -20,10 +20,10 @@
             android:background="@color/light_blue"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/light_blue"
-            app:expandedTitleMargin="@dimen/common_margin"
+            app:expandedTitleMargin="@dimen/common_margin_10dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/user_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -49,70 +49,87 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_margin"
-            android:layout_marginTop="@dimen/common_margin"
-            android:layout_marginEnd="@dimen/common_margin"
-            android:orientation="vertical">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_margin_10dp"
+                android:orientation="horizontal">
 
-            <LinearLayout style="@style/UserScreenLinearLayout">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <TextView
-                    style="@style/UserScreenUserData"
-                    android:text="@string/user_name" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/BaseTextView.User"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_name" />
 
-                <TextView
-                    android:id="@+id/user_name"
-                    style="@style/UserScreenUserInput" />
-            </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/BaseTextView.User"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_second_name" />
 
-            <LinearLayout style="@style/UserScreenLinearLayout">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/BaseTextView.User"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_age" />
 
-                <TextView
-                    style="@style/UserScreenUserData"
-                    android:text="@string/user_second_name" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/BaseTextView.User"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_gender" />
 
-                <TextView
-                    android:id="@+id/user_second_name"
-                    style="@style/UserScreenUserInput" />
-            </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/BaseTextView.User"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_weight" />
 
-            <LinearLayout style="@style/UserScreenLinearLayout">
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <TextView
-                    style="@style/UserScreenUserData"
-                    android:text="@string/user_age" />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/user_age"
-                    style="@style/UserScreenUserInput" />
-            </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/user_name"
+                        style="@style/BaseTextView.UserData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-            <LinearLayout style="@style/UserScreenLinearLayout">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/user_second_name"
+                        style="@style/BaseTextView.UserData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-                <TextView
-                    style="@style/UserScreenUserData"
-                    android:text="@string/user_gender" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/user_age"
+                        style="@style/BaseTextView.UserData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/user_gender"
-                    style="@style/UserScreenUserInput" />
-            </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/user_gender"
+                        style="@style/BaseTextView.UserData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-            <LinearLayout style="@style/UserScreenLinearLayout">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/user_weight"
+                        style="@style/BaseTextView.UserData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-                <TextView
-                    style="@style/UserScreenUserData"
-                    android:text="@string/user_weight" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <TextView
-                    android:id="@+id/user_weight"
-                    style="@style/UserScreenUserInput" />
-            </LinearLayout>
-
-        </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -128,7 +145,7 @@
         android:id="@+id/user_edit_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
+        android:layout_margin="@dimen/common_margin_10dp"
         android:src="@drawable/ic_baseline_edit_24"
         app:layout_anchor="@id/user_nested_scroll_view"
         app:layout_anchorGravity="bottom|right|end" />

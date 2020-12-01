@@ -1,6 +1,5 @@
 package com.example.workapp.presentation.screen.timer.timer;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -29,7 +28,6 @@ import com.example.workapp.presentation.screen.timer.operations.TimerOperations;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,22 +45,23 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     public static boolean isStarted = false;
     public static boolean isPaused = false;
     public static boolean isResumed = false;
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     public Date timeOfFinish;
-    TimerModel timerModel = new TimerModel();
-    WorkModel workModel = new WorkModel();
-    CommentsModel commentsModel = new CommentsModel();
-    TimerOperations timerOperations = new TimerOperations();
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    Fragment stopTimerFragment = new StopTimerFragment();
-    Timer timer;
-    TimerTask timerTask;
-    Fragment commentFragment = new CommentFragment();
-    TimerFragmentBinding binding;
-    Handler uiHandler = new Handler();
-    Runnable runnable;
-    @SuppressLint("SimpleDateFormat")
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+    private TimerModel timerModel = new TimerModel();
+    private WorkModel workModel = new WorkModel();
+    private CommentsModel commentsModel = new CommentsModel();
+    private TimerOperations timerOperations = new TimerOperations();
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private Timer timer;
+    private TimerTask timerTask;
+    private TimerFragmentBinding binding;
+    private Handler uiHandler = new Handler();
+    private Runnable runnable;
+
+    public static TimerFragment newInstance() {
+        return new TimerFragment();
+    }
 
     @Nullable
     @Override
@@ -112,7 +111,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                 if (activity != null) {
                     fragmentManager = activity.getSupportFragmentManager();
                     fragmentTransaction = fragmentManager.beginTransaction()
-                            .replace(R.id.navigation_content_frame, commentFragment);
+                            .replace(R.id.navigation_content_frame, CommentFragment.newInstance());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
@@ -127,7 +126,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
             }
         };
         TimerMenuAdapter timerMenuAdapter = new TimerMenuAdapter
-                (getActivity(), initializeMenuModel(), onUserClickListener);
+                (initializeMenuModel(), onUserClickListener);
         binding.timerRecyclerView.setLayoutManager
                 (new GridLayoutManager(getContext(), 2));
         binding.timerRecyclerView.setAdapter(timerMenuAdapter);
@@ -161,7 +160,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
             workModel.setName(getArguments().getString("workName"));
             workModel.setCompleted(true);
             workModel.setObjectId(getArguments().getString("workObjectId"));
-            Call<WorkModel> call = NetworkClient.getWorkApi().updateWork(workModel
+            Call<WorkModel> call = NetworkClient.getInstance().getWorkApi().updateWork(workModel
                     .getObjectId(), workModel);
             call.enqueue(new Callback<WorkModel>() {
                 @Override
@@ -173,7 +172,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                             timeOfFinish = timerOperations.getCalendarInstance();
                             timerModel.setElapsedTime(timerOperations.calculateDifference
                                     (timeOfTimerStart, timeOfFinish));
-                            Call<TimerModel> elapsedTimeCall = NetworkClient.getTimerAPI()
+                            Call<TimerModel> elapsedTimeCall = NetworkClient.getInstance().getTimerAPI()
                                     .createTimer(timerModel);
                             createTimer(elapsedTimeCall);
                             stopService();
@@ -182,19 +181,15 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                         }
 
                     } else {
-                        try {
-                            if (response.errorBody() != null) {
-                                showToastMessage(response.errorBody().string());
-                            }
-                        } catch (IOException e) {
-                            showToastMessage("IO exception");
+                        if (response.errorBody() != null) {
+                            showToastMessage("Failed to stop timer" + response.body().getName());
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<WorkModel> call, @NonNull Throwable t) {
-                    showToastMessage(t.getMessage());
+                    showToastMessage("Failed to update work");
                 }
             });
         }
@@ -212,21 +207,17 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                         showToastMessage("Timer didn't created");
                     }
                     showToastMessage("Timer stopped");
-                    replaceFragment(stopTimerFragment);
+                    replaceFragment(StopTimerFragment.newInstance());
                 } else {
-                    try {
-                        if (response.errorBody() != null) {
-                            showToastMessage(response.errorBody().string());
-                        }
-                    } catch (IOException e) {
-                        showToastMessage("Error happened");
+                    if (response.errorBody() != null) {
+                        showToastMessage("Failed to create timer");
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<TimerModel> call, @NonNull Throwable t) {
-                showToastMessage(t.getMessage());
+                showToastMessage("Failed to load timer");
             }
         });
     }
@@ -262,7 +253,7 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
     }
 
     private void createCommentOnServer() {
-        Call<CommentsModel> call = NetworkClient.getCommentAPI().createComment(commentsModel);
+        Call<CommentsModel> call = NetworkClient.getInstance().getCommentAPI().createComment(commentsModel);
         call.enqueue(new Callback<CommentsModel>() {
             @Override
             public void onResponse(@NonNull Call<CommentsModel> call,
@@ -270,19 +261,16 @@ public class TimerFragment extends Fragment implements CommentDialog.DialogListe
                 if (response.isSuccessful()) {
                     showToastMessage("Comment created");
                 } else {
-                    try {
-                        if (response.errorBody() != null) {
-                            showToastMessage(response.errorBody().string());
-                        }
-                    } catch (IOException e) {
-                        showToastMessage("Shit happened");
+
+                    if (response.errorBody() != null) {
+                        showToastMessage("Failed to create comment");
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<CommentsModel> call, @NonNull Throwable t) {
-                showToastMessage(t.getMessage());
+                showToastMessage("Failed to load comment");
             }
         });
     }

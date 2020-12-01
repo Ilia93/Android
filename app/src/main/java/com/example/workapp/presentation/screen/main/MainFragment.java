@@ -18,7 +18,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workapp.R;
 import com.example.workapp.data.network.NetworkClient;
@@ -64,12 +63,15 @@ public class MainFragment extends Fragment {
     public final String WORK_ID = "workId";
     public final String WORK_NAME = "workName";
     public final String WORK_OBJECT_ID = "workObjectId";
-    public WorkModel workModel = new WorkModel();
-    MainFragmentBinding binding;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    List<Object> activities = new ArrayList<>();
-    RecyclerView mainRecyclerView;
+    private WorkModel workModel = new WorkModel();
+    private MainFragmentBinding binding;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private List<Object> activities = new ArrayList<>();
+
+    public static MainFragment newInstance(){
+        return new MainFragment();
+    }
 
     @Nullable
     @Override
@@ -78,7 +80,6 @@ public class MainFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = MainFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        mainRecyclerView = view.findViewById(R.id.mainWorksRecyclerView);
         createClickListener();
         showWorks();
         return view;
@@ -119,13 +120,16 @@ public class MainFragment extends Fragment {
 
     private void setActivityTemplatesAdapter(List<WorkModel> works) {
         activities.addAll(works);
-        mainRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        MainWorkAdapter.OnUserCardClickListener onUserCardClickListener = mainTemplatesModel -> {
-            binding.inputWork.setText(mainTemplatesModel.getActivityDescription());
-            createWork();
+        binding.mainWorksRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        MainWorkAdapter.OnUserCardClickListener onUserCardClickListener = new MainWorkAdapter.OnUserCardClickListener() {
+            @Override
+            public void onUserClick(WorkTemplatesModel mainTemplatesModel) {
+                binding.inputWork.setText(mainTemplatesModel.getActivityDescription());
+                MainFragment.this.createWork();
+            }
         };
         MainWorkAdapter workAdapter = new MainWorkAdapter(activities, onUserCardClickListener);
-        mainRecyclerView.setAdapter(workAdapter);
+        binding.mainWorksRecyclerView.setAdapter(workAdapter);
     }
 
     private void createWork() {
@@ -134,14 +138,14 @@ public class MainFragment extends Fragment {
             if (workModel.getName().equals("")) {
                 throw new NullPointerException();
             } else {
-                Call<WorkModel> work = NetworkClient.getWorkApi().createWork(workModel);
+                Call<WorkModel> work = NetworkClient.getInstance().getWorkApi().createWork(workModel);
                 work.enqueue(new Callback<WorkModel>() {
                     @Override
                     public void onResponse(@NonNull Call<WorkModel> call,
                                            @NonNull Response<WorkModel> response) {
                         if (response.isSuccessful()) {
                             showToastMessage("Work created");
-                            getWorkObjectIdByName();
+                            setWorkObjectIdByName();
                             startWorkService();
                         } else {
                             try {
@@ -149,7 +153,7 @@ public class MainFragment extends Fragment {
                                     showToastMessage(response.errorBody().string());
                                 }
                             } catch (IOException e) {
-                                showToastMessage("Error occurred");
+                                showToastMessage("Failed to create work");
                             }
                         }
                     }
@@ -173,7 +177,7 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void getWorkObjectIdByName() {
+    private void setWorkObjectIdByName() {
         WorkCloudDataSource workCloudDataSource = new WorkCloudDataSource();
         workCloudDataSource.getWorkObjectId(workModel.getName(), new WorkActionResult() {
             @Override
@@ -184,7 +188,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-
+                showToastMessage("Failed to ger work object ID");
             }
         });
     }
@@ -222,7 +226,7 @@ public class MainFragment extends Fragment {
             serviceIntent.putExtra(SERVICE_WORK_NAME, workModel.getName());
             serviceIntent.putExtra(SERVICE_NOTIFICATION_ID, "1");
             serviceIntent.putExtra(SERVICE_WORK_ID, workModel.getId());
-            getActivity().getApplicationContext().bindService(
+            getContext().bindService(
                     serviceIntent,
                     serviceConnection,
                     Context.BIND_AUTO_CREATE);

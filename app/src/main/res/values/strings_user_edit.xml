@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="user_edit_name">Name(required)</string>
+    <string name="user_edit_second_name">Second name(optional)</string>
+    <string name="user_edit_age">Age</string>
+    <string name="user_edit_gender">Gender</string>
+    <string name="user_edit_weight">Weight</string>
+    <string name="user_edit_text_view_user_age">User\'s age</string>
+    <string name="user_edit_text_view_user_gender">User\'s gender</string>
+    <string name="user_edit_text_view_user_weight">User\'s weight</string>
+</resources>

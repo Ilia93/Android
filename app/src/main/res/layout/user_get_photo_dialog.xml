@@ -1,30 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_margin="@dimen/margin_all_20dp">
 
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/user_dialog_camera"
+        style="@style/BaseButton.UserDialog"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_user_dialog_buttons_5dp"
+        android:layout_weight="1"
+        android:text="@string/user_dialog_camera" />
 
-        <Button
-            android:id="@+id/user_dialog_camera"
-            style="@style/UserDialogButtons"
-            android:text="@string/user_dialog_camera" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/user_dialog_storage"
+        style="@style/BaseButton.UserDialog"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_user_dialog_buttons_5dp"
+        android:layout_weight="1"
+        android:text="@string/user_dialog_file_storage" />
 
-        <Button
-            android:id="@+id/user_dialog_storage"
-            style="@style/UserDialogButtons"
-            android:text="@string/user_dialog_file_storage" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/user_dialog_cancel"
+        style="@style/BaseButton.UserDialog"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_user_dialog_buttons_5dp"
+        android:layout_weight="1"
+        android:text="@string/user_dialog_cancel" />
 
-        <Button
-            android:id="@+id/user_dialog_cancel"
-            style="@style/UserDialogButtons"
-            android:text="@string/user_dialog_cancel" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

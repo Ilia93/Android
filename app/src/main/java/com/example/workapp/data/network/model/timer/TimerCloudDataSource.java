@@ -13,8 +13,7 @@ import retrofit2.Response;
 public final class TimerCloudDataSource {
 
     public void getTimer(String timer, final TimerActionResult actionResult) {
-        NetworkClient.getInstance();
-        Call<List<TimerModel>> call = NetworkClient.getTimerAPI().getTimer(timer);
+        Call<List<TimerModel>> call = NetworkClient.getInstance().getTimerAPI().getTimer(timer);
         serverCall(call, actionResult);
     }
 
@@ -28,7 +27,7 @@ public final class TimerCloudDataSource {
                     }
                 } else {
                     if (actionResult != null) {
-                        actionResult.onFailure("Error occurred");
+                        actionResult.onFailure("Failed to load server data");
                     }
                 }
             }

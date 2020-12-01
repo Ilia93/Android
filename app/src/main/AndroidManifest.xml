@@ -31,7 +31,7 @@
         <service
             android:name=".presentation.service.notifications.NotificationService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
 
         <receiver
             android:name=".presentation.service.receiver.NotificationReceiver"
@@ -42,11 +42,13 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".presentation.screen.splash.SplashScreenActivity">
+        <activity
+            android:name=".presentation.screen.splash.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".presentation.screen.main.MainActivity"

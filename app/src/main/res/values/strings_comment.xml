@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="comments_comment_text">Comment: </string>
+    <string name="comments_comment_date">At time: </string>
+    <string name="comments_no_comments">There are no any comments</string>
+    <string name="comments_latest_comments">Latest Comments</string>
+    <string name="comments_editText_hint">Your comment</string>
+    <string name="comment_activity_toolbar">Comments Activity</string>
+</resources>

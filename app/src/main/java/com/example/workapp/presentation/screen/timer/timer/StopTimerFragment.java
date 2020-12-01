@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,11 +24,13 @@ import java.util.List;
 
 public class StopTimerFragment extends Fragment {
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    Fragment mainFragment = new MainFragment();
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
     private TimerFinishWorkFragmentBinding binding;
-    private TimerModel timerModel = new TimerModel();
+
+    public static StopTimerFragment newInstance() {
+        return new StopTimerFragment();
+    }
 
     @Nullable
     @Override
@@ -37,7 +40,7 @@ public class StopTimerFragment extends Fragment {
         binding = TimerFinishWorkFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         TimerCloudDataSource timerCloudDataSource = new TimerCloudDataSource();
-        timerCloudDataSource.getTimer(timerModel.getStartTime(), new TimerActionResult() {
+        timerCloudDataSource.getTimer("", new TimerActionResult() {
             @Override
             public void onSuccess(List<TimerModel> timerModel) {
                 binding.timerStartResultView.setText
@@ -52,10 +55,11 @@ public class StopTimerFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-
+                showToastMessage("Failed to complete the work");
             }
         });
-        binding.timerExitFinishFragment.setOnClickListener(v -> replaceFragment(mainFragment));
+        binding.timerExitFinishFragment.setOnClickListener
+                (v -> replaceFragment(MainFragment.newInstance()));
         return view;
     }
 
@@ -70,6 +74,11 @@ public class StopTimerFragment extends Fragment {
             fragmentTransaction.commit();
         }
 
+    }
+
+    public void showToastMessage(String text) {
+        Toast toast = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override

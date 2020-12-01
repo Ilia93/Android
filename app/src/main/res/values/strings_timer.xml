@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="timer_watch_comments">Watch comments</string>
+    <string name="timer_exit_activity">Exit</string>
+    <string name="timer_start">START</string>
+    <string name="timer_stop_timer">STOP</string>
+    <string name="timer_pause_timer">PAUSE</string>
+    <string name="timer_resume_timer">RESUME</string>
+    <string name="timer_add_comment">Add comment</string>
+    <string name="timer_time_of_start">Time of start:</string>
+    <string name="timer_time_of_finish">Time of finish:</string>
+    <string name="timer_start_pause">Time of pause start:</string>
+    <string name="timer_finish_pause">Time of pause finish:</string>
+    <string name="timer_close_common_info">Close</string>
+    <string name="timer_time_in_pause">Time in pause:</string>
+    <string name="timer_elapsed_time">Elapsed time:</string>
+    <string name="timer_activity_toolbar">Timer activity</string>
+    <string name="timer_dialog_header">Add comment</string>
+    <string name="timer_dialog_create">Create</string>
+    <string name="timer_dialog_cancel">Cancel</string>
+</resources>

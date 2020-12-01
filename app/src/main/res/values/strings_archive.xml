@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="archive_works_archive">Works archive</string>
+    <string name="archive_works_name">Work name:</string>
+    <string name="archive_work_started">Work started at: </string>
+    <string name="archive_work_finished">Work finished at: </string>
+    <string name="archive_latest_comments">Latest comments are: </string>
+    <string name="archive_activity_elapsed_time">Time elapsed by Activity: </string>
+    <string name="archive_activity_pause_time">Time spent by pause: </string>
+    <string name="archive_empty_comments">Empty comment</string>
+    <string name="archive_work_short_information">Tap for full information</string>
+    <string name="archive_completed_work">Completed</string>
+    <string name="archive_failed_work">Failed</string>
+    <string name="archive_work_completed_text">Completed: </string>
+</resources>

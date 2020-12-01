@@ -19,8 +19,4 @@ public class TextHolder extends RecyclerView.ViewHolder {
     public TextView getTextHeader() {
         return textHeader;
     }
-
-    public void setTextHeader(TextView textHeader) {
-        this.textHeader = textHeader;
-    }
 }

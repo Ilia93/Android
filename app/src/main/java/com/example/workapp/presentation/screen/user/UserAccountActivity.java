@@ -58,7 +58,7 @@ public class UserAccountActivity extends AppCompatActivity {
     public final int REQUEST_CODE_EDIT_DATA = 0;
     public final int REQUEST_CODE_PHOTO = 1;
     public final int REQUEST_CODE_FILE_STORAGE = 2;
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
     private UserAccountBinding binding;
     private UserModel userModel = new UserModel();
 
@@ -100,7 +100,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
     private void loadUserDataFromServer() {
         UserCloudSource userCloudSource = new UserCloudSource();
-        userCloudSource.getUser(userModel.getUserName(), new UserActionResult() {
+        userCloudSource.getUser("", new UserActionResult() {
             @Override
             public void onSuccess(List<UserModel> users) {
                 if (users.isEmpty()) {
@@ -119,7 +119,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                showToastMessage();
+                showToastMessage("Failed to load user server data");
             }
         });
     }
@@ -279,9 +279,9 @@ public class UserAccountActivity extends AppCompatActivity {
 
     private void setUserObjectId() {
         NetworkClient.getInstance();
-        Call<List<UserModel>> userModelCall = NetworkClient
+        Call<List<UserModel>> userModelCall = NetworkClient.getInstance()
                 .getUserApi()
-                .getUser(userModel.getUserName());
+                .getUser("");
         userModelCall.enqueue(new Callback<List<UserModel>>() {
             @Override
             public void onResponse(@NotNull Call<List<UserModel>> call,
@@ -291,14 +291,14 @@ public class UserAccountActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NotNull Call<List<UserModel>> call, @NotNull Throwable t) {
-
+                showToastMessage("Failed to set user's ID");
             }
         });
     }
 
     private void getUserObjectId() {
         UserCloudSource userCloudSource = new UserCloudSource();
-        userCloudSource.getUserId(userModel.getUserName(), new UserActionResult() {
+        userCloudSource.getUserId("", new UserActionResult() {
             @Override
             public void onSuccess(List<UserModel> users) {
                 findUserObjectIdOnServer(users);
@@ -306,7 +306,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-
+                showToastMessage("Failed to get user's ID from server");
             }
         });
     }
@@ -321,8 +321,8 @@ public class UserAccountActivity extends AppCompatActivity {
         }
     }
 
-    private void showToastMessage() {
-        Toast toast = Toast.makeText(getApplication(), "Failed to load user", Toast.LENGTH_SHORT);
+    private void showToastMessage(String text) {
+        Toast toast = Toast.makeText(getApplication(), text, Toast.LENGTH_SHORT);
         toast.show();
     }
 }

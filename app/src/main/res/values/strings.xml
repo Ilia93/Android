@@ -1,91 +1,12 @@
 <resources>
     <string name="app_name">WorkApp</string>
-    <!--drawer_header-->
     <string name="header_user_name">Ilia Kuhnovets</string>
-    <!-- user_screen-->
-    <string name="user_name">Name:</string>
-    <string name="user_second_name">Surname:</string>
-    <string name="user_age">Age:</string>
-    <string name="user_gender">Gender:</string>
-    <string name="user_weight">Weight:</string>
-    <string name="user_edit_name">Name(required)</string>
-    <string name="user_edit_second_name">Second name(optional)</string>
-    <string name="user_edit_age">Age</string>
-    <string name="user_edit_gender">Gender</string>
-    <string name="user_edit_weight">Weight</string>
-    <!--main screen-->
-    <string name="main_timer_activity">Next</string>
-    <string name="main_work_name">Work name: %1$s</string>
-    <string name="main_run_activity">Run Activity</string>
-    <string name="main_sleep_activity">Sleep Activity</string>
-    <string name="main_walk_activity">Walk activity</string>
-    <string name="main_physical_activity">Physical activity</string>
-    <string name="main_empty_works">Works are empty</string>
-    <string name="main_archive_activity">Archive</string>
-    <string name="main_enter_work">Enter work name:</string>
-    <string name="main_create_work">CREATE</string>
-    <string name="main_work_templates">Activity templates</string>
-    <string name="main_walk_template">Walk</string>
-    <string name="main_sleep_template">Sleep</string>
-    <string name="main_physical_work_template">Ph.work</string>
-    <string name="main_run_template">Run</string>
-    <string name="main_editText_autofill">Input work name</string>
-    <!--timer screen-->
-    <string name="timer_watch_comments">Watch comments</string>
-    <string name="timer_exit_activity">Exit</string>
-    <string name="timer_start">START</string>
-    <string name="timer_stop_timer">STOP</string>
-    <string name="timer_pause_timer">PAUSE</string>
-    <string name="timer_resume_timer">RESUME</string>
-    <string name="timer_add_comment">Add comment</string>
-    <string name="timer_time_of_start">Time of start:</string>
-    <string name="timer_time_of_finish">Time of finish:</string>
-    <string name="timer_start_pause">Time of pause start:</string>
-    <string name="timer_finish_pause">Time of pause finish:</string>
-    <string name="timer_close_common_info">Close</string>
-    <string name="timer_time_in_pause">Time in pause:</string>
-    <string name="timer_elapsed_time">Elapsed time:</string>
-    <!--archive screen-->
-    <string name="archive_works_archive">Works archive</string>
-    <string name="archive_works_name">Work name:</string>
-    <string name="archive_work_started">Work started at: </string>
-    <string name="archive_work_finished">Work finished at: </string>
-    <string name="archive_latest_comments">Latest comments are: </string>
-    <string name="archive_activity_elapsed_time">Time elapsed by Activity: </string>
-    <string name="archive_activity_pause_time">Time spent by pause: </string>
-    <string name="archive_empty_comments">Empty comment</string>
-    <!--comments screen-->
-    <string name="comments_comment_text">Comment: </string>
-    <string name="comments_comment_date">At time: </string>
-    <string name="comments_no_comments">There are no any comments</string>
-    <string name="comments_latest_comments">Latest Comments</string>
-    <string name="comments_editText_hint">Your comment</string>
-    <!--main service-->
-    <string name="service_title">WorkApp running</string>
-    <string name="service_description">Press to enter the app</string>
-    <string name="service_comment">Add comment</string>
-    <string name="service_leave">Leave current activity</string>
-    <string name="service_stop">Service stopped</string>
-    <string name="service_comment_received">Comment received</string>
-    <string name="archive_work_short_information">Tap for full information</string>
-    <string name="archive_completed_work">Completed</string>
-    <string name="archive_failed_work">Failed</string>
-    <string name="archive_work_completed_text">Completed: </string>
-    <string name="timer_activity_toolbar">Timer activity</string>
-    <string name="comment_activity_toolbar">Comments Activity</string>
-    <string name="main_screen_home">Home</string>
-    <string name="main_screen_archive_activity_toolbar">Archive activity</string>
-    <string name="timer_dialog_header">Add comment</string>
-    <string name="timer_dialog_create">Create</string>
-    <string name="timer_dialog_cancel">Cancel</string>
     <string name="splash_screen_text">Work app</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="user_dialog_camera">Camera</string>
     <string name="user_dialog_file_storage">File storage</string>
     <string name="user_dialog_cancel">Cancel</string>
-    <string name="user_empty_field">Undefined</string>
-    <string name="user_edit_text_view_user_age">User\'s age</string>
-    <string name="user_edit_text_view_user_gender">User\'s gender</string>
-    <string name="user_edit_text_view_user_weight">User\'s weight</string>
+    <string name="timer_dialog_deny_comment">Cancel</string>
+    <string name="timer_dialog_add_comment">Create</string>
 </resources>

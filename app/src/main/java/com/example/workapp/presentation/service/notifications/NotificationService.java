@@ -27,16 +27,19 @@ public class NotificationService extends Service {
     public static final String STOP_NOTIFICATION = "com.example.service.LEAVE_NOTIFICATION";
     public static String KEY_TEXT_REPLY = "key_text_reply";
     public final String CHANNEL_ID = "1";
+    public final String STOP_SERVICE = "Service stopped";
+    public final String EMPTY_TIMER = "0";
+    public final String START_TIMER_KEY = "1";
     public final String REPLY_TITLE = "Add comment";
     public final String NOTIFICATION_WORK_ID = "work_id";
     public final String CHANNEL_NAME = "MyChannel";
     private final String NOTIFICATION_REPLY_ID = "Enter your text";
     private final IBinder iBinder = new LocalBinder();
-    Handler handler = new Handler();
-    Intent leaveNotification, replyIntent;
-    NotificationCompat.Action replyAction, leaveNotificationAction;
-    PendingIntent pendingIntent, leaveNotificationPending;
-    Runnable runnable;
+    public Intent leaveNotification, replyIntent;
+    public NotificationCompat.Action replyAction, leaveNotificationAction;
+    private Handler handler = new Handler();
+    private PendingIntent pendingIntent, leaveNotificationPending;
+    private Runnable runnable;
     private long serviceTimerStartTime;
     private long milliseconds, minutes, seconds = 0L;
     private String resultString = null;
@@ -46,6 +49,15 @@ public class NotificationService extends Service {
         super.onCreate();
         createNotificationChannel();
         serviceTimerStartTime = System.currentTimeMillis();
+    }
+
+    public void createNotificationChannel() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService
+                (Context.NOTIFICATION_SERVICE);
+        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
+                CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+        assert notificationManager != null;
+        notificationManager.createNotificationChannel(notificationChannel);
     }
 
     @Override
@@ -60,19 +72,11 @@ public class NotificationService extends Service {
         return false;
     }
 
-    public void createNotificationChannel() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService
-                (Context.NOTIFICATION_SERVICE);
-        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
-                CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-        assert notificationManager != null;
-        notificationManager.createNotificationChannel(notificationChannel);
-    }
 
     public void createStartServiceNotification(@NotNull Intent intent) {
         createReplyAction(intent, createRemoteInput());
         createLeaveNotificationIntent();
-        createNotification(intent);
+        createNotification(intent, 0, EMPTY_TIMER);
     }
 
     private void createReplyAction(@NotNull Intent intent, RemoteInput remoteInput) {
@@ -100,27 +104,29 @@ public class NotificationService extends Service {
                 .build();
     }
 
-    private void createNotification(@NotNull Intent intent) {
+    private void createNotification(@NotNull Intent intent, long timerStart, String contentText) {
         NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
                 .setContentTitle(intent.getStringExtra("workNameForService"))
-                .setContentText("0")
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.running))
                 .addAction(replyAction)
                 .addAction(leaveNotificationAction)
                 .setAutoCancel(true);
+        if (contentText.equals(EMPTY_TIMER)) {
+            builder.setContentText(contentText);
+            startTimer(serviceTimerStartTime, intent);
+        } else if (contentText.equals(START_TIMER_KEY)) {
+            builder.setContentText(initStartTimerField(timerStart));
+        }
         startForeground(NOTIFICATION_ID, builder.build());
-        startTimer(serviceTimerStartTime, intent);
     }
 
     public void createStopServiceNotification() {
-
-        String stopServiceLabel = "Service stopped";
         NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
-                .setContentText(stopServiceLabel)
+                .setContentText(STOP_SERVICE)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.running))
                 .setAutoCancel(true);
 
@@ -131,7 +137,6 @@ public class NotificationService extends Service {
         }
         stopForeground(true);
         handler.removeCallbacks(runnable);
-        //TODO stopforeground and removecallbacks разница + fix notificationstop
     }
 
     @NotNull
@@ -145,32 +150,21 @@ public class NotificationService extends Service {
         runnable = new Runnable() {
             @Override
             public void run() {
-                milliseconds = System.currentTimeMillis() - timerStart;
-                seconds = (int) (milliseconds / 1000);
-                minutes = seconds / 60;
-                seconds = seconds % 60;
-                resultString = minutes + " " + "min" + ":";
-                resultString = resultString.concat(String.valueOf(seconds)) + " " + "sec";
-                NotificationCompat.Builder builder = new NotificationCompat
-                        .Builder(getApplicationContext(), CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
-                        .setContentTitle(intent.getStringExtra("workNameForService"))
-                        .setContentText(resultString)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                                R.drawable.running))
-                        .addAction(replyAction)
-                        .addAction(leaveNotificationAction)
-                        .setAutoCancel(true);
-                startForeground(NOTIFICATION_ID, builder.build());
+                createNotification(intent, timerStart, START_TIMER_KEY);
                 handler.postDelayed(this, 1000);
             }
         };
         handler.post(runnable);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    private String initStartTimerField(long timerStart) {
+        milliseconds = System.currentTimeMillis() - timerStart;
+        seconds = (int) (milliseconds / 1000);
+        minutes = seconds / 60;
+        seconds = seconds % 60;
+        resultString = minutes + " " + "min" + ":";
+        resultString = resultString.concat(String.valueOf(seconds)) + " " + "sec";
+        return resultString;
     }
 
     public class LocalBinder extends Binder {

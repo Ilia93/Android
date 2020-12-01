@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="service_title">WorkApp running</string>
+    <string name="service_description">Press to enter the app</string>
+    <string name="service_comment">Add comment</string>
+    <string name="service_leave">Leave current activity</string>
+    <string name="service_stop">Service stopped</string>
+    <string name="service_comment_received">Comment received</string>
+</resources>

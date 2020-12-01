@@ -12,14 +12,12 @@ import retrofit2.Response;
 
 public final class WorkCloudDataSource {
     public void getWork(String workName, final WorkActionResult action) {
-        NetworkClient.getInstance();
-        Call<List<WorkModel>> call = NetworkClient.getWorkApi().getWorkName(workName);
+        Call<List<WorkModel>> call = NetworkClient.getInstance().getWorkApi().getWorkName(workName);
         serverCall(call, action);
     }
 
     public void getWorkObjectId(String workName, final WorkActionResult action) {
-        NetworkClient.getInstance();
-        Call<List<WorkModel>> call = NetworkClient.getWorkApi().getWorkObjectId(workName);
+        Call<List<WorkModel>> call = NetworkClient.getInstance().getWorkApi().getWorkObjectId(workName);
         serverCall(call, action);
     }
 
@@ -34,7 +32,7 @@ public final class WorkCloudDataSource {
                             }
                         } else {
                             if (action != null) {
-                                action.onFailure("Something went wrong.");
+                                action.onFailure("Failed to connect.");
                             }
                         }
                     }

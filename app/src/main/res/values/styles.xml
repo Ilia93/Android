@@ -7,81 +7,71 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ArchiveTextRecyclerView">
+    <style name="BaseTextView" parent="Widget.AppCompat.TextView" />
+
+    <style name="BaseTextView.Archive">
         <item name="android:textSize">@dimen/textSize_all_11sp</item>
-        <item name="android:layout_marginLeft">@dimen/common_margin</item>
-        <item name="android:layout_marginRight">@dimen/common_margin</item>
         <item name="android:textColor">@color/blue_1</item>
     </style>
 
-    <style name="CompletedWorksHeaders">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
+    <style name="BaseTextView.CompletedWorksHeaders">
         <item name="android:textColor">@color/blue_1</item>
         <item name="android:textSize">@dimen/textSize_all_11sp</item>
     </style>
 
-    <style name="CompletedWorks">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
+    <style name="BaseTextView.CompletedWorks">
         <item name="android:textColor">@color/blue_1</item>
         <item name="android:textSize">@dimen/textSize_all_11sp</item>
-        <item name="android:layout_marginStart">@dimen/margin_all_5dp</item>
     </style>
-    
-    <style name="UserScreenUserData">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">90dp</item>
+
+    <style name="BaseTextView.User">
         <item name="android:textColor">@color/white_1</item>
         <item name="android:textSize">@dimen/textSize_all_15sp</item>
-        <item name="android:padding">@dimen/padding_user_screen_user_data_10dp</item>
+        <item name="android:padding">@dimen/padding_user_screen_user_data_5dp</item>
     </style>
 
-    <style name="UserScreenUserInput">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+    <style name="BaseTextView.Timer">
+        <item name="android:textColor">@color/white_1</item>
+        <item name="android:textSize">@dimen/textSize_all_11sp</item>
+    </style>
+
+    <style name="BaseTextView.TimerData">
+        <item name="android:textColor">@color/white_1</item>
+        <item name="android:textSize">@dimen/textSize_all_11sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTextView.UserData">
         <item name="android:textColor">@color/white_1</item>
         <item name="android:textSize">@dimen/textSize_all_15sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:padding">@dimen/padding_user_screen_user_data_10dp</item>
+        <item name="android:padding">@dimen/padding_user_screen_user_data_5dp</item>
     </style>
 
-    <style name="UserScreenLinearLayout">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:orientation">horizontal</item>
+    <style name="BaseTextView.UserEdit">
+        <item name="android:textColor">@color/white_1</item>
+        <item name="android:textSize">@dimen/textSize_all_15sp</item>
     </style>
 
-    <style name="UserDialogButtons">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_margin">@dimen/margin_user_dialog_buttons_5dp</item>
-        <item name="android:layout_weight">1</item>
+    <style name="BaseButton" parent="Widget.AppCompat.Button" />
+
+    <style name="BaseButton.UserDialog">
         <item name="android:textSize">@dimen/text_size_user_dialog_buttons_10sp</item>
         <item name="android:background">@drawable/bg_blue_btn</item>
     </style>
 
-    <style name="UserEditText">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
+    <style name="BaseEditText" parent="Widget.AppCompat.EditText" />
+
+    <style name="BaseEditText.User">
         <item name="android:textColor">@color/white_1</item>
         <item name="android:textColorHint">@color/white_1</item>
         <item name="android:textSize">@dimen/textSize_all_15sp</item>
     </style>
 
-    <style name="UserSpinner">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_marginStart">-13dp</item>
-        <item name="android:spinnerMode">dialog</item>
-    </style>
+    <style name="BaseSpinner" parent="Widget.AppCompat.Spinner" />
 
-    <style name="UserEditTextView">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_marginStart">3dp</item>
-        <item name="android:textColor">@color/white_1</item>
-        <item name="android:textSize">@dimen/textSize_all_15sp</item>
+    <style name="BaseSpinner.User">
+        <item name="android:spinnerMode">dialog</item>
     </style>
 
 </resources>

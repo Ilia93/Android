@@ -1,37 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/common_margin"
-    android:orientation="horizontal">
+    android:layout_marginBottom="@dimen/common_margin_10dp">
 
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/activityTemplateImage"
         android:layout_width="match_parent"
-        android:background="@color/dark_blue"
-        android:layout_height="wrap_content">
+        android:layout_height="80dp"
+        android:scaleType="centerCrop" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/mainCardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/activityDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin_10dp"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/white_1"
+        android:textSize="@dimen/textSize_all_15sp"
+        android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/activityTemplateImage"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"/>
-
-            <TextView
-                android:id="@+id/activityDescription"
-                android:layout_marginStart="@dimen/common_margin"
-                android:layout_marginTop="50dp"
-                android:textStyle="bold"
-                android:textSize="@dimen/textSize_all_15sp"
-                android:textColor="@color/white_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
-</ScrollView>
+</androidx.cardview.widget.CardView>

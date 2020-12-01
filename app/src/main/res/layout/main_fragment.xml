@@ -5,52 +5,40 @@
     android:background="@drawable/abstract_mountains"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/create_work_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginLeft="@dimen/common_margin_10dp"
+        android:layout_marginTop="@dimen/margin_main_screen_user_input_70dp"
+        android:layout_marginRight="@dimen/common_margin_10dp"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/create_work_area"
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/inputWork"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/common_margin"
-            android:layout_marginTop="70dp"
-            android:layout_marginRight="@dimen/common_margin"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:autofillHints="@string/main_editText_autofill"
+            android:hint="@string/main_editText_autofill"
+            android:inputType="text"
+            android:textColor="@color/white_1"
+            android:textColorHint="@color/white_1" />
 
-            <EditText
-                android:id="@+id/inputWork"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:autofillHints="@string/main_editText_autofill"
-                android:hint="@string/main_editText_autofill"
-                android:inputType="text"
-                android:textColor="@color/white_1"
-                android:textColorHint="@color/white_1" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/createWork"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_create_work_white_48dp"
-                android:src="@drawable/ic_create_work_white_48dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/createWork"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_margin"
-            android:layout_marginEnd="@dimen/common_margin">
+            android:background="@drawable/ic_create_work_white_48dp"
+            android:src="@drawable/ic_create_work_white_48dp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/mainWorksRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mainWorksRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin_10dp"
+        android:layout_marginTop="@dimen/margin_main_screen_recycler_view_140dp"
+        android:layout_marginEnd="@dimen/common_margin_10dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
